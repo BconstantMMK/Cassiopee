@@ -15,6 +15,10 @@ if (px > 0.){
     l2 = 2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)*(sqrt(1.+px*ax)+1.)); //PRESSURE
     l3 = -2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)); //PRESSURE
   }
+  if (MafzalMode == 4){
+    l2 = 2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)*(sqrt(1.+px*ax)+1.)); //PRESSURE
+    l3 = -2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)); //PRESSURE
+  }
   else{
     l2 = -2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)*(sqrt(1.+px*ax)+1.)); //PRESSURE
     l3 = 0.; //PRESSURE
@@ -25,6 +29,11 @@ else{
     px = -px;
     l2 = 2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)*(sqrt(1.+px*ax)+1.)); //PRESSURE
     l3 = 0.; //PRESSURE
+  }
+  else if (MafzalMode == 4){
+    px = -px;
+    l2 = -2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)*(sqrt(1.+px*ax)+1.)); //PRESSURE
+    l3 = 2.*px*ax*kappainv/(utau_vec[noind]*sqrt(1.+px*ax)); //PRESSURE
   }
   else{
     l2 = 0.; //PRESSURE

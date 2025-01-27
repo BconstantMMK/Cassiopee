@@ -688,7 +688,7 @@ PyObject* K_CONNECTOR::__setInterpTransfers(PyObject* self, PyObject* args)
       if (r != 0) size  = size + 8 - r;        // on rajoute du bas pour alignememnt 64bits
       if (bctype <=1 ) size = 0;               // tableau inutile
 
-      FldArrayF  tmp(size*17*threadmax_sdm);
+      FldArrayF  tmp(size*20*threadmax_sdm);
       E_Float* ipt_tmp=  tmp.begin();
 
       E_Float* xPC     = ptrCoefs + nbInterpD;
@@ -773,39 +773,49 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
   }
   E_Int rank     = -100;
   E_Int it_target=  E_Int(It_target);
+  E_Float alpha = 0.;
   /* varType :
      1  : conservatives,
      11 : conservatives + ronutildeSA
      2  : (ro,u,v,w,t)
      21 : (ro,u,v,w,t) + ronutildeSA
-     22 : (ro,u,v,w,t) + ronutildeSA + (gradxRo, gradyRo, gradzRo) + (gradxT, gradyT, gradzT)
+     22 : (ro,u,v,w,t) + ronutildeSA + (gradxP, gradyP, gradzP)
+     23 : (ro,u,v,w,t) + ronutildeSA + (gradxNutildeSA, gradyNutildeSA, gradzNutildeSA)
+     24 : (ro,u,v,w,t) + ronutildeSA + (gradxNutildeSA, gradyNutildeSA, gradzNutildeSA) + (gradxP, gradyP, gradzP)
      3  : (ro,u,v,w,p)
      31 : (ro,u,v,w,p) + ronutildeSA
      4  : (ro,u,v,w,t) + (Q1,..., QN) LBM
      41 : (ro,u,v,w,t) + (Sxx,...) + (corr_xx,...) + (Q1,...,QN) LBM OVERSET
      ---------------------------------------------
      5  : (ro,u,v,w,t) + (Sxx,...) Couplage NS LBM
-     51 : Couplage NS LBM improved ( a coder ) */
+     51 : Couplage NS LBM improved ( a coder ) 
+     ---------------------------------------------
+     */
 
   E_Int varType = E_Int(vartype);
 
   //gestion nombre de pass pour ID et/ou IBC
   E_Int TypeTransfert = E_Int(type_transfert);
   E_Int pass_deb, pass_fin;
-  if     (TypeTransfert==0) { pass_deb =1; pass_fin =2; }//ID
-  else if(TypeTransfert==1) { pass_deb =0; pass_fin =1; }//IBCD
-  else                      { pass_deb =0; pass_fin =2; }//ALL
+  if     (TypeTransfert==0)  { pass_deb =1; pass_fin =2; }//ID
+  else if(TypeTransfert==1)  { pass_deb =0; pass_fin =1; }//IBCD
+  else if(TypeTransfert==11) { pass_deb =0; pass_fin =1; }//IBCD with 2nd IP
+  else if(TypeTransfert==21) { pass_deb =0; pass_fin =2; }//ALL with 2nd IP
+  else                       { pass_deb =0; pass_fin =2; }//ALL
 
   E_Int NoTransfert  = E_Int(no_transfert);
 
   E_Int kmd, cnNfldD, nvars, meshtype, nvars_Pnt2;
 
-  if     ( vartype <= 3 &&  vartype >= 1) nvars =5;
-  else if( vartype == 4 ) nvars =32; // LBM transfer, 19 or 27 Qs and 5 macros (32 max in total)
+  if      (vartype <= 3 && vartype >= 1) nvars = 5;
+  else if (vartype == 4 ) nvars = 32; // LBM transfer, 19 or 27 Qs and 5 macros (32 max in total)
                                      // on majore pour la LBM, car nvar sert uniquememnt a dimensionner taille vector
-  else if (vartype == 41) nvars =44; //38;    // LBM Overset : 19 or 27 Q, 5 macro and 6 gradients
-  else if( vartype == 5 ) nvars =30;    // Hybrid NSLBM transfer, 5 macros, 19 Qs + 6 gradients
-  else                    nvars =6;
+  else if (vartype == 41) nvars = 44; //38;    // LBM Overset : 19 or 27 Q, 5 macro and 6 gradients
+  else if (vartype == 5 ) nvars = 30;    // Hybrid NSLBM transfer, 5 macros, 19 Qs + 6 gradients
+  else if (vartype == 22) nvars = 3;
+  else if (vartype == 23) nvars = 9;
+  else if (vartype == 24) nvars = 12;
+  else                    nvars = 6;
 
   nvars_Pnt2 = 0;
   if (TypeTransfert==0)  isWireModel=0;
@@ -887,7 +897,6 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
     else if(ivar==3) {varname3 = vartmp;}
     else {printf("Warning: souci varname setInterpTransfers \n"); }
   }
-
 
   //on recupere sol et solcenter ainsi que connectivite et taille zones Donneuses (tc)
   for (E_Int nd = 0; nd < nidomD; nd++)
@@ -1037,7 +1046,7 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
   if (r != 0) size  = size + 8 - r;           // on rajoute du bas pour alignememnt 64bits
   if (ibcTypeMax <=1 ) size = 0;              // tableau inutile : SP voir avec Ivan
 
-  FldArrayF  tmp(size*17*threadmax_sdm);
+  FldArrayF  tmp(size*20*threadmax_sdm);
   E_Float* ipt_tmp = tmp.begin();
   
   E_Float** RcvFields = new E_Float*[ (nvars+nvars_Pnt2)*threadmax_sdm];
@@ -1110,7 +1119,11 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
             else if (nvars_loc==27 && overset==0) nvars_loc = nvars_loc + 5;
             else if (nvars_loc==19 && overset==1) nvars_loc = nvars_loc + 5 + 6 + 6;
             else if (nvars_loc==27 && overset==1) nvars_loc = nvars_loc + 5 + 6 + 6;
-            // cout << nvars_loc << endl;
+
+            if      (vartype == 22) nvars_loc = 3;     // (gradxP, gradyP, gradzP)
+            else if (vartype == 23) nvars_loc = 1+3;   // ronutildeSA + (gradxNutildeSA, gradyNutildeSA, gradzNutildeSA)
+            else if (vartype == 24) nvars_loc = 1+3+3; // ronutildeSA + (gradxNutildeSA, gradyNutildeSA, gradzNutildeSA) + (gradxP, gradyP, gradzP)
+
             // printf("irac=  %d, nvar/nvar_loc= %d %d,  ithread= %d  solverDR %d %d \n",irac , nvars,nvars_loc, ithread,  solver_D, solver_R);
 
             E_Int levelD   = ipt_param_intR[NoD][LEVEL];
@@ -1128,86 +1141,94 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
             }
             else
             {
-                        /*--------------------------------------------------------------------*/
-                        /*                GESTION DES TRANSFERTS EN CENTER                    */
-                        /* 2 cas: - si pas de couplage NSLBM, transferts habituels,           */
-                        /*        - si couplage NSLBM, raccords a adapter                     */
-                        /*--------------------------------------------------------------------*/
-                        if (nvars_loc == 5 || nvars_loc == 6) // Transferts NS classiques ou LBM -> NS
-                        {
-                         for (E_Int eq = 0; eq < nvars_loc; eq++)
-                         {
-                           vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
-                           vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
-                         }
-                        }
-                        else if (nvars_loc == 24 || nvars_loc == 32) // Transferts LBM classiques
-                        {
-                          // On commence par copier les 5 variables macros
-                          for (E_Int eq = 0; eq < 5; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                          // Puis on copie les fonctions de distribution
-                          for (E_Int eq = 5; eq < nvars_loc; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_qR[ NoR] + (eq-5)*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_qD[ NoD] + (eq-5)*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                        }
-                        else if (nvars_loc == 11 ) // //Transfert NS -> LBM    
-                        {
-                          // On commence par copier les 5 variables macros
-                          for (E_Int eq = 0; eq < 5; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                          // Puis on copie les gradients
-                          for (E_Int eq = 5; eq < nvars_loc; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_SR[ NoR] + (eq-5)*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_SD[ NoD] + (eq-5)*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                        }
-                        else if (nvars_loc == 36 || nvars_loc == 44) // //Transfert LBM  overset   
-                        {
-                          // On commence par copier les 5 variables macros
-                          for (E_Int eq = 0; eq < 5; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                          // Puis on copie les gradients
-                          for (E_Int eq = 5; eq < 11; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_SR[ NoR] + (eq-5)*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_SD[ NoD] + (eq-5)*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                          for (E_Int eq =11; eq < 17; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_psiGR[ NoR] + (eq-11)*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_psiGD[ NoD] + (eq-11)*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                          for (E_Int eq =17; eq < nvars_loc; eq++)
-                          {
-                            vectOfRcvFields[eq] = ipt_qR[ NoR] + (eq-17)*ipt_param_intR[ NoR][ NDIMDX ];
-                            vectOfDnrFields[eq] = ipt_qD[ NoD] + (eq-17)*ipt_param_intR[ NoD][ NDIMDX ];
-                          }
-                        }
-                        if (isWireModel>0)
-                        {
-                          for (E_Int eq = nvars_loc; eq < nvars_loc+nvars_Pnt2; eq++){
-                          vectOfRcvFields[eq] = ipt_roR_Pnt2[ NoR] + (eq-nvars_loc)*ipt_param_intR[ NoR ][ NDIMDX ];
-                        }
-                     }
-
-                      imd= ipt_param_intR[ NoD ][ NIJK ]; jmd= ipt_param_intR[ NoD ][ NIJK+1];
+              /*--------------------------------------------------------------------*/
+              /*                GESTION DES TRANSFERTS EN CENTER                    */
+              /* 2 cas: - si pas de couplage NSLBM, transferts habituels,           */
+              /*        - si couplage NSLBM, raccords a adapter                     */
+              /*--------------------------------------------------------------------*/
+              if (vartype == 23 || vartype == 24)
+              {
+                vectOfRcvFields[0] = ipt_roR[ NoR] + 5*ipt_param_intR[ NoR][ NDIMDX ]; // nutildeSA
+                vectOfDnrFields[0] = ipt_roD[ NoD] + 5*ipt_param_intR[ NoD][ NDIMDX ]; // nutildeSA
+                for (E_Int eq = 1; eq < nvars_loc; eq++) // gradients
+                {
+                  vectOfRcvFields[eq] = ipt_qR[ NoR] + (eq-1)*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_qD[ NoD] + (eq-1)*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+              }
+              if (nvars_loc == 5 || nvars_loc == 6 || nvars_loc == 3) // Transferts NS classiques ou LBM -> NS
+              {
+                for (E_Int eq = 0; eq < nvars_loc; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+              }
+              else if (nvars_loc == 24 || nvars_loc == 32) // Transferts LBM classiques
+              {
+                // On commence par copier les 5 variables macros
+                for (E_Int eq = 0; eq < 5; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+                // Puis on copie les fonctions de distribution
+                for (E_Int eq = 5; eq < nvars_loc; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_qR[ NoR] + (eq-5)*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_qD[ NoD] + (eq-5)*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+              }
+              else if (nvars_loc == 11 ) // //Transfert NS -> LBM    
+              {
+                // On commence par copier les 5 variables macros
+                for (E_Int eq = 0; eq < 5; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+                // Puis on copie les gradients
+                for (E_Int eq = 5; eq < nvars_loc; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_SR[ NoR] + (eq-5)*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_SD[ NoD] + (eq-5)*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+              }
+              else if (nvars_loc == 36 || nvars_loc == 44) // //Transfert LBM  overset   
+              {
+                // On commence par copier les 5 variables macros
+                for (E_Int eq = 0; eq < 5; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_roR[ NoR] + eq*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_roD[ NoD] + eq*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+                // Puis on copie les gradients
+                for (E_Int eq = 5; eq < 11; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_SR[ NoR] + (eq-5)*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_SD[ NoD] + (eq-5)*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+                for (E_Int eq =11; eq < 17; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_psiGR[ NoR] + (eq-11)*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_psiGD[ NoD] + (eq-11)*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+                for (E_Int eq =17; eq < nvars_loc; eq++)
+                {
+                  vectOfRcvFields[eq] = ipt_qR[ NoR] + (eq-17)*ipt_param_intR[ NoR][ NDIMDX ];
+                  vectOfDnrFields[eq] = ipt_qD[ NoD] + (eq-17)*ipt_param_intR[ NoD][ NDIMDX ];
+                }
+              }
+              if (isWireModel>0)
+              {
+                for (E_Int eq = nvars_loc; eq < nvars_loc+nvars_Pnt2; eq++){
+                vectOfRcvFields[eq] = ipt_roR_Pnt2[ NoR] + (eq-nvars_loc)*ipt_param_intR[ NoR ][ NDIMDX ];
+                }
+              }
+              imd= ipt_param_intR[ NoD ][ NIJK ]; jmd= ipt_param_intR[ NoD ][ NIJK+1];
             }
 
             imdjmd = imd*jmd;
-
 
             ////
             //  Interpolation parallele
@@ -1236,6 +1257,12 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
             E_Int ifin      = 0;
             E_Int shiftCoef = 0;
             E_Int shiftDonor  = 0;
+
+            alpha = ipt_param_realR[ NoR ][ ALPHAGRADP ];
+
+            E_Float b0, b1, b2, normb, n0, n1, n2;
+            E_Int shiftGradP = 0;
+            if (vartype == 24) shiftGradP = 4;
             
             for (E_Int ndtyp = 0; ndtyp < ntype[0]; ndtyp++)
             {
@@ -1274,81 +1301,148 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
               }
               else if ( isWireModel == 0 and  ibcType==141) linterp = 0;
 
-            if ( (nvars_loc==5 || (ibc==1 && solver_R==4)) && linterp==1 )
-            {
-#           include "commonInterpTransfers_reorder_5eq.h"
-            }
-            else if (nvars_loc==6 and linterp== 1)
-            {
-#           include "commonInterpTransfers_reorder_6eq.h"
-            }
-            else if(nvars_loc==19)
-            {
-#           include "commonInterpTransfers_reorder_19eq.h" 
-            }
-            else
-            {
-              if (linterp==1) 
+              if (type_transfert == 11) linterp = 0;
+              if (ibcType != 10 && (vartype == 22 || vartype == 23 || vartype == 24)) 
               {
-#               include "commonInterpTransfers_reorder_neq.h"
+                if (ibc == 1) linterp = 0;
+                ibc = 0;
               }
-            }
+
+              if ( (nvars_loc==5 || (ibc==1 && solver_R==4)) && linterp==1 )
+              {
+#             include "commonInterpTransfers_reorder_5eq.h"
+              }
+              else if (nvars_loc==6 and linterp== 1)
+              {
+#             include "commonInterpTransfers_reorder_6eq.h"
+              }
+              else if(nvars_loc==19)
+              {
+#             include "commonInterpTransfers_reorder_19eq.h" 
+              }
+              else
+              {
+                if (linterp==1) 
+                {
+#                 include "commonInterpTransfers_reorder_neq.h"
+                }
+              }
             
-            // =============================================================
-            // RAFFINEMENT DE MAILLAGE LBM/LBM
-            // =============================================================
-            if (solver_D==4 && solver_R==4 && levelD > levelR)
-            {
-#             include "includeTransfers_coarse2fine_LBM.h"
-            }
-            else if (solver_D == 4 && solver_R == 4 && levelD < levelR)
-            {
-#             include "includeTransfers_fine2coarse_LBM.h"
-            }
-            // =============================================================
+              // =============================================================
+              // RAFFINEMENT DE MAILLAGE LBM/LBM
+              // =============================================================
+              if (solver_D==4 && solver_R==4 && levelD > levelR)
+              {
+#               include "includeTransfers_coarse2fine_LBM.h"
+              }
+              else if (solver_D == 4 && solver_R == 4 && levelD < levelR)
+              {
+#               include "includeTransfers_fine2coarse_LBM.h"
+              }
+              // =============================================================
 
-            // =============================================================
-            // COUPLAGE NS-LBM: changement d'unite
-            // =============================================================
-            // Code que pour le cas D3Q19 pour le moment, a adapter au 27
-            if (solver_D==4 && solver_R<4)
-            {
-              // Transfert LBM vers NS: repasse dans unites SI
-#             include "includeTransfers_dimLBMtoNS.h"
-            }
-            else if (solver_D<4 && solver_R==4)
-            {
-              // Transfert NS vers LBM : adimensionnement
-#             include "includeTransfers_dimNStoLBM.h"
-            }
+              // =============================================================
+              // COUPLAGE NS-LBM: changement d'unite
+              // =============================================================
+              // Code que pour le cas D3Q19 pour le moment, a adapter au 27
+              if (solver_D==4 && solver_R<4)
+              {
+                // Transfert LBM vers NS: repasse dans unites SI
+#               include "includeTransfers_dimLBMtoNS.h"
+              }
+              else if (solver_D<4 && solver_R==4)
+              {
+                // Transfert NS vers LBM : adimensionnement
+#               include "includeTransfers_dimNStoLBM.h"
+              }
 
-            // Prise en compte de la periodicite par rotation
-            if (rotation == 1 and isWireModel!=2)
-            {
-              E_Float* angle = ptrCoefs + nbInterpD;
-#          include "includeTransfers_rotation.h"
-            }
+              // Prise en compte de la periodicite par rotation
+              if (rotation == 1 and isWireModel!=2)
+              {
+                E_Float* angle = ptrCoefs + nbInterpD;
+#               include "includeTransfers_rotation.h"
+              }
             
-
-            // ibc
-            if (ibc == 1)
-            {
+              // ibc
+              if (ibc == 1)
+              {
                 if (isWireModel ==0)
                 {
-                  setIBCTransfersCommonVar2(ibcType, rcvPts, nbRcvPts, pt_deb, pt_fin, ithread,
-                                  xPC, xPC+nbRcvPts, xPC+nbRcvPts*2,
-                                  xPW, xPW+nbRcvPts, xPW+nbRcvPts*2,
-                                  xPI, xPI+nbRcvPts, xPI+nbRcvPts*2,
-                                  densPtr, 
-                                  ipt_tmp, size, nvars,
-                                  ipt_param_realR[ NoR ],
-                                  vectOfDnrFields, vectOfRcvFields);
+                  if (vartype == 22 || vartype == 23 || vartype == 24) // Extended Wall Laws
+                  {
+                    if (vartype == 22 || vartype == 24) // gradP
+                    {
+                      if (type_transfert == 21) alpha = 1.;
 
-                  // Si calcul LBM => reconstruction a l'equilibre des Qs
-                  if (solver_R==4)
-                   {
-#                   include "includeTransfers_LBM_feq.h"
-                   }
+                      for (E_Int noind = 0; noind < pt_fin-pt_deb; noind++)
+                      {
+                        indR = rcvPts[noind+pt_deb];
+
+                        (densPtr+nbRcvPts*7)[noind+pt_deb] = vectOfRcvFields[0+shiftGradP][indR]/alpha + (densPtr+nbRcvPts*7)[noind+pt_deb]*(alpha-1.)/alpha;
+                        (densPtr+nbRcvPts*8)[noind+pt_deb] = vectOfRcvFields[1+shiftGradP][indR]/alpha + (densPtr+nbRcvPts*8)[noind+pt_deb]*(alpha-1.)/alpha;
+                        (densPtr+nbRcvPts*9)[noind+pt_deb] = vectOfRcvFields[2+shiftGradP][indR]/alpha + (densPtr+nbRcvPts*9)[noind+pt_deb]*(alpha-1.)/alpha;
+                      }
+                    }
+                    if (vartype == 23 || vartype == 24) // nutilde
+                    {
+
+                      if (type_transfert == 21) alpha = 1.;
+                      
+                      for (E_Int noind = 0; noind < pt_fin-pt_deb; noind++)
+                      {
+                        indR = rcvPts[noind+pt_deb];
+
+                        if (type_transfert == 11)
+                        {
+                          (densPtr+nbRcvPts*10)[noind+pt_deb] = vectOfRcvFields[1][indR];
+                          (densPtr+nbRcvPts*11)[noind+pt_deb] = vectOfRcvFields[2][indR];
+                          (densPtr+nbRcvPts*12)[noind+pt_deb] = vectOfRcvFields[3][indR];
+                        }
+                        else
+                        {
+                          b0 = (xPI           )[noind+pt_deb]-(xPW           )[noind+pt_deb];
+                          b1 = (xPI+nbRcvPts  )[noind+pt_deb]-(xPW+nbRcvPts  )[noind+pt_deb];
+                          b2 = (xPI+nbRcvPts*2)[noind+pt_deb]-(xPW+nbRcvPts*2)[noind+pt_deb];
+
+                          normb = sqrt(b0*b0+b1*b1+b2*b2);
+                          normb = std::max(normb, 1.e-12);
+
+                          n0 = b0/normb;
+                          n1 = b1/normb;
+                          n2 = b2/normb;
+
+                          (densPtr+nbRcvPts*10)[noind+pt_deb] = normb;
+                          (densPtr+nbRcvPts*11)[noind+pt_deb] = vectOfRcvFields[0][indR];
+                          (densPtr+nbRcvPts*12)[noind+pt_deb] = n0*vectOfRcvFields[1][indR] + n1*vectOfRcvFields[2][indR] + n2*vectOfRcvFields[3][indR];
+
+                          if (type_transfert == 21)
+                          {
+                            // store dist, nutilde, and gradnNutilde in rcvzones in gradxNutilde, gradyNutilde, and gradzNutilde
+                            vectOfRcvFields[1][indR] = (densPtr+nbRcvPts*10)[noind+pt_deb];
+                            vectOfRcvFields[2][indR] = (densPtr+nbRcvPts*11)[noind+pt_deb];
+                            vectOfRcvFields[3][indR] = (densPtr+nbRcvPts*12)[noind+pt_deb];
+                          }
+                        }
+                      }
+                    }
+                  }
+                  else
+                  {
+                    setIBCTransfersCommonVar2(ibcType, rcvPts, nbRcvPts, pt_deb, pt_fin, ithread,
+                                    xPC, xPC+nbRcvPts, xPC+nbRcvPts*2,
+                                    xPW, xPW+nbRcvPts, xPW+nbRcvPts*2,
+                                    xPI, xPI+nbRcvPts, xPI+nbRcvPts*2,
+                                    densPtr, 
+                                    ipt_tmp, size, nvars,
+                                    ipt_param_realR[ NoR ],
+                                    vectOfDnrFields, vectOfRcvFields);
+
+                    // Si calcul LBM => reconstruction a l'equilibre des Qs
+                    if (solver_R==4)
+                    {
+#                       include "includeTransfers_LBM_feq.h"
+                    }
+                  }
                 }
                 else if(isWireModel==2)
                 {
@@ -1360,24 +1454,24 @@ PyObject* K_CONNECTOR::___setInterpTransfers(PyObject* self, PyObject* args)
                       (densPtr+nbRcvPts*5 )[noind+pt_deb] = vectOfRcvFields[nvars  ][indR];
                       (densPtr+nbRcvPts*6 )[noind+pt_deb] = vectOfRcvFields[nvars+1][indR];
                       (densPtr+nbRcvPts*7 )[noind+pt_deb] = vectOfRcvFields[nvars+2][indR];
-                      (densPtr+nbRcvPts*8)[noind+pt_deb]  = vectOfRcvFields[nvars+3][indR];
-                      (densPtr+nbRcvPts*9)[noind+pt_deb]  = vectOfRcvFields[nvars+4][indR];
+                      (densPtr+nbRcvPts*8 )[noind+pt_deb] = vectOfRcvFields[nvars+3][indR];
+                      (densPtr+nbRcvPts*9 )[noind+pt_deb] = vectOfRcvFields[nvars+4][indR];
                       if (nvars==6){ (densPtr+nbRcvPts*10)[noind+pt_deb] = vectOfRcvFields[nvars+5][indR]; }					  
                     }
                   }
                 }
               }//ibc
             
-            ideb       =  ideb + ntype[ 1 + ndtyp];
-            shiftCoef  = shiftCoef  +  ntype[1+ndtyp]*sizecoefs; //shift coef   entre 2 types successif
-            shiftDonor = shiftDonor +  ntype[1+ndtyp];           //shift donor entre 2 types successif
-              }// type
+              ideb       =  ideb + ntype[ 1 + ndtyp];
+              shiftCoef  = shiftCoef  +  ntype[1+ndtyp]*sizecoefs; //shift coef   entre 2 types successif
+              shiftDonor = shiftDonor +  ntype[1+ndtyp];           //shift donor entre 2 types successif
+            }// type
 #pragma omp barrier
           }// autorisation transfert
-          }//irac
+        }//irac
       }//pass_inst
 #pragma omp barrier
-      }//ipass
+    }//ipass
   }// omp
 
 
@@ -1631,7 +1725,7 @@ PyObject* K_CONNECTOR::___setInterpTransfers4GradP(PyObject* self, PyObject* arg
   if (r != 0) size  = size + 8 - r;           // on rajoute du bas pour alignememnt 64bits
   if (ibcTypeMax <=1 ) size = 0;              // tableau inutile : SP voir avec Ivan
 
-  FldArrayF  tmp(size*17*threadmax_sdm);
+  FldArrayF  tmp(size*20*threadmax_sdm);
   E_Float* ipt_tmp = tmp.begin();
 
   //# pragma omp parallel default(shared)  num_threads(1)

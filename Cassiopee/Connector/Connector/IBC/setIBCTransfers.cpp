@@ -501,6 +501,10 @@ E_Int K_CONNECTOR::setIBCTransfersCommonVar2(
   E_Float Ct_WM        = param_real[ CtWire ];
   E_Float R_gas        = Pinf/(Roinf*Tinf);
 
+  E_Float MafzalMode   = param_real[ MAFZAL_MODE ];
+  E_Float alphaGradP   = param_real[ ALPHAGRADP ];
+  // printf("MafzalMode = %f / alphaGradP = %f\n", MafzalMode, alphaGradP);
+
 
   E_Int bctypeLocal; 
   int   motionType      = (int) param_real[MotionType];
@@ -550,6 +554,10 @@ E_Int K_CONNECTOR::setIBCTransfersCommonVar2(
   E_Float* gradxWPtr = NULL;
   E_Float* gradyWPtr = NULL;
   E_Float* gradzWPtr = NULL;
+
+  E_Float* dtwPtr = NULL;
+  E_Float* nutildePtr = NULL;
+  E_Float* gradnNutildePtr = NULL;
 
   E_Float* motionPtr   = NULL;
   E_Float* transpeedPtrX = NULL;
@@ -642,10 +650,9 @@ E_Int K_CONNECTOR::setIBCTransfersCommonVar2(
       gradyPressPtr = densPtr+8*nbRcvPts;
       gradzPressPtr = densPtr+9*nbRcvPts;
 
-      //E_Int   mafzalMode    = param_real[ MAFZAL_MODE ];
-      //E_Float alphaGradP    = param_real[ ALPHAGRADP ];
-      //nbptslinelets         = param_real[ NBPTS_LINELETS ];
-      // std::cout << "mafzalMode = " << mafzalMode << " alpha = " << alphaGradP << " nbpts linelets = " << nbptslinelets << std::endl;
+      dtwPtr = densPtr+10*nbRcvPts;
+      nutildePtr = densPtr+11*nbRcvPts;
+      gradnNutildePtr = densPtr+12*nbRcvPts;
     }
   else if (bctype == 11) // TBLE-FULL
     {
@@ -697,6 +704,7 @@ E_Int K_CONNECTOR::setIBCTransfersCommonVar2(
   E_Float gradxUext, gradyUext, gradzUext;
   E_Float gradxVext, gradyVext, gradzVext;
   E_Float gradxWext, gradyWext, gradzWext;
+  E_Float dtw_ext, nutilde_ext, gradnNutilde_ext;
   E_Float uscaln, un, vn, wn, ut, vt, wt, utau, utauv, utau0, umod;  
   E_Float utinf, vtinf, wtinf;
   E_Float t_thwaites, a_thwaites, b_thwaites, c_thwaites, lambda_thwaites, m_thwaites;
@@ -1879,132 +1887,122 @@ E_Int K_CONNECTOR::setIBCTransfersCommonVar2(
 	}
     }//bctype
   else if (bctype == 10) // loi de paroi Mafzal
-    {
+  {
 #   include "IBC/pointer.h"
 
-      E_Float MafzalMode = 3; // param_real[ MAFZAL_MODE ];
+    E_Int err  = 0;
+    E_Int skip = 0;
+    E_Float tgradU = 0.;
+    E_Float ngradU = 0.;
+    E_Float unext = 0.;
 
-      E_Int err  = 0;
-      E_Int skip = 0;
-      E_Float tgradU = 0.;
-      E_Float ngradU = 0.;
-      E_Float unext = 0.;
-      //initialisation parametre geometrique et utau
+#ifdef _OPENMP4
+#pragma omp simd
+#endif
+    for (E_Int noind = 0; noind < ifin-ideb; noind++)
+    {
+      E_Int indR = rcvPts[noind+ideb];
+
+      roext = roOut[indR]; // densite du point interpole
+      text  = tOut[indR];  // pression du point interpole
+      pext  = text*roext*cvgam;
+
+      // vitesse du pt ext
+      u = uOut[indR];
+      v = vOut[indR];
+      w = wOut[indR];
+
+      // gradient de pression au point ext
+      gradxPext = gradxPressPtr[noind+ideb];
+      gradyPext = gradyPressPtr[noind+ideb];
+      gradzPext = gradzPressPtr[noind+ideb];
+
+      // info nutilde au point ext
+      dtw_ext = dtwPtr[noind+ideb];
+      nutilde_ext = nutildePtr[noind+ideb];
+      gradnNutilde_ext = gradnNutildePtr[noind+ideb];
+
+#     include "IBC/commonMafzalLaw_init.h"
+    }
+
+    // PREMIERE PASSE MUSKER POUR UTAU_ORI #####################################
+#   include "IBC/commonMuskerLaw_Newton.h"
+    err  = 0;
+    skip = 0;
+    E_Float alphaMafMus;
+
+#ifdef _OPENMP4
+#pragma omp simd
+#endif
+    for (E_Int noind = 0; noind < ifin-ideb; noind++)
+    {
+      utau0 = utauOri_vec[noind];
+      utauOri_vec[noind] = utau_vec[noind];
+      utau_vec[noind] = utau0;
+
+#     include "IBC/mafzal_vec.h"
+    }
+    // #########################################################################
+
+    // Newton pour utau -> Mafzal
+#   include "IBC/commonMafzalLaw_Newton.h"
+
+    //initialisation Newton SA  + vitesse cible
+#   include "IBC/nutilde_Ferrari_adim_Mafzal.h"
+      
+    if (nvars == 6)
+	  {
 #ifdef _OPENMP4
 #pragma omp simd
 #endif
       for (E_Int noind = 0; noind < ifin-ideb; noind++)
-	{
-	  //E_Int indR = rcvPts[noind];
-	  E_Int indR = rcvPts[noind+ideb];
+      {
+        E_Int indR = rcvPts[noind+ideb];
 
-	  roext = roOut[indR]; // densite du point interpole
-	  text  = tOut[indR];  // pression du point interpole
-	  pext  = text*roext*cvgam;
+        // For Post (tOut temperature du point image en entree, pt corrige en sortie)
+        twall = tOut[indR] + 0.5*pow(Pr,one_third)/(cv*gamma)*(uext_vec[noind]*uext_vec[noind]); // Crocco-Busemann
+        densPtr[noind+ideb]  = press_vec[noind]/twall*cvgaminv;
+        pressPtr[noind+ideb] = press_vec[noind];
 
-	  // vitesse du pt ext
-	  u = uOut[indR];
-	  v = vOut[indR];
-	  w = wOut[indR];
+        // Mise a jour pt corrige
+        roOut[indR]    = press_vec[noind ]/tcible_vec[noind]*cvgaminv;
+        uOut[indR]     = ucible_vec[noind];
+        vOut[indR]     = vcible_vec[noind];
+        wOut[indR]     = wcible_vec[noind];
+        tOut[indR]     = tcible_vec[noind];
+        varSAOut[indR] = aa_vec[noind]*sign_vec[noind]*uext_vec[noind];  //nutilde*signibc
 
-	  // gradient de pression au point ext
-	  gradxPext = gradxPressPtr[noind+ideb];
-	  gradyPext = gradyPressPtr[noind+ideb];
-	  gradzPext = gradzPressPtr[noind+ideb];
-
-#       include "IBC/commonMafzalLaw_init.h"
-	}
-
-      // PREMIERE PASSE MUSKER POUR UTAU_ORI #####################################
-#    include "IBC/commonMuskerLaw_Newton.h"
-      err  = 0;
-      skip = 0;
-      E_Float alphaMafMus;
-
+        vxPtr[noind+ideb] = uOut[indR];
+        vyPtr[noind+ideb] = vOut[indR];
+        vzPtr[noind+ideb] = wOut[indR];
+      }
+    }
+    else //5eq
+    {
 #ifdef _OPENMP4
 #pragma omp simd
 #endif
       for (E_Int noind = 0; noind < ifin-ideb; noind++)
-	{
-	  utau0 = utauOri_vec[noind];
-	  utauOri_vec[noind] = utau_vec[noind];
-	  utau_vec[noind] = utau0;
+      {
+        E_Int indR = rcvPts[noind+ideb];
 
-#  include "IBC/mafzal_vec.h"
-	}
-      // #########################################################################
+        // For Post (tOut temperature du point image)
+        twall = tOut[indR]  + 0.5*pow(Pr,one_third)/(cv*gamma)*(uext_vec[noind]*uext_vec[noind]); // Crocco-Busemann
+        densPtr[noind+ideb]  = press_vec[noind]/twall*cvgaminv;
+        pressPtr[noind+ideb] = press_vec[noind];
 
-      // Newton pour utau -> Mafzal
-#    include "IBC/commonMafzalLaw_Newton.h"
+        roOut[indR]    = press_vec[noind ]/tcible_vec[noind]*cvgaminv;
+        uOut[indR]     = ucible_vec[noind];
+        vOut[indR]     = vcible_vec[noind];
+        wOut[indR]     = wcible_vec[noind];
+        tOut[indR]     = tcible_vec[noind];
 
-      //initialisation Newton SA  + vitesse cible
-#if NUTILDE_FERRARI == 0
-#    include "IBC/commonMafzalLaw_cible.h"
-#elif NUTILDE_FERRARI == 1
-#    include "IBC/nutilde_Ferrari_Mafzal.h"
-#else
-#    include "IBC/nutilde_Ferrari_adim_Mafzal.h"
-#endif
-      if (nvars == 6)
-	{
-	  // Newton pour mut
-#if NUTILDE_FERRARI == 0
-#       include "IBC/nutildeSA_Newton.h"
-#endif
-	  // mise a jour des variables
-#ifdef _OPENMP4
-#pragma omp simd
-#endif
-	  for (E_Int noind = 0; noind < ifin-ideb; noind++)
-	    {
-	      E_Int indR = rcvPts[noind+ideb];
-
-	      // For Post (tOut temperature du point image en entree, pt corrige en sortie)
-	      twall = tOut[indR] + 0.5*pow(Pr,one_third)/(cv*gamma)*(uext_vec[noind]*uext_vec[noind]); // Crocco-Busemann
-	      densPtr[noind+ideb]  = press_vec[noind]/twall*cvgaminv;
-	      pressPtr[noind+ideb] = press_vec[noind];
-
-	      // Mise a jour pt corrige
-	      roOut[indR]    = press_vec[noind ]/tcible_vec[noind]*cvgaminv;
-	      uOut[indR]     = ucible_vec[noind];
-	      vOut[indR]     = vcible_vec[noind];
-	      wOut[indR]     = wcible_vec[noind];
-	      tOut[indR]     = tcible_vec[noind];
-	      varSAOut[indR] = aa_vec[noind]*sign_vec[noind]*uext_vec[noind];  //nutilde*signibc
-
-	      vxPtr[noind+ideb] = uOut[indR];
-	      vyPtr[noind+ideb] = vOut[indR];
-	      vzPtr[noind+ideb] = wOut[indR];
-	    }
-	}
-      else //5eq
-	{
-	  // mise a jour des variable
-#ifdef _OPENMP4
-#pragma omp simd
-#endif
-	  for (E_Int noind = 0; noind < ifin-ideb; noind++)
-	    {
-	      E_Int indR = rcvPts[noind+ideb];
-
-	      // For Post (tOut temperature du point image)
-	      twall = tOut[indR]  + 0.5*pow(Pr,one_third)/(cv*gamma)*(uext_vec[noind]*uext_vec[noind]); // Crocco-Busemann
-	      densPtr[noind+ideb]  = press_vec[noind]/twall*cvgaminv;
-	      pressPtr[noind+ideb] = press_vec[noind];
-
-	      roOut[indR]    = press_vec[noind ]/tcible_vec[noind]*cvgaminv;
-	      uOut[indR]     = ucible_vec[noind];
-	      vOut[indR]     = vcible_vec[noind];
-	      wOut[indR]     = wcible_vec[noind];
-	      tOut[indR]     = tcible_vec[noind];
-
-	      vxPtr[noind+ideb] = uOut[indR];
-	      vyPtr[noind+ideb] = vOut[indR];
-	      vzPtr[noind+ideb] = wOut[indR];
-	    }
-	}
-
-    }//bctype
+        vxPtr[noind+ideb] = uOut[indR];
+        vyPtr[noind+ideb] = vOut[indR];
+        vzPtr[noind+ideb] = wOut[indR];
+      }
+    }
+  }//bctype
   else if (bctype == 11) // TBLE_FULL
     {
 

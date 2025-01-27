@@ -423,7 +423,7 @@ def _extractShearStress(ts):
     C._initVars(ts, '{centers:ShearStressXY}={centers:tau_wall}*({centers:tx}*{centers:sy}+{centers:ty}*{centers:sx})')
     C._initVars(ts, '{centers:ShearStressXZ}={centers:tau_wall}*({centers:tx}*{centers:sz}+{centers:tz}*{centers:sx})')
     C._initVars(ts, '{centers:ShearStressYZ}={centers:tau_wall}*({centers:ty}*{centers:sz}+{centers:tz}*{centers:sy})')
-    C._rmVars(ts,['centers:utau','centers:tau_wall','centers:tx','centers:ty','centers:tz','centers:sx','centers:sy','centers:sz'])
+    C._rmVars(ts,['centers:tau_wall','centers:tx','centers:ty','centers:tz','centers:sx','centers:sy','centers:sz'])
 
     return None
 
@@ -880,6 +880,7 @@ def createCloudIBM__(tc, ibctypes=[], famZones=[], extraIBCVariables=['yplusIP']
             pressNP = []; utauNP = []; yplusNP = []; yplusINP = []; yplusIRNP = []; densNP = []
             vxNP = []; vyNP = []; vzNP = []
             gradxPressureNP = []; gradyPressureNP = []; gradzPressureNP = []
+            dtwNP = []; nutildeNP = []; gradnNutildeNP = []
 
             PW = Internal.getNodeFromName1(IBCD,XOD.__PRESSURE__)
             if PW is not None: pressNP.append(PW[1])
@@ -910,6 +911,13 @@ def createCloudIBM__(tc, ibctypes=[], famZones=[], extraIBCVariables=['yplusIP']
             GRADZPW = Internal.getNodeFromName1(IBCD, XOD.__GRADZPRESSURE__)
             if GRADZPW is not None: gradzPressureNP.append(GRADZPW[1])
 
+            DTW = Internal.getNodeFromName1(IBCD, 'dtw')
+            if DTW is not None: dtwNP.append(DTW[1])
+            NUTILDE = Internal.getNodeFromName1(IBCD, 'turbulentSANuTilde')
+            if NUTILDE is not None: nutildeNP.append(NUTILDE[1])
+            GRADNNUTILDE = Internal.getNodeFromName1(IBCD, 'gradnTurbulentSANuTilde')
+            if GRADNNUTILDE is not None: gradnNutildeNP.append(GRADNNUTILDE[1])
+
             FSN[2].append([XOD.__PRESSURE__,pressNP[0], [],'DataArray_t'])
             FSN[2].append([XOD.__DENSITY__,densNP[0], [],'DataArray_t'])
             if utauNP != []:
@@ -932,6 +940,11 @@ def createCloudIBM__(tc, ibctypes=[], famZones=[], extraIBCVariables=['yplusIP']
                 FSN[2].append([XOD.__GRADXPRESSURE__,gradxPressureNP[0], [],'DataArray_t'])
                 FSN[2].append([XOD.__GRADYPRESSURE__,gradyPressureNP[0], [],'DataArray_t'])
                 FSN[2].append([XOD.__GRADZPRESSURE__,gradzPressureNP[0], [],'DataArray_t'])
+
+            if nutildeNP != [] and 'turbulentSANuTilde' in extraIBCVariables:
+                FSN[2].append(['dtw',dtwNP[0], [],'DataArray_t'])
+                FSN[2].append(['turbulentSANuTilde',nutildeNP[0], [],'DataArray_t'])
+                FSN[2].append(['gradnTurbulentSANuTilde',gradnNutildeNP[0], [],'DataArray_t'])
 
             Cmpi._setProc(z,Cmpi.rank)
             tl[2][1][2].append(z)
@@ -1111,6 +1124,10 @@ def prepareSkinReconstruction(tb, tc, dimPb=3, ibctypes=[], famZones=[], extraIB
     C._initVars(ts,XOD.__GRADYPRESSURE__,0.)
     C._initVars(ts,XOD.__GRADZPRESSURE__,0.)
 
+    if 'turbulentSANuTilde' in extraIBCVariables:
+        C._initVars(ts,'dtw',0.)
+        C._initVars(ts,'turbulentSANuTilde',0.)
+        C._initVars(ts,'gradnTurbulentSANuTilde',0.)
 
     # CREATE interpdata for MLS
     if prepareMLS:
