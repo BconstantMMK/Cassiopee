@@ -967,7 +967,7 @@ def _addIBCCoords__(z, zname, correctedPts, wallPts, interpolatedPts, bcType, bc
         KCurvNP = numpy.zeros((nIBC),numpy.float64)
         zsr[2].append([__KCURV__ , KCurvNP , [], 'DataArray_t'])
 
-    if bcType == 10 or bcType == 11:
+    if bcType == 10:
         gradxPressureNP  = numpy.zeros((nIBC),numpy.float64)
         zsr[2].append(['gradxPressure' , gradxPressureNP , [], 'DataArray_t'])
         gradyPressureNP  = numpy.zeros((nIBC),numpy.float64)
@@ -975,7 +975,21 @@ def _addIBCCoords__(z, zname, correctedPts, wallPts, interpolatedPts, bcType, bc
         gradzPressureNP  = numpy.zeros((nIBC),numpy.float64)
         zsr[2].append(['gradzPressure' , gradzPressureNP , [], 'DataArray_t'])
 
+        dtwNP = numpy.zeros((nIBC),numpy.float64)
+        zsr[2].append(['dtw' , dtwNP , [], 'DataArray_t'])
+        turbulentSANuTildeNP = numpy.zeros((nIBC),numpy.float64)
+        zsr[2].append(['turbulentSANuTilde' , turbulentSANuTildeNP , [], 'DataArray_t'])
+        gradnTurbulentSANuTildeNP = numpy.zeros((nIBC),numpy.float64)
+        zsr[2].append(['gradnTurbulentSANuTilde' , gradnTurbulentSANuTildeNP , [], 'DataArray_t'])
+
     if bcType == 11:
+        gradxPressureNP  = numpy.zeros((nIBC),numpy.float64)
+        zsr[2].append(['gradxPressure' , gradxPressureNP , [], 'DataArray_t'])
+        gradyPressureNP  = numpy.zeros((nIBC),numpy.float64)
+        zsr[2].append(['gradyPressure' , gradyPressureNP , [], 'DataArray_t'])
+        gradzPressureNP  = numpy.zeros((nIBC),numpy.float64)
+        zsr[2].append(['gradzPressure' , gradzPressureNP , [], 'DataArray_t'])
+        
         gradxVelocityXNP  = numpy.zeros((nIBC),numpy.float64)
         zsr[2].append(['gradxVelocityX' , gradxVelocityXNP , [], 'DataArray_t'])
         gradyVelocityXNP  = numpy.zeros((nIBC),numpy.float64)

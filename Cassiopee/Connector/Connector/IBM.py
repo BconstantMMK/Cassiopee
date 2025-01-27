@@ -1776,19 +1776,16 @@ def _tcInitialize__(tc, tc2=None, ibctypes=[], isWireModel=False):
     Internal._createUniqueChild(solverIBC, 'Reref', 'DataArray_t', -1)
     Internal._createUniqueChild(solverIBC, 'Lref' , 'DataArray_t',  1)
 
-    Internal._createUniqueChild(solverIBC, 'isgradP'    , 'DataArray_t', 'False')
+    Internal._createUniqueChild(solverIBC, 'isGradP'    , 'DataArray_t', 'False')
+    Internal._createUniqueChild(solverIBC, 'isNutildeHO', 'DataArray_t', 'False')
     Internal._createUniqueChild(solverIBC, 'isWireModel', 'DataArray_t', 'False')
     Internal._createUniqueChild(solverIBC, 'isTBLE'     , 'DataArray_t', 'False')
 
-    # note: here alphagrad is the corrected nomenclature for alghagradp found in param_solver.h (B.Constant confirmed)
-    #      changed some other variables names to be consistent with other options/coding "guidelines"
     if 'Mafzal' in ibctypes:
-        Internal._createUniqueChild(solverIBC, 'isgradP'   , 'DataArray_t', 'True')
-        Internal._createUniqueChild(solverIBC, 'mafzalMode', 'DataArray_t', 0)
-        Internal._createUniqueChild(solverIBC, 'alphaGrad' , 'DataArray_t', 0)
-    # if twoFronts:
-    #     Internal._createUniqueChild(solverIBC, 'isgradP'    , 'DataArray_t', 'True')
-    #     Internal._createUniqueChild(solverIBC, 'alphaGrad'  , 'DataArray_t', 0)
+        Internal._createUniqueChild(solverIBC, 'isGradP'    , 'DataArray_t', 'True')
+        Internal._createUniqueChild(solverIBC, 'isNutildeHO', 'DataArray_t', 'False')
+        Internal._createUniqueChild(solverIBC, 'MafzalMode' , 'DataArray_t', 3)
+        Internal._createUniqueChild(solverIBC, 'AlphaGradP' , 'DataArray_t', 1000.)
     if isWireModel:
         Internal._createUniqueChild(solverIBC, 'isWireModel' , 'DataArray_t', 'True')
         Internal._createUniqueChild(solverIBC, 'DeltaVWire'  , 'DataArray_t', 0)

@@ -39,6 +39,10 @@ if (MafzalMode < 3){
 	}
 }
 
+yplusext_vec[noind] = dtw_ext*rowall/muwall;
+nutext_vec[noind] = nutilde_ext*rowall/muwall;
+gradNutext_vec[noind] = gradnNutilde_ext*rowall/muwall;
+
 mu_vec[noind]       = muwall;
 
 alpha_vec[noind]    = alpha;

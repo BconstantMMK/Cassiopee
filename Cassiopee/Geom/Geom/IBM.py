@@ -452,23 +452,31 @@ def _addVariablesTcIbc(zsr, ibctype, nIBC, nsModel='NSLaminar'):
         Internal._createChild(zsr, 'diry'              , 'DataArray_t', value=copy.copy(Nlength))
         Internal._createChild(zsr, 'dirz'              , 'DataArray_t', value=copy.copy(Nlength))
 
-    elif ibctype == 10 or ibctype == 11:
+    elif ibctype == 10:
         zsr[2].append(['gradxPressure' , copy.copy(Nlength) , [], 'DataArray_t'])
         zsr[2].append(['gradyPressure' , copy.copy(Nlength) , [], 'DataArray_t'])
         zsr[2].append(['gradzPressure' , copy.copy(Nlength) , [], 'DataArray_t'])
 
-        if ibctype == 11:
-            zsr[2].append(['gradxVelocityX' , copy.copy(Nlength) , [], 'DataArray_t'])
-            zsr[2].append(['gradyVelocityX' , copy.copy(Nlength) , [], 'DataArray_t'])
-            zsr[2].append(['gradzVelocityX' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['dtw' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['turbulentSANuTilde' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradnTurbulentSANuTilde' , copy.copy(Nlength) , [], 'DataArray_t'])
 
-            zsr[2].append(['gradxVelocityY' , copy.copy(Nlength) , [], 'DataArray_t'])
-            zsr[2].append(['gradyVelocityY' , copy.copy(Nlength) , [], 'DataArray_t'])
-            zsr[2].append(['gradzVelocityY' , copy.copy(Nlength) , [], 'DataArray_t'])
+    if ibctype == 11:
+        zsr[2].append(['gradxPressure' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradyPressure' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradzPressure' , copy.copy(Nlength) , [], 'DataArray_t'])
 
-            zsr[2].append(['gradxVelocityZ' , copy.copy(Nlength) , [], 'DataArray_t'])
-            zsr[2].append(['gradyVelocityZ' , copy.copy(Nlength) , [], 'DataArray_t'])
-            zsr[2].append(['gradzVelocityZ' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradxVelocityX' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradyVelocityX' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradzVelocityX' , copy.copy(Nlength) , [], 'DataArray_t'])
+
+        zsr[2].append(['gradxVelocityY' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradyVelocityY' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradzVelocityY' , copy.copy(Nlength) , [], 'DataArray_t'])
+
+        zsr[2].append(['gradxVelocityZ' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradyVelocityZ' , copy.copy(Nlength) , [], 'DataArray_t'])
+        zsr[2].append(['gradzVelocityZ' , copy.copy(Nlength) , [], 'DataArray_t'])
 
     elif ibctype == 100:
         zsr[2].append(["KCurv" , copy.copy(Nlength) , [], 'DataArray_t'])
