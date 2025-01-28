@@ -1090,7 +1090,7 @@ def miseAPlatDonorTree__(zones, tc, graph=None, list_graph=None, nbpts_linelets=
             if gradnNutilde is not None:
                 dtw[1] = param_real[ ptdtw : ptdtw + Nbpts_D ]
                 nutilde[1] = param_real[ ptnutilde : ptnutilde + Nbpts_D ]
-                gradnNutilde[1] = param_real[ ptgradnNutilde : ptgradnNutilde + Nbpts_D ] 
+                gradnNutilde[1] = param_real[ ptgradnNutilde : ptgradnNutilde + Nbpts_D ]
 
             if xcInit is not None:
                 xcInit = param_real[ ptxcInit : ptxcInit + Nbpts_D ]
