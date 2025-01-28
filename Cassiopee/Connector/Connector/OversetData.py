@@ -989,7 +989,7 @@ def _addIBCCoords__(z, zname, correctedPts, wallPts, interpolatedPts, bcType, bc
         zsr[2].append(['gradyPressure' , gradyPressureNP , [], 'DataArray_t'])
         gradzPressureNP  = numpy.zeros((nIBC),numpy.float64)
         zsr[2].append(['gradzPressure' , gradzPressureNP , [], 'DataArray_t'])
-        
+
         gradxVelocityXNP  = numpy.zeros((nIBC),numpy.float64)
         zsr[2].append(['gradxVelocityX' , gradxVelocityXNP , [], 'DataArray_t'])
         gradyVelocityXNP  = numpy.zeros((nIBC),numpy.float64)
