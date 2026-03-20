@@ -569,6 +569,34 @@ installDict = {
         'NvccAdditionalOptions': []
     },
 
+    'ubuntu_arm64': {
+        'description': 'Linux ubuntu 24.04 (emulation arm64 with QEMU) - Github Actions',
+        'f77compiler': 'gfortran',
+        'f90compiler': 'gfortran',
+        'Cppcompiler': 'gcc',
+        'CppAdditionalOptions': [
+            '-DPNG_ARM_NEON_OPT=0'
+        ],
+        'f77AdditionalOptions': [],
+        'useOMP': True,
+        'static': False,
+        'additionalIncludePaths': [
+            '/usr/include',
+            '/usr/include/hdf5/openmpi',
+            '/usr/lib/aarch64-linux-gnu/openmpi/include',
+            '/usr/include/libpng16',
+        ],
+        'additionalLibs': ['gfortran', 'gomp', 'png'],
+        'additionalLibPaths': [
+            '/usr/lib',
+            '/usr/lib/aarch64-linux-gnu',
+            '/usr/lib/aarch64-linux-gnu/hdf5/openmpi',
+            '/usr/lib/aarch64-linux-gnu/openmpi/lib'
+        ],
+        'useCuda': False,
+        'NvccAdditionalOptions': []
+    },
+
     'jean_zay': {
         'description': 'Machine IDRIS intel + NVIDIA V100)',
         'f77compiler': 'nvfortran',

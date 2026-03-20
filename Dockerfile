@@ -75,10 +75,10 @@ ENV PIP_ROOT_USER_ACTION=ignore
 # Install Python dependencies using pip
 RUN python -m pip install --upgrade pip setuptools wheel build
 RUN python -m pip install \
-        numpy>=1.23.3 \
-        mpi4py>=3.1.3 \
-        scons>=4.4.0 \
-        matplotlib>=3.8.0
+        "numpy>=1.23.3" \
+        "mpi4py>=3.1.3" \
+        "scons>=4.4.0" \
+        "matplotlib>=3.10.0"
 
 # Verify the version of Python and numpy
 RUN python3 --version && pip3 --version
@@ -155,13 +155,16 @@ COPY . $CASSIOPEE
 # Change the default shell to be the bash shell
 SHELL ["/bin/bash", "-c"]
 
-# Source environment and run install script
-RUN . /etc/cassiopee-machine.env && echo "Using MACHINE=${MACHINE}" \
-    && . $CASSIOPEE/Cassiopee/Envs/sh_Cassiopee_r8 \
-    && export PRODMODE=3 \
-    && export OMP_NUM_THREADS=2 \
-    && cd $CASSIOPEE/Cassiopee \
-    && ./install
+# Install vim
+RUN apt-get update && apt-get install -y vim
 
-# Default command to run the application: start an interactive shell session
-ENTRYPOINT ["/bin/bash", "-i", "-c", "source /etc/cassiopee-machine.env && source $CASSIOPEE/Cassiopee/Envs/sh_Cassiopee_r8 && exec /bin/bash -i"]
+# Source environment and run install script
+ENV MACHINE=ubuntu_arm64
+# RUN . $CASSIOPEE/Cassiopee/Envs/sh_Cassiopee_r8 \
+#     && export PRODMODE=3 \
+#     && export OMP_NUM_THREADS=2 \
+#     && cd $CASSIOPEE/Cassiopee
+#     && ./install
+
+# # Default command to run the application: start an interactive shell session
+# ENTRYPOINT ["/bin/bash", "-i", "-c", "source /etc/cassiopee-machine.env && source $CASSIOPEE/Cassiopee/Envs/sh_Cassiopee_r8 && exec /bin/bash -i"]
