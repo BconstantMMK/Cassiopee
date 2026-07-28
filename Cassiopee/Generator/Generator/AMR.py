@@ -305,7 +305,7 @@ def generateListOfOffsets__(tb, snears, offsetValues=[], dim=3, opt=False, nboxe
     debugCheck = False
 
     if offsetValues == []: return []
-    
+
     if Cmpi.master: print('Generating list of offsets...start', flush=True)
 
     minSnear = min([snearLocal[0] for snearLocal in snears])
@@ -640,7 +640,7 @@ def generateSkeletonMeshCart__(tb, dictGridCart, snearsFlat, dim, levelSkel):
         # determine levelSkel for the x-z plane - disregarding the y direction - needed for the y-extruded case
         lengthBGMin = lengthBG[0]; lengthBGMax = lengthBG[0]
     if dim == 3: lengthBGMin=min(lengthBGMax, lengthBG[2]); lengthBGMax=max(lengthBGMax, lengthBG[2])
-    
+
     levelSkelLoc = int(math.log2(lengthBGMax/snearMin)) + 1
     if not forceUpperLimitOffset: levelSkel = max(levelSkel, levelSkelLoc) # security so that levelSkel is not too small
     else: levelSkel = min(levelSkel, levelSkelLoc)
@@ -648,7 +648,7 @@ def generateSkeletonMeshCart__(tb, dictGridCart, snearsFlat, dim, levelSkel):
     snearloc = 2**levelSkel*snearMin
     while snearloc > lengthBGMin/8: # security so that levelSkel is not too big - atleast
         snearloc  /= 2.; levelSkel -= 1
-    
+
     tolYdirection = 1.2
     if extrude: # Deltax_i needs to the same in each direction - check how many large Dx fit in the y-direction
         multipleYdirection = (lengthBG[1]*tolYdirection)//snearloc
@@ -690,7 +690,7 @@ def generateSkeletonMeshCart__(tb, dictGridCart, snearsFlat, dim, levelSkel):
         o = G.cart((cartbgExtent[0], cartbgExtent[1], cartbgExtent[2]),
                    (snearloc, snearloc, snearloc),
                    (nCellsCartesian[0]+1, nCellsCartesian[1]+1, nCellsCartesian[2]+1))
-        
+
     for i in range(dim):
         if matchExtent[i+3]:
             maxVal = C.getMaxValue(o, 'GridCoordinates')[i]
@@ -1803,7 +1803,7 @@ def generateCartBackgroundGrid(tb, levelMax=0, snears=0.01, dim=3, dictGridCart=
     return o, newLevelMax
 
 #==================================================================
-# 
+#
 #==================================================================
 def _addExtensionInfo(tb, dictExtension, dictTolerance=None):
     # example of the dictExtension - the value provided (-1, 1) correspond to
