@@ -944,7 +944,7 @@ def getMinimumSpacing__(t, dim, snear=1e-1):
 def computeDistance_IP_DP_front42_nonAdaptive__(t, Reynolds, yplus_target, Lref, dim, snear=1e-2):
     # not used currently - not sure what it does... need to look into it
     import Geom.IBM as D_IBM
-    distance_IP = D_IBM.computeModelisationHeight(Re=Reynolds, yplus=yplus_target, L=Lref)
+    distance_IP = D_IBM.computeModelingHeight(Re=Reynolds, yplus=yplus_target, L=Lref)
     locsize = getMinimumSpacing__(t, dim, snear)
     distance_DP = distance_IP+2*(dim**0.5)*locsize
     distance_DP = min(Cmpi.allgather(distance_DP))

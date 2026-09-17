@@ -54,13 +54,13 @@ PyObject* K_CONNECTOR::getIBMPtsWithFront(PyObject* self, PyObject* args)
 {
     PyObject *allCorrectedPts, *bodySurfaces, *frontSurfaces, *normalNames;
     PyObject *ListOfSnearsLoc;
-    PyObject *ListOfModelisationHeightsLoc;
+    PyObject *ListOfModelingHeightsLoc;
     E_Int signOfDist; //if correctedPts are inside bodies: sign = -1, else sign=1 (e.g. for Euler sign=-1, for wall modeling sign=1)
     E_Int depth; //nb of layers of ghost cells
     E_Int projAlgo; //if 0: old way of setting max projection distance, if 1: new way
     E_Int isWireModel, isOrthoFirst;
     if (!PYPARSETUPLE_(args, OOOO_ OO_ II_ III_,
-                       &allCorrectedPts, &ListOfSnearsLoc, &ListOfModelisationHeightsLoc, &bodySurfaces, &frontSurfaces, 
+                       &allCorrectedPts, &ListOfSnearsLoc, &ListOfModelingHeightsLoc, &bodySurfaces, &frontSurfaces, 
                        &normalNames, &signOfDist, &depth, &projAlgo, &isWireModel, &isOrthoFirst)) return NULL;
 
     // extract list of snearsloc
@@ -87,26 +87,26 @@ PyObject* K_CONNECTOR::getIBMPtsWithFront(PyObject* self, PyObject* args)
         else vectOfSnearsLoc.push_back(PyFloat_AsDouble(tpl0));
     }
 
-    // extract list of ModelisationHeightsLoc
-    if (PyList_Size(ListOfModelisationHeightsLoc) == 0)
+    // extract list of ModelingHeightsLoc
+    if (PyList_Size(ListOfModelingHeightsLoc) == 0)
     {
         PyErr_SetString(PyExc_TypeError, 
                         "getIBMPtsWithFront: 3rd argument is an empty list.");
         return NULL;
     }
 
-    vector<E_Float> vectOfModelisationHeightsLoc;
+    vector<E_Float> vectOfModelingHeightsLoc;
 
     for (int i = 0; i < nsnears; i++)
     {
-        tpl0 = PyList_GetItem(ListOfModelisationHeightsLoc, i);
+        tpl0 = PyList_GetItem(ListOfModelingHeightsLoc, i);
         if (PyFloat_Check(tpl0) == 0)
         {
             PyErr_SetString(PyExc_TypeError, 
-                            "getIBMPtsWithFront: not a valid value for modelisation height.");
+                            "getIBMPtsWithFront: not a valid value for Modeling height.");
             return NULL;
         } 
-        else vectOfModelisationHeightsLoc.push_back(PyFloat_AsDouble(tpl0));
+        else vectOfModelingHeightsLoc.push_back(PyFloat_AsDouble(tpl0));
     }
   
     E_Int sign = -signOfDist; // sens de projection sur la paroi
@@ -484,7 +484,7 @@ PyObject* K_CONNECTOR::getIBMPtsWithFront(PyObject* self, PyObject* args)
         E_Float* ptrZI = zit[noz];
         E_Float* ptrPT = xPTt[noz];
         E_Float snearloc = vectOfSnearsLoc[noz];
-        E_Float heightloc = vectOfModelisationHeightsLoc[noz];
+        E_Float heightloc = vectOfModelingHeightsLoc[noz];
         //distance max for image pt to its corrected pt : height*sqrt(3)
 
         E_Float distMaxF2, distMaxB2;
@@ -498,8 +498,8 @@ PyObject* K_CONNECTOR::getIBMPtsWithFront(PyObject* self, PyObject* args)
           snearloc = snearloc + 3*snearloc*sqrt(3); // for 2nd image point
           snearloc = snearloc*snearloc;
 
-          distMaxF2 = max(toldistFactorImage*snearloc, heightloc);// distance au carre maximale des pts cibles au front via depth ou modelisationHeight
-          distMaxB2 = max(toldistFactorWall*snearloc, heightloc);// distance au carre maximale des pts cibles au projete paroi via depth ou modelisationHeight
+          distMaxF2 = max(toldistFactorImage*snearloc, heightloc);// distance au carre maximale des pts cibles au front via depth ou ModelingHeight
+          distMaxB2 = max(toldistFactorWall*snearloc, heightloc);// distance au carre maximale des pts cibles au projete paroi via depth ou ModelingHeight
         }
 
         // New way of setting max tolerances - used for Constant et al. 2025

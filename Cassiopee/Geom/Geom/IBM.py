@@ -1,5 +1,4 @@
-"""Immersed boundary geometry definition module.
-"""
+"""Immersed boundary geometry definition module."""
 import Converter.PyTree as C
 import Converter.Internal as Internal
 import numpy
@@ -16,7 +15,8 @@ varsDeleteIBM = ['utau','StagnationEnthalpy','StagnationPressure',
                  'KCurv'         ,'yplus'         ,
                  't11_model'     ,'t12_model'     ,'t22_model',
                  't13_model'     ,'t23_model'     ,'t33_model']
-varsDeleteIBMRotTmp=['CoordinateX_PC#Init','CoordinateX_PC#Init','CoordinateX_PC#Init',
+
+varsDeleteIBMRotTmp = ['CoordinateX_PC#Init','CoordinateX_PC#Init','CoordinateX_PC#Init',
                      'CoordinateX_PW#Init','CoordinateX_PW#Init','CoordinateX_PW#Init',
                      'CoordinateX_PI#Init','CoordinateX_PI#Init','CoordinateX_PI#Init',
                      'MotionType','omega',
@@ -26,81 +26,80 @@ varsDeleteIBMRotTmp=['CoordinateX_PC#Init','CoordinateX_PC#Init','CoordinateX_PC
 
 EPSCART = 1.e-6
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-## COMPUTE INFO FOR F42 (e.g. Yplus & modelisation height etc.)
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #=============================================================================
 # Compute the skin friction coefficient for a given emperical law
 #=============================================================================
-def compute_Cf(Re, Cf_law='ANSYS'):
-    if Cf_law == 'ANSYS':
+def computeAnalyticalCf(Re, CfLaw='ANSYS'):
+    if CfLaw == 'ANSYS':
         return 0.058*Re**(-0.2)
-    elif Cf_law == 'PW':
+    elif CfLaw == 'PW':
         return 0.026*Re**(-1/7.)
-    elif Cf_law == 'PipeDiameter':
+    elif CfLaw == 'PipeDiameter':
         return 0.079*Re**(-0.25)
-    elif Cf_law == 'Laminar':
+    elif CfLaw == 'Laminar':
         return 1.328*Re**(-0.5)
+    else:
+        raise ValueError("computeAnalyticalCf: wrong CfLaw value. Possible CfLaw values are 'ANSYS', 'PW', 'PipeDiameter', and 'Laminar'.")
 
+compute_Cf = computeAnalyticalCf
 
 #=============================================================================
 # Compute the corresponding yplus of a given modeling height
 #=============================================================================
-def computeYplus(Re, Cf_law='ANSYS', height=0.1, L=1.):
-    h0 = (L*numpy.sqrt(2))/(Re*numpy.sqrt(compute_Cf(Re,Cf_law)))
+def computeYplus(Re, CfLaw='ANSYS', height=0.1, L=1.):
+    h0 = (L*numpy.sqrt(2))/(Re*numpy.sqrt(computeAnalyticalCf(Re,CfLaw)))
     return height/h0
-
 
 #=============================================================================
 # Compute the modeling height
 #=============================================================================
-def computeModelisationHeight(Re, Cf_law='ANSYS', yplus=100., L=1.):
-    return (yplus*L*numpy.sqrt(2))/(Re*numpy.sqrt(compute_Cf(Re,Cf_law)))
+def computeModelingHeight(Re, CfLaw='ANSYS', yplus=100., L=1.):
+    return (yplus*L*numpy.sqrt(2))/(Re*numpy.sqrt(computeAnalyticalCf(Re,CfLaw)))
 
+computeModelisationHeight = computeModelingHeight
 
 #=============================================================================
 # Compute the best modeling height for a given snear
 #=============================================================================
-def computeBestModelisationHeight(Re, h, Cf_law='ANSYS', L=1., q=1.2):
-    h0 = (L*numpy.sqrt(2))/(Re*numpy.sqrt(compute_Cf(Re,Cf_law)))
+def computeBestModelingHeight(Re, h, CfLaw='ANSYS', L=1., q=1.2):
+    h0 = (L*numpy.sqrt(2))/(Re*numpy.sqrt(computeAnalyticalCf(Re,CfLaw)))
     hmod = (h0-q*h)/(1.-q)
     return hmod, hmod/h0
 
-
-def computeYplusOpt(Re=None,tb=None,Lref=1.,q=1.2,snear=None,Cf_law='ANSYS'):
-    fail=0
+def computeYplusOpt(Re=None, tb=None, Lref=1., q=1.2, snear=None, CfLaw='ANSYS', verbose=0):
+    fail = 0
     if Re is None:
         if tb is not None:
-            Re = Internal.getNodeFromName(tb,"Reynolds")
-            if Re is None: fail=1
-            else:
-                Re = Internal.getValue(Re)
+            Re = Internal.getNodeFromName(tb, "Reynolds")
+            if Re is None: fail = 1
+            else: Re = Internal.getValue(Re)
         else: fail = 1
-    if fail:
-        raise ValueError("computeYplusOpt: requires Reynolds number as a float or in tb.")
+    if fail: raise ValueError("computeYplusOpt: requires Reynolds number as a float or in tb.")
+    
     fail = 0
     if snear is None:
-        snear = Internal.getNodeFromName(tb,"snear")
-        if snear is None: fail=1
-        else: snear = Internal.getValue(snear)
-    if fail:
-        raise ValueError("computeYlusOpt: requires snear as a float or in tb.")
+        if tb is not None:
+            snear = Internal.getNodeFromName(tb, "snear")
+            if snear is None: fail = 1
+            else: snear = Internal.getValue(snear)
+        else: fail = 1
+    if fail: raise ValueError("computeYlusOpt: requires snear as a float or in tb.")
 
     print("Warning: estimation of the optimum y+ at Reynolds number ", Re, " and snear target at image point ", snear)
-    h0 = (1.*Lref*math.sqrt(2.))/(Re*math.sqrt(compute_Cf(Re,Cf_law))) #Taille de maille pour y+1
-    h_opti = (h0-q*snear)/(1.-q) #Hauteur de modelisation opti
-    yplus_opti = h_opti/h0 #yplus opti
-    # print('\nInformation for the body-fitted mesh :')
-    # print('h_opti     = %1.2e'%(h_opti))
-    # print('h0         = %1.2e\n'%(h0))
-    # print('Information for the Cartesian mesh :')
-    # print('yplus_opti = %d\n'%(int(math.ceil(yplus_opti))))
+    h0 = (1.*Lref*math.sqrt(2.))/(Re*math.sqrt(computeAnalyticalCf(Re,CfLaw))) # cell size for yplus=1
+    h_opti = (h0-q*snear)/(1.-q) # optimum modeling height
+    yplus_opti = h_opti/h0 # optimum yplus
+    if verbose > 0:
+        print('\nInformation for the body-fitted mesh :')
+        print('h_opti     = %1.2e'%(h_opti))
+        print('h0         = %1.2e\n'%(h0))
+        print('Information for the Cartesian mesh :')
+        print('yplus_opti = %d\n'%(int(math.ceil(yplus_opti))))
     return yplus_opti
 
-
 # compute the near wall spacing in agreement with the yplus target at image points - front42
-def computeSnearOpt(Re=None,tb=None,Lref=1.,q=1.2,yplus=300.,Cf_law='ANSYS'):
-    fail=0
+def computeSnearOpt(Re=None, tb=None, Lref=1., q=1.2, yplus=300., CfLaw='ANSYS', verbose=0):
+    fail = 0
     if Re is None:
         if tb is not None:
             Re = Internal.getNodeFromName(tb,"Reynolds")
@@ -112,17 +111,17 @@ def computeSnearOpt(Re=None,tb=None,Lref=1.,q=1.2,yplus=300.,Cf_law='ANSYS'):
 
 
     print("Estimation of the optimum near-wall spacing at Reynolds number ", Re, " and yplus target at image point ", yplus)
-    h_mod = (yplus*Lref*math.sqrt(2.))/(Re*math.sqrt(compute_Cf(Re,Cf_law)))
-    h0    = (Lref*math.sqrt(2.))/(Re*math.sqrt(compute_Cf(Re,Cf_law))) #Taille de maille pour y+=1
-    n     = int(math.ceil(math.log(1-yplus*(1-q))/math.log(q))) # number of cells in the BF mesh for the height h
-    snear_opti = q**(n-1)*h0 # best snear for the target yplus
-    # print('\nInformation for the body-fitted mesh :')
-    # print('h           = %1.2e'%(h_mod))
-    # print('h0          = %1.2e\n'%(h0))
-    # print('Information for the Cartesian mesh :')
-    # print('snear_opti  = %1.3e\n'%(snear_opti))
+    h_mod = (yplus*Lref*math.sqrt(2.))/(Re*math.sqrt(computeAnalyticalCf(Re,CfLaw)))
+    h0 = (Lref*math.sqrt(2.))/(Re*math.sqrt(computeAnalyticalCf(Re,CfLaw))) # cell size for yplus=1
+    n = int(math.ceil(math.log(1-yplus*(1-q))/math.log(q))) # number of cells in a ref. BF mesh along the modeling height
+    snear_opti = q**(n-1)*h0 # optimum snear value
+    if verbose > 0:
+        print('\nInformation for the body-fitted mesh :')
+        print('h           = %1.2e'%(h_mod))
+        print('h0          = %1.2e\n'%(h0))
+        print('Information for the Cartesian mesh :')
+        print('snear_opti  = %1.3e\n'%(snear_opti))
     return snear_opti
-
 
 def getMinimumCartesianSpacing(t):
     baseC = Internal.getNodeFromName1(t, 'CARTESIAN')
@@ -136,6 +135,8 @@ def getMinimumCartesianSpacing(t):
 
     print('Minimum spacing on Cartesian grids = %f.'%dxmin, flush=True)
     return dxmin
+
+computeBestModelisationHeight = computeBestModelingHeight
 
 #==============================================================================
 # Creation of a case with a symmetry plane
@@ -220,6 +221,7 @@ def _addSymPlane(tb, snear_sym, dir_sym=2, midPlane=0):
     return None
 
 _symetrizePb = _symmetrizePb
+
 #==============================================================================
 # Set snear in zones
 #==============================================================================
@@ -249,7 +251,6 @@ def setDfar(t, value):
     tp = Internal.copyRef(t)
     _setDfar(tp, value)
     return tp
-
 
 def _setDfar(t, value):
     """Set the value of dfar in a geometry tree.
@@ -294,7 +295,6 @@ def snearFactor(t, sfactor):
     _snearFactor(tp, sfactor)
     return tp
 
-
 def _snearFactor(t, sfactor):
     """Multiply the value of snear in a geometry tree by a sfactor.
     Usage: _snearFactor(t, sfactor)"""
@@ -314,7 +314,6 @@ def setIBCType(t, value):
     tp = Internal.copyRef(t)
     _setIBCType(tp, value)
     return tp
-
 
 def _setIBCType(t, value):
     """Set the IBC type in a geometry tree.
@@ -366,7 +365,6 @@ def _setFluidOutside(t):
         Internal._createUniqueChild(n, 'inv', 'DataArray_t', value=0)
     return None
 
-
 #==============================================================================
 # Set outpress control parameters in zones
 #==============================================================================
@@ -380,7 +378,6 @@ def setOutPressControlParam(t, probeName='pointOutPress', AtestSection=1, AOutPr
                              machTarget=machTarget, pStatTarget=pStatTarget, tStatTarget=tStatTarget,lmbd=lmbd,
                              cxSupport=cxSupport, sSupport=sSupport, itExtrctPrb=itExtrctPrb)
     return tp
-
 
 def _setOutPressControlParam(t, probeName='pointOutPress', AtestSection=1, AOutPress=1,
                              machTarget=0.1, pStatTarget=1e05, tStatTarget=298.15,lmbd=0.1,
@@ -403,6 +400,7 @@ def _setOutPressControlParam(t, probeName='pointOutPress', AtestSection=1, AOutP
         Internal._createUniqueChild(n, 'itExtrctPrb' , 'DataArray_t', itExtrctPrb)
 
     return None
+
 #==============================================================================
 # Set the IBC type outpress for zones in familyName
 #==============================================================================
@@ -481,7 +479,6 @@ def initHeatFlux(tc, familyName, QWall):
     _initHeatFlux(tc2, familyName, QWall)
     return tc2
 
-
 def _initHeatFlux(tc, familyName, QWall):
     """Set the value of heat flux QWall for the wall no slip IBC with family name familyName.
     Usage: _initHeatFlux(tc,familyName, QWall)"""
@@ -510,7 +507,6 @@ def initInj(tc, familyName, PTot, HTot, injDir=[1.,0.,0.], InterpolPlane=None, P
     tc2 = Internal.copyRef(tc)
     _initInj(tc2, familyName, PTot, HTot, injDir, InterpolPlane=InterpolPlane, PressureVar=PressureVar, EnthalpyVar=EnthalpyVar)
     return tc2
-
 
 def _initInj(tc, familyName, PTot, HTot, injDir=[1.,0.,0.], InterpolPlane=None, PressureVar=0, EnthalpyVar=0):
     """Set the total pressure PTot, total enthalpy HTot, and direction of the flow injDir for the injection IBC with family name familyName.
@@ -615,7 +611,6 @@ def changeIBCType(tc, oldIBCType, newIBCType):
     _changeIBCType(tcp, oldIBCType, newIBCType)
     return tcp
 
-
 def _changeIBCType(tc, oldIBCType, newIBCType):
     """Change the IBC type in a connectivity tree from oldIBCType to newIBCType.
     Usage: changeIBCType(tc, oldIBCType, newIBCType)"""
@@ -649,7 +644,6 @@ def transformTc2(tc2):
     tcp = Internal.copyRef(tc2)
     _transformTc2(tcp)
     return tcp
-
 
 def _transformTc2(tc2):
     for z in Internal.getZones(tc2):
@@ -812,7 +806,6 @@ def determineClosedSolidFilament__(tb):
 
     return tb, tbFilament
 
-
 def localWMMFlags__(tb,tbFilament):
     isFilamentOnly=False
     isWireModel   =False
@@ -833,10 +826,9 @@ def localWMMFlags__(tb,tbFilament):
                         break
     return isFilamentOnly,isWireModel
 
-
-###############
-# Special test-cases
-###############
+#================================================================================
+# Special test cases
+#================================================================================
 def flatPlate(snear=0.001, ibctype='Musker'):
     """Generate an IBM case for the canonical flat plate test-case."""
     Gamma = 1.4
@@ -977,20 +969,24 @@ def naca0012(snear=0.001, ibctype='Musker', alpha=0.):
 
     return t
 
-#====================================================================================
-#Add .Solver#Define with dirx, diry, dirz, & granularity to the base of the tboneover. tboneover is the
-#PyTree that defines the region in space wherein a one over n coarsening will be pursued
-#during the automatic cartesian grid generator of FastIBC.
-#IN: t: PyTree
-#IN: oneOver: list of list of dirx,diry,dirz,granularity for each base in tboneover. E.g. oneOver=[[1,1,2,0],[1,2,1,0],[2,1,1,1]]
-#             for a tboneover with 3 bases where the 1st base has dirx=1, diry=1, dirz=2, & granularity=0 (coarse)
+#================================================================================
+# Add .Solver#Define with dirx, diry, dirz, & granularity to the base of the tboneover. 
+# tboneover is the PyTree that defines the region in space wherein 
+# a one over n coarsening will be pursued during the automatic cartesian grid generator of FastIBC.
+#
+# IN: t: PyTree
+# IN: oneOver: list of list of dirx,diry,dirz,granularity for each base in tboneover. 
+#              E.g. oneOver=[[1,1,2,0],[1,2,1,0],[2,1,1,1]]
+#              for a tboneover with 3 bases where the 1st base has dirx=1, diry=1, dirz=2, & granularity=0 (coarse)
 #                                                    2nd base has dirx=1, diry=2, dirz=1, & granularity=0 (coarse)
 #                                                    3rd base has dirx=2, diry=1, dirz=1, & granularity=0 (fine)
-#OUT: Nothing. Rewrite tboneover with the same FileName as that original used
-##NOTE # 1: To be run SEQUENTIALLY ONLY. This is ok as we are dealing with a surface geometry which tend to be
-##          relatively small.
-##NOTE # 2: Generation of tboneover is similar to that used for tbox.
-def _addOneOverLocally(t,oneOver):
+#
+# OUT: Nothing. Rewrite tboneover with the same FileName as that original used
+# NOTE # 1: To be run SEQUENTIALLY ONLY. This is ok as we are dealing with a surface geometry which tend to be
+#          relatively small.
+# NOTE # 2: Generation of tboneover is similar to that used for tbox.
+#================================================================================
+def _addOneOverLocally(t, oneOver):
     count   = 0
     nodes   = Internal.getNodesFromNameAndType(t, '*OneOver*', 'CGNSBase_t')
     for b in nodes:

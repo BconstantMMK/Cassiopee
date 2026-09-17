@@ -4,8 +4,6 @@ from Connector.IBM import prepareIBMData, dist2wallIBM, blankingIBM, buildFrontI
 
 from Geom.IBM import setSnear, _setSnear, setDfar, _setDfar, setIBCType, _setIBCType, _setFluidInside, _setFluidOutside, snearFactor, _snearFactor, setIBCType, changeIBCType, _changeIBCType, initOutflow, _initOutflow, initInj, _initInj, setFluidInside, setFluidOutside, flatPlate, bumpInChannel, naca0012
 
-from Generator.IBMmodelHeight import computeModelisationHeight, computeSnearOpt
-
 from Post.IBM import extractPressureGradients, extractPressureHighOrder, extractYplusAtImagePoints, prepareSkinReconstruction, computeSkinVariables, _computeSkinVariables, computeAerodynamicLoads, computeAerodynamicCoefficients, extractIBMWallFields
 
 import Converter.PyTree as C

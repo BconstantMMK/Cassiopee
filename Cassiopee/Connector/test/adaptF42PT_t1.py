@@ -4,12 +4,12 @@ import Converter.Internal as Internal
 import Geom.PyTree as D
 import Geom.IBM as D_IBM
 import Connector.IBM as X_IBM
-import Generator.IBMmodelHeight as G_IBM_Height
+import Geom.IBM as D_IBM
 import KCore.test as test
 import numpy
 
 def _initYplusTargetPoints(tc):
-    hmod = G_IBM_Height.computeModelisationHeight(6.e6, Cf_law='ANSYS', yplus=2000., L=1.)
+    hmod = D_IBM.computeModelisationHeight(6.e6, CfLaw='ANSYS', yplus=2000., L=1.)
 
     for z in Internal.getZones(tc):
         subRegions = Internal.getNodesFromType1(z, 'ZoneSubRegion_t')

@@ -11,7 +11,6 @@ import Post.Mpi as Pmpi
 import Generator.PyTree as G
 import Initiator.PyTree as I
 import Converter.Distributed as Distributed
-import Generator.IBMmodelHeight as G_IBM_Height
 import Geom.IBM as D_IBM
 import Transform.PyTree as T
 import Converter.Internal as Internal
@@ -26,6 +25,8 @@ import Transform
 import KCore
 import numpy
 import math
+
+import Geom.IBM as D_IBM
 
 varsn       = ['gradxTurbulentDistance','gradyTurbulentDistance','gradzTurbulentDistance']
 varsnDouble = ['gradxTurbulentDistanceDouble','gradyTurbulentDistanceDouble','gradzTurbulentDistanceDouble']
@@ -869,12 +870,12 @@ def _blankingIBM__(t, tb, tbFilament=None, dimPb=3, frontType=1, IBCType=1, dept
 
     # F42 special treatment
     if yplus > 0.:
-        hmod = G_IBM_Height.computeModelisationHeight(Re=Reynolds, yplus=yplus, L=Lref)
+        hmod = D_IBM.computeModelingHeight(Re=Reynolds, yplus=yplus, L=Lref)
     else:
         h_loc = D_IBM.getMinimumCartesianSpacing(t)
         h = Cmpi.allreduce(h_loc, op=Cmpi.MIN)
-        hmod = G_IBM_Height.computeBestModelisationHeight(Re=Reynolds, h=h) # best compromise between the min snear and the modeling height
-        yplus = G_IBM_Height.computeYplus(Re=Reynolds, height=hmod, L=Lref)
+        hmod = D_IBM.computeBestModelingHeight(Re=Reynolds, h=h) # best compromise between the min snear and the modeling height
+        yplus = D_IBM.computeYplus(Re=Reynolds, height=hmod, L=Lref)
 
     if heightMaxF42 > 0.: # security
         if hmod > heightMaxF42:
@@ -1087,7 +1088,7 @@ def _blankingIBM(t, tb, tbFilament=None, dimPb=3, frontType=1, IBCType=1, depth=
                 epsilon_dist = abs(C.getValue(z,'CoordinateX',1)-C.getValue(z,'CoordinateX',0))
                 dmin = math.sqrt(3)*4*epsilon_dist
                 if frontType == 42:
-                    SHIFTB = G_IBM_Height.computeModelisationHeight(Re=Reynolds, yplus=yplus, L=Lref)
+                    SHIFTB = D_IBM.computeModelingHeight(Re=Reynolds, yplus=yplus, L=Lref)
                     dmin = max(dmin, SHIFTB+math.sqrt(3)*2*epsilon_dist) # where shiftb = hmod
                 C._initVars(z,'{centers:cellNIBC_2}=({centers:TurbulentDistance}>%20.16g)+(2*({centers:TurbulentDistance}<=%20.16g)*({centers:TurbulentDistance}>0))'%(dmin,dmin))
                 C._initVars(z,'{centers:cellNFront_2}=logical_and({centers:cellNIBC_2}>0.5, {centers:cellNIBC_2}<1.5)')
@@ -1890,7 +1891,7 @@ def _blankByIBCBodies(t, tb, loc, dim, cellNName='cellN'):
 
     if blankalgo == 'xray':
         BM = numpy.ones((nbases,nbodies),dtype=Internal.E_NpyInt)
-        dh_min = G_IBM_Height.getMinimumCartesianSpacing(t)
+        dh_min = D_IBM.getMinimumCartesianSpacing(t)
         if dh_min > 0.:
             bb = G.bbox(tb)
             Lxref = bb[3]-bb[0]
@@ -2283,12 +2284,12 @@ def getAllIBMPoints(t, loc='nodes', tb=None, tfront=None, frontType=0,
     heightMaxF42 = kwargs.get('heightMaxF42', -1.)
 
     if yplus > 0.:
-        hmod = G_IBM_Height.computeModelisationHeight(Re=Reynolds, yplus=yplus, L=Lref)
+        hmod = D_IBM.computeModelingHeight(Re=Reynolds, yplus=yplus, L=Lref)
     else:
         h_loc = D_IBM.getMinimumCartesianSpacing(t)
         h = Cmpi.allreduce(h_loc, op=Cmpi.MIN)
-        hmod = G_IBM_Height.computeBestModelisationHeight(Re=Reynolds, h=h) # best compromise between the min snear and the modeling height
-        yplus = G_IBM_Height.computeYplus(Re=Reynolds, height=hmod, L=Lref)
+        hmod = D_IBM.computeBestModelingHeight(Re=Reynolds, h=h) # best compromise between the min snear and the modeling height
+        yplus = D_IBM.computeYplus(Re=Reynolds, height=hmod, L=Lref)
 
     if heightMaxF42 > 0.: # security
         if hmod > heightMaxF42:
@@ -2303,7 +2304,7 @@ def getAllIBMPoints(t, loc='nodes', tb=None, tfront=None, frontType=0,
     # 1. Get the list of IBC corrected pts
     #-------------------------------------------
     listOfSnearsLoc = []
-    listOfModelisationHeightsLoc = []
+    listOfModelingHeightsLoc = []
     if loc == 'nodes':
         for z in Internal.getZones(t):
             an = C.getFields(Internal.__GridCoordinates__, z, api=1)[0]
@@ -2327,9 +2328,9 @@ def getAllIBMPoints(t, loc='nodes', tb=None, tfront=None, frontType=0,
 
             if frontType == 42:
                 hmod *= projMul
-                listOfModelisationHeightsLoc.append(hmod)
+                listOfModelingHeightsLoc.append(hmod)
             else:
-                listOfModelisationHeightsLoc.append(0.)
+                listOfModelingHeightsLoc.append(0.)
     else:
         for z in Internal.getZones(t):
             an = C.getFields(Internal.__GridCoordinates__, z, api=1)[0]
@@ -2354,9 +2355,9 @@ def getAllIBMPoints(t, loc='nodes', tb=None, tfront=None, frontType=0,
 
             if frontType == 42:
                 hmod *= projMul
-                listOfModelisationHeightsLoc.append(hmod)
+                listOfModelingHeightsLoc.append(hmod)
             else:
-                listOfModelisationHeightsLoc.append(0.)
+                listOfModelingHeightsLoc.append(0.)
 
     #-------------------------------------------
     # 2. Get the list of IBC wall and interp pts
@@ -2414,7 +2415,7 @@ def getAllIBMPoints(t, loc='nodes', tb=None, tfront=None, frontType=0,
 
             front = Converter.convertArray2Tetra(front)
             allCorrectedPts = Converter.extractVars(allCorrectedPts, ['CoordinateX','CoordinateY','CoordinateZ']+varsn)
-            res = connector.getIBMPtsWithFront(allCorrectedPts, listOfSnearsLoc, listOfModelisationHeightsLoc, bodies,
+            res = connector.getIBMPtsWithFront(allCorrectedPts, listOfSnearsLoc, listOfModelingHeightsLoc, bodies,
                                                front, varsn, signOfDistCorrected, depth, projAlgo, int(isWireModel), int(isOrthoFirst))
     allWallPts = res[0]
     allWallPts = Converter.extractVars(allWallPts, ['CoordinateX','CoordinateY','CoordinateZ'])
@@ -2819,10 +2820,10 @@ def prepareIBMData_legacy(t, tbody, DEPTH=2, loc='centers', frontType=1, interpD
         for z in Internal.getZones(t):
             h = abs(C.getValue(z,'CoordinateX',0)-C.getValue(z,'CoordinateX',1))
             if yplus > 0.:
-                height = G_IBM_Height.computeModelisationHeight(Re=Reynolds, yplus=yplus, L=Lref)
+                height = D_IBM.computeModelingHeight(Re=Reynolds, yplus=yplus, L=Lref)
             else:
-                height = G_IBM_Height.computeBestModelisationHeight(Re=Reynolds, h=h) # meilleur compromis entre hauteur entre le snear et la hauteur de modelisation
-                yplus  = G_IBM_Height.computeYplus(Re=Reynolds, height=height, L=Lref)
+                height = D_IBM.computeBestModelingHeight(Re=Reynolds, h=h) # meilleur compromis entre hauteur entre le snear et la hauteur de modelisation
+                yplus  = D_IBM.computeYplus(Re=Reynolds, height=height, L=Lref)
             C._initVars(z,'{centers:cellN}=({centers:TurbulentDistance}>%20.16g)+(2*({centers:TurbulentDistance}<=%20.16g)*({centers:TurbulentDistance}>0))'%(height,height))
 
         # Si wallAdapt, utilisation de la solution precedente pour ne garder que les pts cibles tq y+PC <= y+ref : rapproche le front de la paroi (utile proche bord d'attaque)

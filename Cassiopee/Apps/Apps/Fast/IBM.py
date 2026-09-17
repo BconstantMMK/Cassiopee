@@ -32,7 +32,7 @@ from Geom.IBM import setSnear, _setSnear, setDfar, _setDfar, snearFactor, _snear
 import Post.IBM as P_IBM
 import Connector.IBM as X_IBM
 import Generator.IBM as G_IBM
-import Generator.IBMmodelHeight as G_IBM_Height
+import Geom.IBM as D_IBM
 
 KCOMM = Cmpi.KCOMM
 
@@ -1701,11 +1701,11 @@ class IBM(Common):
                 C._initVars(t,'{centers:TurbulentDistance_ori}={centers:TurbulentDistance}')
 
                 if self.input_var.yplus > 0.:
-                    shiftDist = G_IBM_Height.computeModelisationHeight(Re=self.Reynolds, yplus=self.input_var.yplus, L=self.input_var.Lref)
+                    shiftDist = D_IBM.computeModelisationHeight(Re=self.Reynolds, yplus=self.input_var.yplus, L=self.input_var.Lref)
                 else:
                     self.input_var.snears    = Internal.getNodesFromName(tb, 'snear')
                     h         = max(self.input_var.snears, key=lambda x: x[1])[1]
-                    shiftDist = G_IBM_Height.computeBestModelisationHeight(Re=self.Reynolds, h=h) # meilleur compromis entre hauteur entre le snear et la hauteur de modelisation
+                    shiftDist = D_IBM.computeBestModelisationHeight(Re=self.Reynolds, h=h) # meilleur compromis entre hauteur entre le snear et la hauteur de modelisation
 
                 if self.input_var.height_in>0.:
                     if shiftDist>self.input_var.height_in: shiftDist=self.input_var.height_in
@@ -1821,10 +1821,10 @@ class IBM(Common):
                 for z in Internal.getZones(t):
                     h = abs(C.getValue(z,'CoordinateX',0)-C.getValue(z,'CoordinateX',1))
                     if self.input_var.yplus > 0.:
-                        height = G_IBM_Height.computeModelisationHeight(Re=self.Reynolds, yplus=self.input_var.yplus, L=self.input_var.Lref)
+                        height = D_IBM.computeModelisationHeight(Re=self.Reynolds, yplus=self.input_var.yplus, L=self.input_var.Lref)
                     else:
-                        height = G_IBM_Height.computeBestModelisationHeight(Re=self.Reynolds, h=h) # meilleur compromis entre hauteur entre le snear et la hauteur de modelisation
-                        self.input_var.yplus  = G_IBM_Height.computeYplus(Re=self.Reynolds, height=height, L=self.input_var.Lref)
+                        height = D_IBM.computeBestModelisationHeight(Re=self.Reynolds, h=h) # meilleur compromis entre hauteur entre le snear et la hauteur de modelisation
+                        self.input_var.yplus  = D_IBM.computeYplus(Re=self.Reynolds, height=height, L=self.input_var.Lref)
                     if self.input_var.height_in>0.:
                         if height>self.input_var.height_in:
                             height=self.input_var.height_in
@@ -2895,7 +2895,7 @@ class IBM(Common):
                     epsilon_dist = abs(C.getValue(z,'CoordinateX',1)-C.getValue(z,'CoordinateX',0))
                     dmin = math.sqrt(3)*4*epsilon_dist
                     if self.input_var.frontType == 42:
-                        SHIFTB = G_IBM_Height.computeModelisationHeight(Re=self.Reynolds, yplus=self.input_var.yplus, L=self.input_var.Lref)
+                        SHIFTB = D_IBM.computeModelisationHeight(Re=self.Reynolds, yplus=self.input_var.yplus, L=self.input_var.Lref)
                         dmin = max(dmin, SHIFTB+math.sqrt(3)*2*epsilon_dist) # where shiftb = hmod
                     C._initVars(z,'{centers:cellNIBC_2}=({centers:TurbulentDistance}>%20.16g)+(2*({centers:TurbulentDistance}<=%20.16g)*({centers:TurbulentDistance}>0))'%(dmin,dmin))
                     C._initVars(z,'{centers:cellNFront_2}=logical_and({centers:cellNIBC_2}>0.5, {centers:cellNIBC_2}<1.5)')
@@ -3216,19 +3216,19 @@ def _modifIBCD(tc):
 
 
 ## IMPORTANT NOTE !!
-## FUNCTIONS MIGRATED TO $CASSIOPEE/Cassiopee/Generator/Generator/IBMmodelHeight.py
+## FUNCTIONS MIGRATED TO $CASSIOPEE/Cassiopee/Geom/Geom/IBM.py
 ## The functions below will become deprecated after Jan. 1 2023
 #====================================================================================
-def compute_Cf(Re, Cf_law='ANSYS'):
-    val=G_IBM_Height.compute_Cf(Re, Cf_law=Cf_law)
+def computeAnalyticalCf(Re, CfLaw='ANSYS'):
+    val=D_IBM.computeAnalyticalCf(Re, CfLaw=CfLaw)
     return val
 
-def computeYplusOpt(Re=None, tb=None, Lref=1., q=1.2, snear=None, Cf_law='ANSYS'):
-    val=G_IBM_Height.computeYplusOpt(Re=Re, tb=tb, Lref=Lref, q=q, snear=snear, Cf_law=Cf_law)
+def computeYplusOpt(Re=None, tb=None, Lref=1., q=1.2, snear=None, CfLaw='ANSYS'):
+    val=D_IBM.computeYplusOpt(Re=Re, tb=tb, Lref=Lref, q=q, snear=snear, CfLaw=CfLaw)
     return val
 
-def computeSnearOpt(Re=None, tb=None, Lref=1., q=1.2, yplus=300., Cf_law='ANSYS'):
-    val=G_IBM_Height.computeSnearOpt(Re=Re, tb=tb, Lref=Lref, q=q, yplus=yplus, Cf_law=Cf_law)
+def computeSnearOpt(Re=None, tb=None, Lref=1., q=1.2, yplus=300., CfLaw='ANSYS'):
+    val=D_IBM.computeSnearOpt(Re=Re, tb=tb, Lref=Lref, q=q, yplus=yplus, CfLaw=CfLaw)
     return val
 
 ## IMPORTANT NOTE !!
