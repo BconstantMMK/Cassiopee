@@ -17,12 +17,12 @@ varsDeleteIBM = ['utau','StagnationEnthalpy','StagnationPressure',
                  't13_model'     ,'t23_model'     ,'t33_model']
 
 varsDeleteIBMRotTmp = ['CoordinateX_PC#Init','CoordinateX_PC#Init','CoordinateX_PC#Init',
-                     'CoordinateX_PW#Init','CoordinateX_PW#Init','CoordinateX_PW#Init',
-                     'CoordinateX_PI#Init','CoordinateX_PI#Init','CoordinateX_PI#Init',
-                     'MotionType','omega',
-                     'transl_speedX','transl_speedY','transl_speedZ',
-                     'axis_pntX'    ,'axis_pntY'    ,'axis_pntZ'    ,
-                     'axis_vctX'    ,'axis_vctY'    ,'axis_vctZ'    ]
+                       'CoordinateX_PW#Init','CoordinateX_PW#Init','CoordinateX_PW#Init',
+                       'CoordinateX_PI#Init','CoordinateX_PI#Init','CoordinateX_PI#Init',
+                       'MotionType','omega',
+                       'transl_speedX','transl_speedY','transl_speedZ',
+                       'axis_pntX'    ,'axis_pntY'    ,'axis_pntZ'    ,
+                       'axis_vctX'    ,'axis_vctY'    ,'axis_vctZ'    ]
 
 EPSCART = 1.e-6
 
@@ -75,7 +75,7 @@ def computeYplusOpt(Re=None, tb=None, Lref=1., q=1.2, snear=None, CfLaw='ANSYS',
             else: Re = Internal.getValue(Re)
         else: fail = 1
     if fail: raise ValueError("computeYplusOpt: requires Reynolds number as a float or in tb.")
-    
+
     fail = 0
     if snear is None:
         if tb is not None:
@@ -970,12 +970,12 @@ def naca0012(snear=0.001, ibctype='Musker', alpha=0.):
     return t
 
 #================================================================================
-# Add .Solver#Define with dirx, diry, dirz, & granularity to the base of the tboneover. 
-# tboneover is the PyTree that defines the region in space wherein 
+# Add .Solver#Define with dirx, diry, dirz, & granularity to the base of the tboneover.
+# tboneover is the PyTree that defines the region in space wherein
 # a one over n coarsening will be pursued during the automatic cartesian grid generator of FastIBC.
 #
 # IN: t: PyTree
-# IN: oneOver: list of list of dirx,diry,dirz,granularity for each base in tboneover. 
+# IN: oneOver: list of list of dirx,diry,dirz,granularity for each base in tboneover.
 #              E.g. oneOver=[[1,1,2,0],[1,2,1,0],[2,1,1,1]]
 #              for a tboneover with 3 bases where the 1st base has dirx=1, diry=1, dirz=2, & granularity=0 (coarse)
 #                                                    2nd base has dirx=1, diry=2, dirz=1, & granularity=0 (coarse)
