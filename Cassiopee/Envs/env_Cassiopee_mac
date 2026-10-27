@@ -1,11 +1,11 @@
 # macOS Apple Silicon build environment for Cassiopee (v2, sans mac-gcc-bin).
-# Tout passe par l'entree 'mac' de KCore/installBase.py + les branches Darwin
-# de KCore/Dist.py. Sourcing: source Envs/env_Cassiopee_mac
+# Everything goes through the 'mac' entry of KCore/installBase.py + the Darwin
+# branches of KCore/Dist.py. Sourcing: source Envs/env_Cassiopee_mac
 _CASSIOPEE_ENV_FILE="${(%):-%x}"
 export CASSIOPEE="$(cd "$(dirname "$_CASSIOPEE_ENV_FILE")/.." && pwd)"
 export CASSIOPEE_PROD="${CASSIOPEE_PROD:-mac_i8}"
 export ELSAPROD="$CASSIOPEE_PROD"
-# SDKROOT: injecte par Dist.getDarwinSysrootOptions() dans les flags compile+link
+# SDKROOT: injected by Dist.getDarwinSysrootOptions() into the compile+link flags
 export SDKROOT="${SDKROOT:-$(xcrun --show-sdk-path)}"
 if [ -z "${CASSIOPEE_PYTHON:-}" ]; then
 	if [ -x "$CASSIOPEE/../.venv/bin/python" ]; then
@@ -17,7 +17,7 @@ fi
 export PYTHONEXE="$CASSIOPEE_PYTHON"
 export PRODMODE="${PRODMODE:-1}"
 export PATH="$(dirname "$CASSIOPEE_PYTHON"):$PATH"
-# Homebrew GCC (binaires versionnes gcc-14/gfortran-14, resolves via installBase.py)
+# Homebrew GCC (versioned binaries gcc-14/gfortran-14, resolved via installBase.py)
 export PATH="/opt/homebrew/opt/gcc@14/bin:/opt/homebrew/opt/open-mpi/bin:/opt/homebrew/bin:$PATH"
 export PATH="$PATH:$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD:$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD/bin"
 export PYTHONPATH="$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD/lib/python3.11/site-packages:$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD/lib/site-packages:$PYTHONPATH"
