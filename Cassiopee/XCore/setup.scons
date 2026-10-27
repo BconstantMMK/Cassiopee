@@ -185,8 +185,10 @@ if srcs.SCOTCH:
     deps += ['libscotch1.a', 'libscotch2.a']
 
     if mpi:
-        env3 = env.Clone(CXXFLAGS=Dist.getCppArgs()+ADDITIONALCPPFLAGS+opt1+opt1_1, 
-                         CFLAGS=Dist.getCArgs()+ADDITIONALCPPFLAGS+opt1+opt1_1)
+        ptscotchFlags = opt1+opt1_1
+        if Dist.GDOUBLEINT(): ptscotchFlags += ['-DG_DOUBLEINT']
+        env3 = env.Clone(CXXFLAGS=Dist.getCppArgs()+ADDITIONALCPPFLAGS+ptscotchFlags,
+                         CFLAGS=Dist.getCArgs()+ADDITIONALCPPFLAGS+ptscotchFlags)
         myMod4 = env3.StaticLibrary('ptscotch', srcs_scotch.cpp_srcs2)
         deps += ['libptscotch.a']
 
