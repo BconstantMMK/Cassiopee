@@ -215,5 +215,12 @@
 #define PNG_Z_DEFAULT_STRATEGY 1
 #define PNG_sCAL_PRECISION 5
 #define PNG_sRGB_PROFILE_CHECKS 2
+/* Cassiopee: the bundled libpng does not ship the arm/ NEON sources, but
+ * pngpriv.h auto-enables NEON intrinsics when the compiler defines
+ * __ARM_NEON__ (all aarch64 builds). The png_do_*_neon symbols would then
+ * be referenced by pngrtran.c but defined nowhere, and only surface at
+ * dlopen time ("symbol not found in flat namespace"). Force NEON off.
+ */
+#define PNG_ARM_NEON_OPT 0
 /* end of settings */
 #endif /* PNGLCONF_H */
