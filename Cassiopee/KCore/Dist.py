@@ -1184,9 +1184,6 @@ def getLinkArgs():
         if useStatic == 1: out += ['-static']
         else: out += ['-shared']
         if useOMP == 1: out += ['-fopenmp']
-    mySystem = getSystem()[0]
-    if mySystem == 'Darwin':
-        if useStatic == 0: out += ['-dynamiclib']
     return out
 
 #=============================================================================
@@ -1774,6 +1771,9 @@ def checkMpi():
     libnames = []
     l = checkLibFile__('libmpi.so', additionalLibPaths)
     if l is not None: libnames.append('mpi')
+    if l is None:
+        l = checkLibFile__('libmpi.dylib', additionalLibPaths)
+        if l is not None: libnames.append('mpi')
     if l is None:
         l = checkLibFile__('libmpi.a', additionalLibPaths)
         if l is not None: libnames.append('mpi')

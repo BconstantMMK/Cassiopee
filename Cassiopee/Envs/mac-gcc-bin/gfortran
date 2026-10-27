@@ -1,0 +1,4 @@
+#!/bin/sh
+SDKROOT="${SDKROOT:-$(/usr/bin/xcrun --show-sdk-path)}"
+export SDKROOT
+exec "${CASSIOPEE_GCC_BIN:-/opt/homebrew/opt/gcc@14/bin}/gfortran-14" -isysroot "$SDKROOT" "$@"
