@@ -31,7 +31,7 @@ if prod is None:
 # Setting libraryDirs, include dirs and libraries =============================
 libraryDirs = ["build/"+prod, kcoreLibDir]
 includeDirs = [numpyIncDir, kcoreIncDir]
-libraries = ["kcore", "roms"]
+libraries = ["kcore"]
 (ok, libs, paths) = Dist.checkCppLibs()
 libraryDirs += paths; libraries += libs
 
