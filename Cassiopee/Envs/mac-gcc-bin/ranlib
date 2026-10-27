@@ -1,5 +1,0 @@
-#!/bin/sh
-if [ ! -s "$1" ]; then
-	exit 0
-fi
-exec /usr/bin/ranlib "$@"

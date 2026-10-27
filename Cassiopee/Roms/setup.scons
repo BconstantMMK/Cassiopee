@@ -54,9 +54,13 @@ env.SConsignFile('build/'+ELSAPROD+'/.sconsign.dblite')
 
 #==============================================================================
 
-myMod = env.StaticLibrary('roms', source=srcs.cpp_srcs)
-
 modDir = 'build/'+ELSAPROD
-dp1 = env.Install(modDir, myMod)
-
-env.Alias(target="install", source=[dp1])
+if srcs.cpp_srcs:
+    myMod = env.StaticLibrary('roms', source=srcs.cpp_srcs)
+    dp1 = env.Install(modDir, myMod)
+    env.Alias(target="install", source=[dp1])
+else:
+    # Roms ships no C++ sources in srcs.py; the Python extension is built by
+    # setup.py from Roms/roms.cpp and does not link libroms. Nothing to
+    # build here, and 'ar' cannot create an empty archive on macOS.
+    env.Alias(target="install", source=[])

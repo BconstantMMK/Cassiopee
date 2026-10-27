@@ -49,6 +49,27 @@ installDict = {
         'NvccAdditionalOptions': []
     },
 
+    'mac': {
+        'description': 'macOS (Apple Silicon, Homebrew GCC: gcc-14/gfortran-14 + OpenMP)',
+        'f77compiler': 'gfortran-14',
+        'f90compiler': 'gfortran-14',
+        'Cppcompiler': 'gcc-14',
+        'CppAdditionalOptions': [],
+        'f77AdditionalOptions': [],
+        'useOMP': True,
+        'static': False,
+        'additionalIncludePaths': [
+            '/opt/homebrew/include'
+        ],
+        'additionalLibs': ['gomp', 'gfortran'],
+        'additionalLibPaths': [
+            '/opt/homebrew/lib',
+            '/opt/homebrew/opt/gcc@14/lib/gcc/14'
+        ],
+        'useCuda': False,
+        'NvccAdditionalOptions': []
+    },
+
     'WDAAA161Z': {
         'description': 'Windows win64+msys2 (CB-ONERA)',
         'f77compiler': 'gfortran',
