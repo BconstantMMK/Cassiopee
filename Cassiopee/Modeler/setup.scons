@@ -73,16 +73,32 @@ env.SConsignFile('build/'+ELSAPROD+'/.sconsign.dblite')
 
 #==============================================================================
 
-env.Command('merge.l', 'merge.ar', "sed -e s/ELSAPROD/%s/g merge.ar > merge.l"%ELSAPROD)
-env.Command('libmodeler.a', ['libmodeler1.a', 'libmodeler2.a', 'libmodeler3.a', 
-    'libmodeler4.a', 'libmodeler5.a', 'libmodeler6.a', 'merge.l'], "ar -M < merge.l")
+# One static library per chunk of sources; empty chunks are skipped so that
+# 'ar' is never asked to create an archive with no member (e.g. stub builds
+# with TIXI/TIGL disabled).
+chunk = 100
+modeler_libs = []
+for i in range(0, len(srcs.cpp_srcs), chunk):
+    n = i//chunk + 1
+    env.StaticLibrary('modeler%d'%n, source=srcs.cpp_srcs[i:i+chunk])
+    modeler_libs.append('libmodeler%d.a'%n)
 
-myMod1 = env.StaticLibrary('modeler1', source=srcs.cpp_srcs[0:100])
-myMod2 = env.StaticLibrary('modeler2', source=srcs.cpp_srcs[100:200])
-myMod3 = env.StaticLibrary('modeler3', source=srcs.cpp_srcs[200:300])
-myMod4 = env.StaticLibrary('modeler4', source=srcs.cpp_srcs[300:400])
-myMod5 = env.StaticLibrary('modeler5', source=srcs.cpp_srcs[400:500])
-myMod6 = env.StaticLibrary('modeler6', source=srcs.cpp_srcs[500:])
+if Dist.getSystem()[0] == 'Darwin':
+    # MRI 'ar -M' merge is GNU-binutils specific; its archives are
+    # rejected by the Apple linker. Use libtool on Darwin.
+    env.Command('libmodeler.a', modeler_libs, "libtool -static -o $TARGET $SOURCES")
+else:
+    # Merge the existing chunk libraries with a GNU MRI script built from
+    # modeler_libs (works even when some chunks are skipped).
+    command = "echo 'create build/%s/libmodeler.a' > merge.l; "%ELSAPROD
+    for lib in modeler_libs:
+        command += "echo 'addlib build/%s/%s' >> merge.l; "%(ELSAPROD, lib)
+    command += "echo 'save' >> merge.l; "
+    command += "echo 'end' >> merge.l"
+    command = 'sh -c \"'+command+'\"'
+    env.Command('merge.l', modeler_libs, command)
+    env.Command('libmodeler.a', modeler_libs+['merge.l'], "ar -M < merge.l")
+
 
 myMod = 'libmodeler.a'
 
