@@ -219,7 +219,12 @@ command += "echo 'end' >> merge.l"
 command = 'sh -c \"'+command+'\"'
 
 env.Command('merge.l', 'merge.ar', command)
-env.Command('libxcore.a', deps+['merge.l'], "ar -M < merge.l")
+if Dist.getSystem()[0] == 'Darwin':
+    # MRI 'ar -M' merge is GNU-binutils specific; its archives are
+    # rejected by the Apple linker. Use libtool on Darwin.
+    env.Command('libxcore.a', deps, "libtool -static -o $TARGET $SOURCES")
+else:
+    env.Command('libxcore.a', deps+['merge.l'], "ar -M < merge.l")
 
 # install deps
 env.Alias(target="install", source=['libxcore.a'])
