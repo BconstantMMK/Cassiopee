@@ -1,0 +1,23 @@
+# macOS Apple Silicon build environment for Cassiopee.
+_CASSIOPEE_ENV_FILE="${(%):-%x}"
+export CASSIOPEE="$(cd "$(dirname "$_CASSIOPEE_ENV_FILE")/.." && pwd)"
+export CASSIOPEE_PROD="${CASSIOPEE_PROD:-mac_i8}"
+export ELSAPROD="$CASSIOPEE_PROD"
+export CASSIOPEE_GCC_BIN="${CASSIOPEE_GCC_BIN:-/opt/homebrew/opt/gcc@14/bin}"
+export CASSIOPEE_BINUTILS_BIN="${CASSIOPEE_BINUTILS_BIN:-/opt/homebrew/opt/binutils/bin}"
+export SDKROOT="${SDKROOT:-$(xcrun --show-sdk-path)}"
+if [ -z "${CASSIOPEE_PYTHON:-}" ]; then
+	if [ -x "$CASSIOPEE/../.venv/bin/python" ]; then
+		export CASSIOPEE_PYTHON="$CASSIOPEE/../.venv/bin/python"
+	else
+		export CASSIOPEE_PYTHON="$HOME/cassiopee-venv/bin/python"
+	fi
+fi
+export PYTHONEXE="$CASSIOPEE_PYTHON"
+export PRODMODE="${PRODMODE:-1}"
+export PATH="$(dirname "$CASSIOPEE_PYTHON"):$PATH"
+export PATH="$CASSIOPEE/Envs/mac-gcc-bin:$CASSIOPEE_GCC_BIN:$CASSIOPEE_BINUTILS_BIN:/opt/homebrew/opt/open-mpi/bin:/opt/homebrew/bin:$PATH"
+export PATH="$PATH:$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD:$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD/bin"
+export PYTHONPATH="$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD/lib/python3.11/site-packages:$CASSIOPEE/Dist/bin/$CASSIOPEE_PROD/lib/site-packages:$PYTHONPATH"
+export DYLD_LIBRARY_PATH="/opt/homebrew/lib:/opt/homebrew/opt/gcc@14/lib/gcc/14:/opt/homebrew/opt/open-mpi/lib:$DYLD_LIBRARY_PATH"
+export OMP_NUM_THREADS=8
