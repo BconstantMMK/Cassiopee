@@ -61,4 +61,5 @@ out.step
 *.swp
 *.db
 tools/MigrationSVN
+.DS_Store
 .env
