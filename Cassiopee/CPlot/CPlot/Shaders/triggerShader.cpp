@@ -25,6 +25,10 @@
 //=============================================================================
 void Data::triggerShader(Zone& z, int material, float scale, float* color)
 {
+  // No shader could be loaded (e.g. GL legacy profile with unsupported
+  // GLSL): fall back to fixed-function rendering, without indexing the
+  // empty shader list
+  if (_shaders.numberOfShaders() == 0) { _shaders.deactivate(); return; }
   int shader = 1;
   float dx = K_FUNC::E_max(1.e-6, 1./(z.xmax-z.xmin));
   float dy = K_FUNC::E_max(1.e-6, 1./(z.ymax-z.ymin));

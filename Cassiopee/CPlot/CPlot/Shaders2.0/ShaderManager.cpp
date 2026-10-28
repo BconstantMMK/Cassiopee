@@ -56,7 +56,11 @@ unsigned short ShaderManager::currentShader() const
 unsigned short ShaderManager::shader_id( int idShadMat ) const
 {
   unsigned short id = idShadMat;
-  if ( id >= (unsigned short)_shaderList.size() ) printf("Bogue, depassement de tableau de shader !!!!\n");
+  if ( id >= (unsigned short)_shaderList.size() )
+  {
+    printf("Warning: shader id %d out of range (shader not compiled?). Fixed-function rendering.\n", (int)id);
+    return 0; // 0 = no shader
+  }
   return id;
 }
 
@@ -253,6 +257,22 @@ int ShaderManager::init()
 //=============================================================================
 int ShaderManager::load()
 {
+  // CPlot shaders require GLSL >= 1.50. If the GL context only exposes an
+  // older GLSL (e.g. macOS legacy 2.1 profile through XQuartz), do not
+  // attempt any load: print a single message and render fixed-function
+  // (guarded in triggerShader)
+  const char* glslVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+  if (glslVersion != NULL)
+  {
+    int maj = 0; int min = 0;
+    if (sscanf(glslVersion, "%d.%d", &maj, &min) == 2 && maj*100+min < 150)
+    {
+      printf("Info: GLSL %s < 1.50: shaders unavailable, fixed-function rendering.\n",
+             glslVersion);
+      return 0;
+    }
+  }
+
   Data* d = Data::getInstance();
   char* path = d->ptrState->shaderPath;
   E_Int len = strlen(path);

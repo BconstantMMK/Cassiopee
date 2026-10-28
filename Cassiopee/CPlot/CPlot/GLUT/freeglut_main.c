@@ -28,7 +28,7 @@
 #include <GL/freeglut.h>
 #include "freeglut_internal.h"
 #ifdef __APPLE__
-/* macOS: select() n'est pas expose par les en-tetes X11, contrairement a glibc */
+/* macOS: select() is not exposed by the X11 headers, unlike glibc */
 #include <sys/select.h>
 #endif
 #ifdef HAVE_ERRNO_H
