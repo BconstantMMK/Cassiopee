@@ -1,3 +1,4 @@
+import sys
 import tkinter as TK
 try: import Tk as CTK
 except: from . import Tk as CTK
@@ -7,6 +8,39 @@ try: import tkinter.ttk as ttk
 except: ttk = None
 #Uncomment that for a pure Tk interface
 #ttk = None
+
+#=================================================================
+# Right-click portability
+# On macOS (Aqua Tk), mouse buttons 2 and 3 are swapped compared to
+# X11: the right button is reported as <Button-2> and the middle
+# button as <Button-3>. All Cassiopee code follows the X11
+# convention (<Button-3> = right click), so swap both bindings
+# globally on Aqua: every widget (applets included) then behaves as
+# on Linux, without touching each file.
+#=================================================================
+def _isAqua(widget):
+    try:
+        return widget.tk.call('tk', 'windowingsystem') == 'aqua'
+    except TK.TclError:
+        return False
+
+import re
+_BUTTON_SWAP_RE = re.compile(r'(Button(?:Release|Press)?-)([23])')
+
+def _swapAquaButtons(sequence):
+    # Covers <Button-N>, <ButtonRelease-N>, <ButtonPress-N>,
+    # <Double-Button-N>, ... with N in {2, 3}
+    return _BUTTON_SWAP_RE.sub(
+        lambda m: m.group(1) + ('2' if m.group(2) == '3' else '3'),
+        sequence)
+
+if sys.platform == 'darwin':
+    _origBind = TK.Misc.bind
+    def _portableBind(self, sequence=None, *args, **kwargs):
+        if sequence is not None and _isAqua(self):
+            sequence = _swapAquaButtons(sequence)
+        return _origBind(self, sequence, *args, **kwargs)
+    TK.Misc.bind = _portableBind
 
 # Couleur du fond (theme)
 BACKGROUNDCOLOR = '#FFFFFF'
@@ -278,7 +312,7 @@ def Text(*args, **kwargs):
     else: return TK.Text(*args, **kwargs)
 
 def Radiobutton(*args, **kwargs):
-    if ttk is None: TK.Radiobutton(*args, **kwargs)
+    if ttk is None: return TK.Radiobutton(*args, **kwargs)
     else:
         if 'offrelief' in kwargs: kwargs.pop('offrelief')
         if 'selectcolor' in kwargs: kwargs.pop('selectcolor')
