@@ -70,6 +70,19 @@ fi
 # Load module names
 . ./MODULES
 
+# macOS: drop OCC from the modules to build. Homebrew OpenCASCADE is
+# built with clang/libc++ while the production uses GCC/libstdc++: the
+# C++ ABI does not match and OCC cannot link until an OpenCASCADE built
+# with the same toolchain as the production is available.
+if [ "$(uname)" = "Darwin" ]; then
+    _mods=""
+    for _m in $FULLMODULES; do
+        [ "$_m" = "OCC" ] && continue
+        _mods="$_mods $_m"
+    done
+    FULLMODULES=$_mods
+fi
+
 if [ "$PYTHONEXE" = "" ]; then
     export PYTHONEXE=python
 fi
