@@ -69,7 +69,6 @@ AR = Dist.getAR()
 
 EXTRA = ['-D__SHADERS__']
 if mpi: EXTRA += ['-D_MPI']
-if mySystem == 'Darwin': EXTRA += ['-framework OpenGL']
 env = Environment(tools=tools, CC=cc, CXX=cxx, AR=AR, CPPFLAGS=[], CCFLAGS=[],
                   LIBPATH=additionalLibPaths+libraryDirs,
                   LIBS=libraries+additionalLibs,
@@ -84,7 +83,6 @@ env.Append(CPPFLAGS=EXTRA)
 # Env - libcplot1.a (openGL/glsl4) =============================================================
 EXTRA = ['-D__SHADERS__']
 if mpi: EXTRA += ['-D_MPI']
-if mySystem == 'Darwin': EXTRA += ['-framework OpenGL']
 env1 = Environment(tools=tools, CC=cc, CXX=cxx, AR=AR, CPPFLAGS=[], CCFLAGS=[],
                   LIBPATH=additionalLibPaths+libraryDirs+[GLLibDir],
                   LIBS=libraries+additionalLibs+["GL"],

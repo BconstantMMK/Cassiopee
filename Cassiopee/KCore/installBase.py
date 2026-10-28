@@ -59,12 +59,14 @@ installDict = {
         'useOMP': True,
         'static': False,
         'additionalIncludePaths': [
-            '/opt/homebrew/include'
+            '/opt/homebrew/include',
+            '/opt/X11/include'
         ],
         'additionalLibs': ['gomp', 'gfortran'],
         'additionalLibPaths': [
             '/opt/homebrew/lib',
-            '/opt/homebrew/opt/gcc@14/lib/gcc/14'
+            '/opt/homebrew/opt/gcc@14/lib/gcc/14',
+            '/opt/X11/lib'
         ],
         'useCuda': False,
         'NvccAdditionalOptions': []
