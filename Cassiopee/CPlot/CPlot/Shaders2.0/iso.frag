@@ -1,5 +1,4 @@
 // Shader banded-colormap
-#version 150 compatibility
 
 varying vec4 color;
 varying vec3 Nv;
@@ -25,9 +24,7 @@ void main()
 {
   float f, fs;
   int vali;
-  f = color.r;
-
-  // discard
+  f = color.r; 
   if (amax > amin)
   { 
     if (f > amax) discard;

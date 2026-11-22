@@ -1,6 +1,4 @@
 // Gooch (hand drawing) shader
-#version 150 compatibility
-
 varying float NdotL;
 varying vec3 ReflectVec;
 varying vec3 ViewVec;

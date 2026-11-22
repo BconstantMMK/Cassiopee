@@ -1,6 +1,5 @@
 // Sphere billboarding
 // Remplace un quad avec texcoord (0,0)-(1,1) par une sphere
-#version 150 compatibility
 
 varying vec4 initColor;
 varying vec3 P;
@@ -39,4 +38,5 @@ void main()
   gl_FragDepth = depth;
   gl_FragColor = col;
   gl_FragColor.a = initColor.a;
+    
 }

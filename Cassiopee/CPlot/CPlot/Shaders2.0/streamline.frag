@@ -10,6 +10,7 @@ uniform int lightOn;
 uniform float blend;
 uniform int shadow;
 uniform sampler2D ShadowMap;
+uniform float Brightness = 0.5;
 
 void main()
 {
@@ -52,7 +53,7 @@ void main()
     float s = shadowCoordinateW.s;
     float t = shadowCoordinateW.t;      
     if (ShadowCoord.w > 0.0 && s > 0.001 && s < 0.999 && t > 0.001 && t < 0.999)
-      shadowValue = distanceFromLight < shadowCoordinateW.z ? 0.5 : 1.0;
+        shadowValue = distanceFromLight < shadowCoordinateW.z ? 0.5 : 1.0;
   }
 
   gl_FragColor = gAlpha*vec4(1.,1.,1.,1.) + (1.-gAlpha)*shadowValue * color2;

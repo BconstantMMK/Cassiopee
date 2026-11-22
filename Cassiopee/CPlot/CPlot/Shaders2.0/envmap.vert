@@ -1,8 +1,6 @@
 // envmap shader (chrome)
-#version 150 compatibility
-
-varying vec3 Normal;
-varying vec3 EyeDir;
+varying vec3  Normal;
+varying vec3  EyeDir;
 varying vec4 color;
 varying vec4 vertex;
 

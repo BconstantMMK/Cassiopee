@@ -1,5 +1,4 @@
 // Display direct r/g/b + light
-#version 150 compatibility
 
 varying vec3 Nv;
 varying vec3 P;

@@ -1,8 +1,6 @@
 //
 // Envmap shader
 //
-#version 150 compatibility
-
 const vec3 Xunitvec = vec3(1.0, 0.0, 0.0);
 const vec3 Yunitvec = vec3(0.0, 1.0, 0.0);
 

@@ -1,5 +1,4 @@
 // isos + granite
-#version 150 compatibility
 
 varying vec3 Nv;
 varying vec3 P;

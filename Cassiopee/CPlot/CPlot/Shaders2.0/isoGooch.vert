@@ -1,6 +1,4 @@
 // isos + gooch
-#version 150 compatibility
-
 varying vec4 color;
 
 void main()
