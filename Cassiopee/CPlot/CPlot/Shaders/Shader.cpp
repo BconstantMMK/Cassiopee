@@ -226,10 +226,11 @@ Shader::getAttributeLocation( const char *attributeName ) const
 // ----------------------------------------------------------------------------
 unsigned int Shader::getUniformLocation( const char *uniformName ) const
 {
+    if ( !_isLinked ) return (unsigned int)-1; // unlinked (null) shader: uniforms are no-ops
     GLint loc = glGetUniformLocationARB( _programId, uniformName );
     if ( loc == -1 ) {
-        printf( "Doesn't find uniform variable %s.\n", uniformName );
-        throw std::invalid_argument( "Doesn't find uniform variable." );
+        printf( "Doesn't find uniform variable %s (ignored).\n", uniformName );
+        return (unsigned int)-1; // no throw: missing uniform = no-op (robust shader fallback)
     }
     CHECK_GL_ERROR();
     return (unsigned int)loc;
@@ -237,12 +238,13 @@ unsigned int Shader::getUniformLocation( const char *uniformName ) const
 // ----------------------------------------------------------------------------
 unsigned int Shader::getStorageBufferLocation( const char *storageName ) const
 {
+    if ( !_isLinked ) return GL_INVALID_INDEX; // unlinked (null) shader: no-op
     GLuint index = glGetProgramResourceIndex( _programId, GL_SHADER_STORAGE_BLOCK,
                                               storageName );
 
     if ( index == GL_INVALID_INDEX ) {
-        printf( "Doesn't find storage buffer variable %s.\n", storageName );
-        throw std::invalid_argument( "Doesn't find storage buffer variable." );
+        printf( "Doesn't find storage buffer variable %s (ignored).\n", storageName );
+        return GL_INVALID_INDEX; // no throw
     }
     CHECK_GL_ERROR();
     return (unsigned int)index;

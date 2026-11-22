@@ -130,11 +130,12 @@ Shader::getAttributeLocation(const char* attributeName) const
 // ----------------------------------------------------------------------------
 unsigned int Shader::getUniformLocation(const char* uniformName) const
 {
+  if (!_isLinked) return (unsigned int)-1; // unlinked (null) shader: uniforms are no-ops
   GLint loc = glGetUniformLocationARB(_programId, uniformName);
-  if (loc == -1) 
+  if (loc == -1)
   {
-    printf("Doesn't find uniform variable %s.\n", uniformName);
-    throw std::invalid_argument("Doesn't find uniform variable.");
+    printf("Doesn't find uniform variable %s (ignored).\n", uniformName);
+    return (unsigned int)-1; // no throw: missing uniform = no-op
   }
   CHECK_GL_ERROR();
   return (unsigned int)loc;

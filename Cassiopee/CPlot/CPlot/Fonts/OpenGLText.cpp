@@ -39,11 +39,7 @@
 #include <errno.h>
 #include <math.h>
 
-#if defined(__APPLE__)
-    #include <GLUT/glut.h>
-#else
-    #include <GL/glew.h>
-#endif
+#include <GL/glew.h>
 
 #include "tga.h"
 

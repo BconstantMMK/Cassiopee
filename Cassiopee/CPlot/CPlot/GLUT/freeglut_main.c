@@ -27,6 +27,9 @@
 
 #include <GL/freeglut.h>
 #include "freeglut_internal.h"
+#ifdef __APPLE__
+#    include <sys/select.h>
+#endif
 #ifdef HAVE_ERRNO_H
 #    include <errno.h>
 #endif

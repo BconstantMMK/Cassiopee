@@ -25,12 +25,14 @@
 #include "TesselationEvaluationShader.hpp"
 #include <stdexcept>
 #include <string.h>
+#include <sys/stat.h>
 using namespace CPlot;
 
 //=============================================================================
 ShaderManager::ShaderManager()
   : _shaderList(),
     m_previous_shader( nullptr ),
+    m_nullShader( nullptr ),
     _currentActiveShader( 0 )
 {
 }
@@ -38,6 +40,7 @@ ShaderManager::ShaderManager()
 ShaderManager::~ShaderManager()
 {
   deactivate();
+  if ( m_nullShader != nullptr ) { delete m_nullShader; m_nullShader = nullptr; }
   for ( std::vector<Shader *>::iterator itShad = _shaderList.begin(); itShad != _shaderList.end(); itShad++ ) 
   {
     delete ( *itShad );
@@ -57,22 +60,33 @@ unsigned short ShaderManager::currentShader() const
 unsigned short ShaderManager::shader_id( int idShadMat ) const
 {
   unsigned short id = idShadMat*(tesselationManager.numberOfShaders()+1) + tesselationManager.currentShader();
-  if ( id >= (unsigned short)_shaderList.size() ) printf("Bogue, depassement de tableau de shader !!!!\n");
+  if ( id >= (unsigned short)_shaderList.size() )
+  {
+    printf("Warning: shader id %d out of range (shader not compiled?). Fixed-function rendering.\n", (int)id);
+    return 0; // 0 = no shader
+  }
   return id;
 }
 
 Shader* ShaderManager::operator [] (unsigned short id)
 {
-  assert(id > 0);
-  assert(id < _shaderList.size());
-  return _shaderList[id]; 
+  if ( id == 0 || id >= (unsigned short)_shaderList.size() )
+  { // no shader loaded (e.g. GLSL < 1.50): return an inert shader (unlinked
+    // program => glGetUniformLocation == -1 => setUniform calls are no-ops)
+    if ( m_nullShader == nullptr ) m_nullShader = new Shader(); // lazy: GL context must exist
+    return m_nullShader;
+  }
+  return _shaderList[id];
 }
-    
+
 const Shader* ShaderManager::operator [] (unsigned short id) const
-{ 
-  assert(id > 0);
-  assert(id < _shaderList.size());
-  return _shaderList[id]; 
+{
+  if ( id == 0 || id >= (unsigned short)_shaderList.size() )
+  {
+    if ( m_nullShader == nullptr ) m_nullShader = new Shader();
+    return m_nullShader;
+  }
+  return _shaderList[id];
 }
 
 //=============================================================================
@@ -90,27 +104,28 @@ Shader* ShaderManager::addFromFile( const char *geomFile, const char *vertexFile
     {
       std::cerr << "Failed compiling vertex shader " << vertexFile << " : " << std::endl;
       std::cerr << shad->vertex_shader->getCompilerLog().c_str() << std::endl;
-      delete shad;
-      return nullptr;
+      _shaderList.push_back( shad ); // keep index aligned on failure (unlinked placeholder)
+      return shad;
     }
     if ( ( geomFile != nullptr ) && ( not shad->geometry_shader->compile( ShaderObject::load( geomFile ) ) ) )
     {
       std::cerr << "Failed compiling geometry shader " << geomFile << " : " << std::endl;
       std::cerr << shad->geometry_shader->getCompilerLog().c_str() << std::endl;
-      delete shad;
-      return nullptr;            
+      _shaderList.push_back( shad ); // keep index aligned on failure (unlinked placeholder)
+      return shad;            
     }
     if ( ( fragmentFile != nullptr ) && ( not shad->fragment_shader->compile( ShaderObject::load( fragmentFile ) ) ) )
     {
       std::cerr << "Failed compiling fragment shader " << fragmentFile << " : " << std::endl;
       std::cerr << shad->fragment_shader->getCompilerLog().c_str() << std::endl;
-      delete shad;
-      return nullptr;
+      _shaderList.push_back( shad ); // keep index aligned on failure (unlinked placeholder)
+      return shad;
     }
-  } catch ( std::runtime_error &err ) 
+  } catch ( std::runtime_error &err )
   {
     std::cerr << "Failed to load shader : " << err.what() << std::endl;
-    return nullptr;
+    _shaderList.push_back( shad ); // keep index aligned on failure (unlinked placeholder)
+    return shad;
   }
   // Rajout shader sans tesselation
   _shaderList.push_back( shad );
@@ -148,20 +163,21 @@ Shader* ShaderManager::addFromFile( const char* vertexFile,
     {
       std::cerr << "Failed compiling vertex shader " << vertexFile << " : " << std::endl;
       std::cerr << shad->vertex_shader->getCompilerLog().c_str() << std::endl;
-      delete shad;
-      return nullptr;
+      _shaderList.push_back( shad ); // keep index aligned on failure (unlinked placeholder)
+      return shad;
     }
     if ( ( fragmentFile != nullptr ) && ( not shad->fragment_shader->compile( ShaderObject::load( fragmentFile ) ) ) )
     {
       std::cerr << "Failed compiling fragment shader " << fragmentFile << " : " << std::endl;
       std::cerr << shad->fragment_shader->getCompilerLog().c_str() << std::endl;
-      delete shad;
-      return nullptr;
+      _shaderList.push_back( shad ); // keep index aligned on failure (unlinked placeholder)
+      return shad;
     }
-  } catch ( std::runtime_error &err ) 
+  } catch ( std::runtime_error &err )
   {
     std::cerr << "Failed to load shader : " << err.what() << std::endl;
-    return nullptr;
+    _shaderList.push_back( shad ); // keep index aligned on failure (unlinked placeholder)
+    return shad;
   }
   _shaderList.push_back( shad );
   // Puis rajout des shaders avec tesselation :
@@ -239,6 +255,7 @@ void ShaderManager::activate( unsigned short id )
   _currentActiveShader = 0;
   if ( id == 0 ) return;
   if ( id >= _shaderList.size() ) return;
+  if ( !_shaderList[id]->isLinked() ) return; // unlinked placeholder: stay fixed-function
     _currentActiveShader = id;
   if ( !_shaderList[ id  ]->start() )
     throw std::runtime_error( "Fail to start shader !" );
@@ -286,10 +303,39 @@ int ShaderManager::init()
 //=============================================================================
 int ShaderManager::load()
 {
-  tesselationManager.load();
-
   Data* d = Data::getInstance();
   char* path = d->ptrState->shaderPath;
+  char pathbuf[1028+16];
+
+  // CPlot shaders require GLSL >= 1.50. If the GL context only exposes an
+  // older GLSL (e.g. macOS legacy 2.1 profile through XQuartz), use the
+  // GLSL 1.20 fallback shaders (Shaders2.0) installed in the OSMESA/
+  // subdirectory; if absent, render fixed-function (guarded in triggerShader)
+  const char* glslVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+  if (glslVersion != NULL)
+  {
+    int maj = 0; int min = 0;
+    if (sscanf(glslVersion, "%d.%d", &maj, &min) == 2 && maj*100+min < 150)
+    {
+      snprintf(pathbuf, sizeof(pathbuf), "%sOSMESA/", path);
+      struct stat st;
+      if (stat(pathbuf, &st) == 0 && S_ISDIR(st.st_mode))
+      {
+        printf("Info: GLSL %s < 1.50: loading GLSL 1.20 fallback shaders from %s\n",
+               glslVersion, pathbuf);
+        path = pathbuf;
+      }
+      else
+      {
+        printf("Info: GLSL %s < 1.50: shaders unavailable, fixed-function rendering.\n",
+               glslVersion);
+        return 0;
+      }
+    }
+  }
+
+  tesselationManager.load();
+
   E_Int len = strlen(path);
 
   char* vert = new char[ len+32 ];

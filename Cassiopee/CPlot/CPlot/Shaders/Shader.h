@@ -81,6 +81,7 @@ namespace CPlot
     int nb_proglets() const;
 
     GLhandleARB getProgramId() const { return _programId; }
+    bool isLinked() const { return _isLinked; }
     bool link();
 
     bool start(); // Activate the shader. If not linked, link this shader before

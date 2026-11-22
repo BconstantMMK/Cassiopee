@@ -326,12 +326,17 @@ void Data::display()
 #endif
 
   // Post-processing
-  E_Int post = 0; double sobelThreshold = -0.5; 
+  E_Int post = 0; double sobelThreshold = -0.5;
   if (ptrState->DOF == 1) { post = 1; sobelThreshold = ptrState->sobelThreshold; }
   if (ptrState->gamma != 1.) { post = 1; sobelThreshold = ptrState->sobelThreshold; }
   if (ptrState->toneMapping != 0) { post = 1; sobelThreshold = ptrState->sobelThreshold; }
   if (ptrState->mode == SOLID && ptrState->solidStyle == 4) { post = 1; sobelThreshold = 0.5; }
   if (ptrState->panorama == 1) post =1;
+
+  // Post-processing blits through shaders (displayFrameTex): without any
+  // loaded shader (e.g. GL profile with unsupported GLSL), skip it and
+  // keep the direct rendering instead of indexing the empty shader list
+  if (post == 1 && _shaders.numberOfShaders() == 0) post = 0;
 
   if (post == 1)
   { 

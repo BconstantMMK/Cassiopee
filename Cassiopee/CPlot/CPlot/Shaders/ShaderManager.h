@@ -93,6 +93,7 @@ namespace CPlot
     ShaderManager& operator = (const ShaderManager& shadMan);
     std::vector<Shader*> _shaderList;
     Shader* m_previous_shader;
+    mutable Shader* m_nullShader; // inert shader returned by operator[] when id==0 or out of range (GLSL<1.50 fallback)
     unsigned short _currentActiveShader;
     TesselationShaderManager tesselationManager;
   };

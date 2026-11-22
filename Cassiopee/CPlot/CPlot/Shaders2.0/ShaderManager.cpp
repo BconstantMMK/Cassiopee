@@ -29,6 +29,7 @@ using namespace CPlot;
 ShaderManager::ShaderManager()
   : _shaderList(),
     m_previous_shader( nullptr ),
+    m_nullShader( nullptr ),
     _currentActiveShader( 0 )
 {
 }
@@ -36,6 +37,7 @@ ShaderManager::ShaderManager()
 ShaderManager::~ShaderManager()
 {
   deactivate();
+  if ( m_nullShader != nullptr ) { delete m_nullShader; m_nullShader = nullptr; }
   for ( std::vector<Shader *>::iterator itShad = _shaderList.begin();
         itShad != _shaderList.end(); itShad++ ) 
   {
@@ -56,22 +58,33 @@ unsigned short ShaderManager::currentShader() const
 unsigned short ShaderManager::shader_id( int idShadMat ) const
 {
   unsigned short id = idShadMat;
-  if ( id >= (unsigned short)_shaderList.size() ) printf("Bogue, depassement de tableau de shader !!!!\n");
+  if ( id >= (unsigned short)_shaderList.size() )
+  {
+    printf("Warning: shader id %d out of range (shader not compiled?). Fixed-function rendering.\n", (int)id);
+    return 0; // 0 = no shader
+  }
   return id;
 }
 
 Shader* ShaderManager::operator [] (unsigned short id)
 {
-  assert(id > 0);
-  assert(id < _shaderList.size());
-  return _shaderList[id]; 
+  if ( id == 0 || id >= (unsigned short)_shaderList.size() )
+  { // no shader loaded (e.g. GLSL < 1.50): return an inert shader (unlinked
+    // program => glGetUniformLocation == -1 => setUniform calls are no-ops)
+    if ( m_nullShader == nullptr ) m_nullShader = new Shader(); // lazy: GL context must exist
+    return m_nullShader;
+  }
+  return _shaderList[id];
 }
-    
+
 const Shader* ShaderManager::operator [] (unsigned short id) const
-{ 
-  assert(id > 0);
-  assert(id < _shaderList.size());
-  return _shaderList[id]; 
+{
+  if ( id == 0 || id >= (unsigned short)_shaderList.size() )
+  {
+    if ( m_nullShader == nullptr ) m_nullShader = new Shader();
+    return m_nullShader;
+  }
+  return _shaderList[id];
 }
 
 //=============================================================================
@@ -253,6 +266,22 @@ int ShaderManager::init()
 //=============================================================================
 int ShaderManager::load()
 {
+  // CPlot shaders require GLSL >= 1.50. If the GL context only exposes an
+  // older GLSL (e.g. macOS legacy 2.1 profile through XQuartz), do not
+  // attempt any load: print a single message and render fixed-function
+  // (guarded in triggerShader)
+  const char* glslVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+  if (glslVersion != NULL)
+  {
+    int maj = 0; int min = 0;
+    if (sscanf(glslVersion, "%d.%d", &maj, &min) == 2 && maj*100+min < 150)
+    {
+      printf("Info: GLSL %s < 1.50: shaders unavailable, fixed-function rendering.\n",
+             glslVersion);
+      return 0;
+    }
+  }
+
   Data* d = Data::getInstance();
   char* path = d->ptrState->shaderPath;
   E_Int len = strlen(path);
