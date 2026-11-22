@@ -76,6 +76,23 @@ TesselationShaderManager::addFromFile( const char* tesselationBaseNameFile )
 //=============================================================================
 int TesselationShaderManager::load()
 {
+  // Tessellation shaders are GLSL >= 4.00 only (OpenGL 4.0 core or
+  // ARB_tessellation_shader). On a legacy GL 2.1 context (GLSL 1.20),
+  // do not even try to compile them: high-order meshes are rendered
+  // as low-order (fixed-function), without raising GL errors.
+  const char* glslVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+  int maj = 0; int min = 0;
+  bool tessSupported = (GLEW_ARB_tessellation_shader == GL_TRUE);
+  if (!tessSupported && glslVersion != NULL &&
+      sscanf(glslVersion, "%d.%d", &maj, &min) == 2)
+    tessSupported = (maj*100+min >= 400);
+  if (!tessSupported)
+  {
+    printf("Info: tessellation shaders need GLSL >= 4.00 (GLSL %s): high-order meshes rendered as low-order.\n",
+           glslVersion != NULL ? glslVersion : "unknown");
+    return 0;
+  }
+
   Data* d = Data::getInstance();
   char* path = d->ptrState->shaderPath;
   E_Int len = strlen(path);

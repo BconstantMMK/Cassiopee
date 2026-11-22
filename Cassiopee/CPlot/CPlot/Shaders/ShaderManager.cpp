@@ -255,12 +255,15 @@ void ShaderManager::activate( unsigned short id )
   _currentActiveShader = 0;
   if ( id == 0 ) return;
   if ( id >= _shaderList.size() ) return;
-  if ( !_shaderList[id]->isLinked() ) return; // unlinked placeholder: stay fixed-function
-    _currentActiveShader = id;
-  if ( !_shaderList[ id  ]->start() )
-    throw std::runtime_error( "Fail to start shader !" );
-  else
-    m_previous_shader = _shaderList[ id ];
+  // start() links the program if needed (lazy link); if it fails (shader
+  // failed to compile), stay in fixed-function instead of throwing.
+  if ( !_shaderList[ id ]->start() )
+  {
+    _currentActiveShader = 0; // unlinked placeholder: stay fixed-function
+    return;
+  }
+  _currentActiveShader = id;
+  m_previous_shader = _shaderList[ id ];
 }
 //=============================================================================
 void ShaderManager::activate( Shader *shad )
@@ -312,6 +315,7 @@ int ShaderManager::load()
   // GLSL 1.20 fallback shaders (Shaders2.0) installed in the OSMESA/
   // subdirectory; if absent, render fixed-function (guarded in triggerShader)
   const char* glslVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+  bool legacyGLSL = false; // true: GLSL < 1.50 fallback (no geometry shader stage)
   if (glslVersion != NULL)
   {
     int maj = 0; int min = 0;
@@ -324,6 +328,7 @@ int ShaderManager::load()
         printf("Info: GLSL %s < 1.50: loading GLSL 1.20 fallback shaders from %s\n",
                glslVersion, pathbuf);
         path = pathbuf;
+        legacyGLSL = true;
       }
       else
       {
@@ -578,7 +583,8 @@ int ShaderManager::load()
   strcat( vert, "streamline.vert" );
   strcpy( frag, path );
   strcat( frag, "streamline.frag" );
-  addFromFile( geom, vert, frag );
+  if (legacyGLSL) addFromFile( vert, frag ); // GLSL 1.20 has no geometry shader stage
+  else addFromFile( geom, vert, frag );
 
   // - 34 - Vector triangle shader ( geom + frag + vert )
   strcpy(geom, path);
@@ -587,7 +593,8 @@ int ShaderManager::load()
   strcat(vert, "streamarrow.vert");
   strcpy(frag, path);
   strcat( frag, "streamarrow.frag" );
-  addFromFile(geom, vert, frag);
+  if (legacyGLSL) addFromFile( vert, frag ); // GLSL 1.20 has no geometry shader stage
+  else addFromFile(geom, vert, frag);
 
   // - 35 - Textured material shader
   strcpy(vert, path);

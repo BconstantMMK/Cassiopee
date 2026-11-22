@@ -1,9 +1,9 @@
-#version 150 compatibility
-
-in vec4 color;
-in vec3 Nv;
-in vec3 P;
-//in vec4 vert;
+#version 120
+// GLSL 1.20 fallback: varyings come straight from the vertex shader
+varying vec4 color;
+varying vec3 Nv;
+varying vec3 P;
+//varying vec4 vert;
 
 uniform int lightOn;
 uniform float blend;
@@ -21,12 +21,12 @@ void main()
   if (lightOn == 1)
   {
     vec3 E, R;
-    vec4 Iamb, Idiff, Ispec;    
+    vec4 Iamb, Idiff, Ispec;
     E = normalize(-P);
     if (dot(N, L) < 0.) N = -N;
 
     R = normalize(-reflect(L,N));
-    Iamb = gl_LightSource[0].ambient; 
+    Iamb = gl_LightSource[0].ambient;
     Idiff = gl_LightSource[0].diffuse*max(dot(N,L), 0.0);
     Ispec = gl_LightSource[0].specular * 0.1 * pow(max(dot(R,E),0.0),0.2 * gl_FrontMaterial.shininess);
 
@@ -37,7 +37,7 @@ void main()
     color2.a = blend;
     color3.a = blend;
   }
-  
+
   float shadowValue = 1.;
   if (shadow == 128.5)
   {
@@ -52,16 +52,16 @@ void main()
     // Z buffer du point dans la texture rendu du pt de vue de la lumiere
     float distanceFromLight = texture2D(ShadowMap, shadowCoordinateW.st).r;
     float s = shadowCoordinateW.s;
-    float t = shadowCoordinateW.t;      
+    float t = shadowCoordinateW.t;
     if (ShadowCoord.w > 0.0 && s > 0.001 && s < 0.999 && t > 0.001 && t < 0.999)
       shadowValue = distanceFromLight < shadowCoordinateW.z ? 0.5 : 1.0;
   }
-  if (color.a < 0.6) 
+  if (color.a < 0.6)
   {
     gl_FragColor = shadowValue * color3;
     gl_FragColor.a = blend;
-  } 
-  else 
+  }
+  else
   {
     float b = ( color.a < blend ? color.a : blend );
     gl_FragColor = color2;

@@ -144,12 +144,14 @@ unsigned int Shader::getUniformLocation(const char* uniformName) const
 void Shader::setUniform(const char* varName, float v0)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform1fARB(loc, v0);
   _isModified = true;
 }
 // ----------------------------------------------------------------------------
 void Shader::setUniform(unsigned int loc, float v0)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform1fARB(GLint(loc), v0);
   _isModified = true;
 }
@@ -157,12 +159,14 @@ void Shader::setUniform(unsigned int loc, float v0)
 void Shader::setUniform(const char* varName, float v0, float v1)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform2fARB(loc, v0, v1);
   _isModified = true;
 }
 // ------------------------------------------------------------------------
 void Shader::setUniform(unsigned int loc, float v0, float v1)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform2fARB(GLint(loc), v0, v1);
   _isModified = true;
 }
@@ -170,12 +174,14 @@ void Shader::setUniform(unsigned int loc, float v0, float v1)
 void Shader::setUniform(const char* varName, float v0, float v1, float v2)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform3fARB(loc, v0, v1, v2);
   _isModified = true;
 }
 // ------------------------------------------------------------------------
 void Shader::setUniform(unsigned int loc, float v0, float v1, float v2)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform3fARB(GLint(loc), v0, v1, v2);
   _isModified = true;
 }
@@ -184,6 +190,7 @@ void Shader::setUniform(const char* varName,
 		   float v0, float v1, float v2, float v3)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform4fARB(loc, v0, v1, v2, v3);
   _isModified = true;
 }
@@ -191,6 +198,7 @@ void Shader::setUniform(const char* varName,
 void Shader::setUniform(unsigned int loc, 
                         float v0, float v1, float v2, float v3)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform4fARB(GLint(loc), v0, v1, v2, v3);
   _isModified = true;
 }
@@ -198,12 +206,14 @@ void Shader::setUniform(unsigned int loc,
 void Shader::setUniform(const char* varName, int v0)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform1iARB(loc, v0);
   _isModified = true;
 }
 // ------------------------------------------------------------------------
 void Shader::setUniform(unsigned int loc, int v0)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform1iARB(GLint(loc), v0);
   _isModified = true;
 }
@@ -211,12 +221,14 @@ void Shader::setUniform(unsigned int loc, int v0)
 void Shader::setUniform(const char* varName, int v0, int v1)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform2iARB(loc, v0, v1);
   _isModified = true;
 }
 // ------------------------------------------------------------------------
 void Shader::setUniform(unsigned int loc, int v0, int v1)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform2iARB(GLint(loc), v0, v1);
   _isModified = true;
 }
@@ -224,12 +236,14 @@ void Shader::setUniform(unsigned int loc, int v0, int v1)
 void Shader::setUniform(const char* varName, int v0, int v1, int v2)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform3iARB(loc, v0, v1, v2);
   _isModified = true;
 }
 // ------------------------------------------------------------------------
 void Shader::setUniform(unsigned int loc, int v0, int v1, int v2)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform3iARB(GLint(loc), v0, v1, v2);
   _isModified = true;
 }
@@ -238,12 +252,14 @@ void Shader::setUniform(const char* varName,
                         int v0, int v1, int v2, int v3)
 {
   GLint loc = GLint(getUniformLocation(varName));
+    if ( loc == -1 ) return; // GL spec: location -1 is a no-op; also avoids GL_INVALID_OPERATION on Apple legacy GL when no program is current
   glUniform4iARB(loc, v0, v1, v2, v3);
   _isModified = true;
 }
 // ------------------------------------------------------------------------
 void Shader::setUniform(unsigned int loc, int v0, int v1, int v2, int v3)
 {
+    if ( GLint(loc) == -1 ) return; // GL spec: location -1 is a no-op; avoids GL_INVALID_OPERATION on Apple legacy GL
   glUniform4iARB(GLint(loc), v0, v1, v2, v3);
   _isModified = true;
 }

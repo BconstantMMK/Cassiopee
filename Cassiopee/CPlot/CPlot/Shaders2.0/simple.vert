@@ -1,18 +1,6 @@
-#version 400 compatibility
-
-out V2CT_OUT
-{
-  vec4 position;
-  vec4 color;
-  ivec4 data_comp; // Raconte si vdata1,2,3 ou 4 est utilise
-  vec4 vdata1, vdata2, vdata3, vdata4;
-} v2ct_out;
-
+#version 120
+// GLSL 1.20 fallback: plain pass-through (no tessellation stage in GL 2.1)
 void main(void)
 {
-  v2ct_out.color  = gl_Color;
-  v2ct_out.position = gl_Vertex;
-  v2ct_out.data_comp = ivec4(0,0,0,0);
   gl_Position = gl_Vertex;
 }
-
