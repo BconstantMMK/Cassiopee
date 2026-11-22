@@ -1655,7 +1655,7 @@ def getOCCModules(OCCIncDir=None, OCCLibDir=None):
             "TKXSDRAWOBJ", "TKXSDRAWPLY", "TKXSDRAWSTEP",
             "TKXSDRAWSTL", "TKXSDRAWVRML", "TKXml",
             "TKXmlL", "TKXmlTObj", "TKXmlXCAF", "TKernel"]
-    
+
     if OCCLibDir is not None: # keep only modules whose lib is actually present
         allMods = [m for m in allMods if checkLibFile__('lib%s.so'%m, [OCCLibDir]) is not None]
     return allMods
