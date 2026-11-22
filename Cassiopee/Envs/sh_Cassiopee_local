@@ -205,6 +205,17 @@ elif [ "$MAC" = "macosx" ]; then
     unset BUNDLE
     export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATHL
 
+elif [ "$MAC" = "macos" ]; then
+#----------------------------- MacOS -------------------------------------------
+    export ELSAPROD=macos
+    export ELSAPROD=$ELSAPROD$EXT
+    export OMP_NUM_THREADS=8
+    export PYTHONEXE=python3
+    export PRODMODE=3
+    export PIP_DISABLE_PIP_VERSION_CHECK=1
+    export XMODIFIERS="@im=none"
+    export PATH="$HOME/bin:$PATH"
+
 elif [ "$MAC" = "ubuntu" ]; then
 #-------------------------------- ubuntu --------------------------------------
     export ELSAPROD=ubuntu
@@ -777,7 +788,7 @@ getSupportedMachines() {
 if [ -z $ELSAPROD ]; then
     echo 'Error: your machine was not found in Envs.'
     # Check names of all listed MACHINEs in this file and in sh_Cassiopee_user
-    SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+    SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/$(basename "${BASH_SOURCE[0]:-$0}")"
     MACS_LOCAL=$(getSupportedMachines "$SCRIPT_PATH")
     SCRIPT_PATH="${SCRIPT_PATH:0:-5}user"
     echo 'Supported MACHINE values are:'
@@ -846,10 +857,14 @@ else
 fi
 
 # Remove empty paths
-for var in PATH PATHL LD_LIBRARY_PATH LD_LIBRARY_PATHL PYTHONPATH PYTHONPATHL; do
-    value="${!var}"
-    value=$(printf '%s' "$value" | sed -e 's/::\+/:/g' -e 's/^://' -e 's/:$//')
-    printf -v "$var" '%s' "$value"
-done
+clean_path() {
+    printf '%s' "$1" | sed -E 's/::+/:/g; s/^://; s/:$//'
+}
+PATH=$(clean_path "$PATH")
+PATHL=$(clean_path "$PATHL")
+LD_LIBRARY_PATH=$(clean_path "$LD_LIBRARY_PATH")
+LD_LIBRARY_PATHL=$(clean_path "$LD_LIBRARY_PATHL")
+PYTHONPATH=$(clean_path "$PYTHONPATH")
+PYTHONPATHL=$(clean_path "$PYTHONPATHL")
 
 echo '>> Hello from '$MAC', '$ELSAPROD' production is set.'

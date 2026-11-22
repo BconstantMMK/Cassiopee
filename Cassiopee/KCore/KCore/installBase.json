@@ -25,6 +25,31 @@
         "NvccAdditionalOptions": ["-arch=sm_60"]
     },
 
+    "macos": {
+        "description": "macOS (Apple Silicon)",
+        "f77compiler": "gfortran",
+        "f90compiler": "gfortran",
+        "Cppcompiler": "gcc",
+        "CppAdditionalOptions": [],
+        "f77AdditionalOptions": [],
+        "useOMP": true,
+        "static": false,
+        "additionalIncludePaths": [
+            "/opt/X11/include",
+            "/opt/homebrew/include",
+            "/opt/homebrew/opt/open-mpi/include"
+        ],
+        "additionalLibs": ["gomp", "gfortran"],
+        "additionalLibPaths": [
+            "/opt/X11/lib",
+            "/opt/homebrew/lib",
+            "/opt/homebrew/opt/open-mpi/lib"
+        ],
+        "useCuda": false,
+        "NvccAdditionalOptions": []
+    },
+
+
     "win64": {
         "description": "Windows win64+msys2",
         "f77compiler": "gfortran",

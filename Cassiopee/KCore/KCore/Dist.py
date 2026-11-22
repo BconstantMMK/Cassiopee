@@ -202,7 +202,7 @@ def checkAll(summary=True):
     (ok, pngIncDir, pngLibDir) = checkPng()
     if ok: out += ['png: OK (%s, %s).'%(pngIncDir, pngLibDir)]
     else: out += ['png: missing (%s, %s).'%(pngIncDir, pngLibDir)]
-    (ok, osmesaIncDir, osmesaLibDir, libname) = checkOSMesa()
+    (ok, osmesaIncDir, osmesaLibDir, libname) = checkOSMesa(additionalLibPaths, additionalIncludePaths)
     if ok: out += ['osmesa: OK (%s, %s).'%(osmesaIncDir, osmesaLibDir)]
     else: out += ['osmesa: missing (%s, %s).'%(osmesaIncDir, osmesaLibDir)]
     (ok, mpegIncDir, mpegLibDir) = checkMpeg()
@@ -528,7 +528,7 @@ def writeSetupCfg():
         p = open("./setup.cfg", 'w')
         p.write('[build_ext]\ncompiler=unix\n')
         p.close()
-    elif Cppcompiler.find('gcc') == 0 or Cppcompiler.find('g++') == 0:
+    elif Cppcompiler == 'gcc' or Cppcompiler == 'g++':
         p = open("./setup.cfg", 'w')
         p.write('[build_ext]\ncompiler=unix\n')
         p.close()
@@ -643,9 +643,7 @@ def getAR():
     if Cppcompiler == "icl.exe": return 'ar.exe '
     elif Cppcompiler == "x86_64-w64-mingw32-gcc":
         return 'x86_64-w64-mingw32-ar'
-    elif getSystem()[0] == 'Darwin':
-        # GNU binutils ar produces archives the Apple linker rejects;
-        # always use Apple ar on Darwin, even if binutils is in PATH.
+    elif getSystem()[0] == 'Darwin': # security: always use Apple ar on Darwin
         return '/usr/bin/ar'
     else: return 'ar'
 
@@ -656,7 +654,7 @@ def getFortranModDirPrefix():
     f90compiler = getFromConfigDict("f90compiler", "gfortran")
     if f90compiler == 'ifort': return '-module'
     elif f90compiler == 'ifort.exe': return '-module'
-    elif f90compiler.find('gfortran') == 0: return '-J'
+    elif f90compiler == 'gfortran': return '-J'
     elif f90compiler == 'g95': return '-fmod'
     else: return ''
 
@@ -942,7 +940,7 @@ def getCArgs():
     compiler = Cppcompiler.split('/')
     l = len(compiler)-1
     Cppcompiler = compiler[l]
-    options = getCppAdditionalOptions() + getDarwinSysrootOptions()
+    options = getCppAdditionalOptions()
     if EDOUBLEINT(): options += ['-DE_DOUBLEINT']
     if GDOUBLEINT(): options += ['-DG_DOUBLEINT']
     if Cppcompiler == "icpc" or Cppcompiler == "icc":
@@ -1084,8 +1082,10 @@ def getForArgs():
     if f77compiler is None: return []
     options = getf77AdditionalOptions()
     if f77compiler == "gfortran":
-        options += getDarwinSysrootOptions()
-        if DEBUG(): options += ['-Wall', '-g', '-O0', '-fbacktrace', '-fbounds-check', '-ffpe-trap=zero,overflow,invalid']
+        if DEBUG(): options += [
+            '-Wall', '-g', '-O0', '-fbacktrace', '-fbounds-check',
+            '-ffpe-trap=zero,overflow,invalid'
+        ]
         else: options += ['-Wall', '-O3']
         if useOMP == 1: options += ['-fopenmp']
         if useStatic == 1: options += ['--static']
@@ -1189,31 +1189,17 @@ def getForArgs():
         return options
     else: return options
 
-
-#==============================================================================
-# Retourne les options de sysroot pour macOS (Darwin)
-# Permet aux compilateurs Homebrew (gcc-14) de trouver les headers systeme
-# sans wrapper: il suffit d'exporter SDKROOT dans l'environnement.
-#==============================================================================
-def getDarwinSysrootOptions():
-    mySystem = getSystem()[0]
-    if mySystem == 'Darwin':
-        sdkroot = os.environ.get('SDKROOT')
-        if sdkroot:
-            return ['-isysroot', sdkroot]
-    return []
-
 #==============================================================================
 # Retourne les arguments pour le linker
 #==============================================================================
 def getLinkArgs():
     Cppcompiler = getCppCompiler()
-    out = getDarwinSysrootOptions()
     useOMP = getFromConfigDict("useOMP", True)
     useStatic = getFromConfigDict("useStatic", False)
     useCuda = getFromConfigDict("useCuda", False)
 
-    if Cppcompiler.find('gcc') == 0 or Cppcompiler.find('g++') == 0:
+    out = []
+    if Cppcompiler == 'gcc' or Cppcompiler == 'g++':
         if useStatic == 1: out += ['--static']
     elif Cppcompiler == 'icc' or Cppcompiler == 'icpc':
         if useStatic == 1: out += ['-static']
@@ -1588,7 +1574,7 @@ def checkOCC():
         return (False, i, l)
 
 # Return open-cascade module names depending on version
-def getOCCModules(OCCIncDir=None):
+def getOCCModules(OCCIncDir=None, OCCLibDir=None):
     #default
     if getSystem()[0] == 'mingw': version = (7, 8)
     else: version = (7, 5)
@@ -1669,6 +1655,9 @@ def getOCCModules(OCCIncDir=None):
             "TKXSDRAWOBJ", "TKXSDRAWPLY", "TKXSDRAWSTEP",
             "TKXSDRAWSTL", "TKXSDRAWVRML", "TKXml",
             "TKXmlL", "TKXmlTObj", "TKXmlXCAF", "TKernel"]
+    
+    if OCCLibDir is not None: # keep only modules whose lib is actually present
+        allMods = [m for m in allMods if checkLibFile__('lib%s.so'%m, [OCCLibDir]) is not None]
     return allMods
 
 #=============================================================================
@@ -1829,9 +1818,6 @@ def checkMpi():
     libnames = []
     l = checkLibFile__('libmpi.so', additionalLibPaths)
     if l is not None: libnames.append('mpi')
-    if l is None:
-        l = checkLibFile__('libmpi.dylib', additionalLibPaths)
-        if l is not None: libnames.append('mpi')
     if l is None:
         l = checkLibFile__('libmpi.a', additionalLibPaths)
         if l is not None: libnames.append('mpi')
@@ -2146,10 +2132,8 @@ def checkFortranLibs():
     paths += additionalLibPaths
 
     # gfortran (gfortran, gomp)
-    if f77compiler.find('gfortran') == 0:
+    if f77compiler == 'gfortran':
         l = checkLibFile__('libgfortran.so*', additionalLibPaths)
-        if l is None:
-            l = checkLibFile__('libgfortran.dylib', additionalLibPaths)
         if l is None:
             l = checkLibFile__('libgfortran.a', additionalLibPaths)
 
@@ -2158,8 +2142,6 @@ def checkFortranLibs():
 
         if useOMP:
             l = checkLibFile__('libgomp.so*', additionalLibPaths)
-            if l is None:
-                l = checkLibFile__('libgomp.dylib', additionalLibPaths)
             if l is None:
                 l = checkLibFile__('libgomp.a', additionalLibPaths)
             if l is not None:
@@ -2319,15 +2301,13 @@ def checkCppLibs():
 
     # gcc (stdc++, gomp)
     if Cppcompiler.find('gcc') == 0 or Cppcompiler.find('g++') == 0:
-        os.environ['CC'] = Cppcompiler
-        os.environ['CXX'] = Cppcompiler.replace('gcc', 'g++')
+        os.environ['CC'] = 'gcc'
+        os.environ['CXX'] = 'g++'
         cflags = sysconfig.get_config_var('CFLAGS')
         sysconfig._config_vars['CFLAGS'] = '' # kill setup flags for CC
         sysconfig._config_vars['LDFLAGS'] = '' # kill setup flags for LD
 
         l = checkLibFile__('libstdc++.so*', additionalLibPaths)
-        if l is None:
-            l = checkLibFile__('libstdc++.dylib', additionalLibPaths)
         if l is None:
             l = checkLibFile__('libstdc++.a', additionalLibPaths)
         if l is not None:
@@ -2345,8 +2325,6 @@ def checkCppLibs():
 
         if useOMP:
             l = checkLibFile__('libgomp.so*', additionalLibPaths)
-            if l is None:
-                l = checkLibFile__('libgomp.dylib', additionalLibPaths)
             if l is None:
                 l = checkLibFile__('libgomp.a', additionalLibPaths)
             if l is not None:
@@ -2576,6 +2554,15 @@ def checkLibFile__(file, additionalLibPaths):
         if a != []: return i+'64'
         a = glob.glob(i+'/'+file)
         if a != []: return i
+
+    if mySystem[0] == 'Darwin' and '.so' in file: # test .dylib extension after .so
+        file = file.replace('.so', '.dylib')
+        for i in p:
+            a = glob.glob(i+'64/'+file)
+            if a != []: return i+'64'
+            a = glob.glob(i+'/'+file)
+            if a != []: return i
+
     return None
 
 #==============================================================================

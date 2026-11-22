@@ -61,7 +61,7 @@ env = Dist.createFortranBuilder(env, ['./KCore'])
 ppf = Dist.createFortranFiles(env, srcs)
 
 if Dist.getSystem()[0] == 'Darwin':
-    # macOS ar does not support MRI scripts (-M): merge with libtool.
+    # Apple ar does not support MRI scripts (-M): merge with libtool.
     env.Command('libkcore.a', ['libkcore1.a', 'libkcore2.a', 'libkcore3.a'],
                 "libtool -static -o $TARGET $SOURCES")
 else:

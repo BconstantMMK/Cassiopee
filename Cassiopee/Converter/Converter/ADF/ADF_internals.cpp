@@ -5526,13 +5526,13 @@ ADF_sys_err = 0;
 if( ADFI_stridx_c( status, "READ_ONLY" ) == 0 )
 {
 #ifdef _WIN32
-  f_ret = file_open( file, f_mode | O_RDONLY, 0666);
+   f_ret = file_open( file, f_mode | O_RDONLY, 0666);
 #else
 #ifdef O_NOATIME
-  f_ret = file_open( file, f_mode | O_RDONLY | O_NOATIME, 0666);
-  if (f_ret < 0) // if UID file != UID process O_NOATIME fails
-    f_ret = file_open( file, f_mode | O_RDONLY, 0666);
-#else
+   f_ret = file_open( file, f_mode | O_RDONLY | O_NOATIME, 0666);
+   if (f_ret < 0) // if UID file != UID process O_NOATIME fails
+      f_ret = file_open( file, f_mode | O_RDONLY, 0666);
+#else // __APPLE__ and other platforms without O_NOATIME
    f_ret = file_open( file, f_mode | O_RDONLY, 0666);
 #endif
 #endif

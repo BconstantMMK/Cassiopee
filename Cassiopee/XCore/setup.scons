@@ -185,10 +185,8 @@ if srcs.SCOTCH:
     deps += ['libscotch1.a', 'libscotch2.a']
 
     if mpi:
-        ptscotchFlags = opt1+opt1_1
-        if Dist.GDOUBLEINT(): ptscotchFlags += ['-DG_DOUBLEINT']
-        env3 = env.Clone(CXXFLAGS=Dist.getCppArgs()+ADDITIONALCPPFLAGS+ptscotchFlags,
-                         CFLAGS=Dist.getCArgs()+ADDITIONALCPPFLAGS+ptscotchFlags)
+        env3 = env.Clone(CXXFLAGS=Dist.getCppArgs()+ADDITIONALCPPFLAGS+opt1+opt1_1, 
+                         CFLAGS=Dist.getCArgs()+ADDITIONALCPPFLAGS+opt1+opt1_1)
         myMod4 = env3.StaticLibrary('ptscotch', srcs_scotch.cpp_srcs2)
         deps += ['libptscotch.a']
 
@@ -220,8 +218,7 @@ command = 'sh -c \"'+command+'\"'
 
 env.Command('merge.l', 'merge.ar', command)
 if Dist.getSystem()[0] == 'Darwin':
-    # MRI 'ar -M' merge is GNU-binutils specific; its archives are
-    # rejected by the Apple linker. Use libtool on Darwin.
+    # Apple ar does not support MRI scripts (-M): merge with libtool.
     env.Command('libxcore.a', deps, "libtool -static -o $TARGET $SOURCES")
 else:
     env.Command('libxcore.a', deps+['merge.l'], "ar -M < merge.l")
