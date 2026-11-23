@@ -20,6 +20,12 @@
 // Remaillage surfacique avec mmgs
 
 #include "generator.h"
+// Include <complex> BEFORE libmmgs.h: on macOS/libc++, <complex.h> (included
+// by mmgcommon_private.h inside libmmgs.h's extern "C" block) pulls in the
+// C++ <complex> -> <sstream>, whose templates fail with "templates must have
+// C++ linkage" when parsed inside extern "C". Pre-including <complex> sets
+// the include guards so the C++ headers are not re-parsed in extern "C".
+#include <complex>
 #include "MMGS/libmmgs.h"
 
 using namespace std;

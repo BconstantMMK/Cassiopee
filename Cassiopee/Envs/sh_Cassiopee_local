@@ -217,6 +217,8 @@ elif [ "$MAC" = "macos" ]; then
     export PIP_DISABLE_PIP_VERSION_CHECK=1
     export XMODIFIERS="@im=none"
     export PATH="$HOME/bin:/opt/homebrew/bin:$PATH"
+    export CC=clang
+    export CXX=clang++
 
 elif [ "$MAC" = "ubuntu" ]; then
 #-------------------------------- ubuntu --------------------------------------
