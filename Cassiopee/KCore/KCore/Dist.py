@@ -1234,7 +1234,7 @@ def getLinkArgs():
         if useOMP == 1: out += ['-fopenmp']
     elif Cppcompiler == 'clang' or Cppcompiler == 'clang++':
         if useStatic == 1: out += ['-static']
-        elif getSystem()[0] != 'Darwin': 
+        elif getSystem()[0] != 'Darwin':
             # on Darwin, Python's LDSHARED already passes -bundle
             out += ['-shared']
         if useOMP == 1:
