@@ -363,7 +363,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=0, column=2, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set collar surfaces 1.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
 
     # - Surface2 -
@@ -371,7 +371,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=1, column=2, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set collar surfaces 2.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[1])
     B.grid(row=1, column=0, columnspan=2, sticky=TK.EW)
 
     # - Constraints1 -
@@ -379,7 +379,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=2, column=2, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set constraint contours for Surf1.')
-    B = TTK.Entry(Frame, textvariable=VARS[8], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[8])
     B.grid(row=2, column=0,  columnspan=2, sticky=TK.EW)
 
     # - Constraints2 -
@@ -387,36 +387,36 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=3, column=2, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set constraint contours for Surf2.')
-    B = TTK.Entry(Frame, textvariable=VARS[9], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[9])
     B.grid(row=3, column=0,  columnspan=2, sticky=TK.EW)
 
     # - Walk in j -
     B = TTK.Label(Frame, text="j-dir", width=2)
     B.grid(row=4, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=4, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Height of each j-layer.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=5)
     B.grid(row=4, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of j-layers.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=5)
     B.grid(row=4, column=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of j-smoothing iterations.')
 
     # - Walk in k -
     B = TTK.Label(Frame, text="k-dir", width=2)
     B.grid(row=5, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[5], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[5], width=5)
     B.grid(row=5, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Height of each k-layer.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[6], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[6], width=5)
     B.grid(row=5, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of k-layers.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[7], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[7], width=5)
     B.grid(row=5, column=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of k-smoothing iterations.')
 

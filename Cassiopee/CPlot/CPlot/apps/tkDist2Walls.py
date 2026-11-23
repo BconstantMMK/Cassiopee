@@ -130,7 +130,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Surfaces", command=setSurfaces)
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set surfaces for distances computation.\nIf not set, BCWalls are used.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[1])
     B.grid(row=0, column=1, columnspan=1, sticky=TK.EW)
 
     # - Algorithm -

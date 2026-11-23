@@ -170,7 +170,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="SelectCells", command=selectCells)
     B.grid(row=2, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Select cells that matches formula.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     B.bind('<Return>', selectCells)
     BB = CTK.infoBulle(parent=B, text='Selection formula.')
     B.grid(row=2, column=1, sticky=TK.EW)

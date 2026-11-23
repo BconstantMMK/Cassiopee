@@ -135,7 +135,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     F.columnconfigure(1, weight=0)
-    B = TTK.Entry(F, textvariable=VARS[0], background='White')
+    B = TTK.Entry(F, textvariable=VARS[0])
     BB = CTK.infoBulle(parent=B, text='Name of image file to add as billboard or texture.')
     B.grid(row=0, column=0, sticky=TK.EW)
     B = TTK.Button(F, text="...", padx=0, command=chooseFile)

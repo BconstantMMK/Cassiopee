@@ -467,7 +467,7 @@ class Node:
         bbox = sw.bbox(item)
         sw.delete("highlight")
         if bbox:
-            i = sw.create_rectangle(bbox, fill="white", tag="highlight")
+            i = sw.create_rectangle(bbox, fill="", tag="highlight")
             sw.lower(i, item)
 
     def PVT_key(self, event):
@@ -1454,8 +1454,7 @@ def createApp(win):
              root_id=[],
              root_label='tree',
              get_contents_callback=get_contents,
-             width=aw, height=ah,
-             background='White')
+             width=aw, height=ah)
     B.bind('<MouseWheel>', onMouseWheel)
     B.bind('<Button-4>', onMouseWheel)
     B.bind('<Button-5>', onMouseWheel)

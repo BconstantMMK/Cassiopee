@@ -477,7 +477,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Close", command=close)
     B.grid(row=4, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Close mesh.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[1])
     BB = CTK.infoBulle(parent=B, text='Close accuracy.')
     B.grid(row=4, column=1, sticky=TK.EW)
 
@@ -485,7 +485,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Oneovern", command=oneovern)
     B.grid(row=5, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Extract one point over n points.\nTree is modified.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     BB = CTK.infoBulle(parent=B, text='Steps in each direction.')
     B.grid(row=5, column=1, sticky=TK.EW)
 

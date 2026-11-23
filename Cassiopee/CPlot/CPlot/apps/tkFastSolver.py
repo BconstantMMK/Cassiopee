@@ -789,7 +789,7 @@ def createApp(win):
     B = TTK.OptionMenu(Frame, VARS[11], "time_step", "cfl", command=changeCflTimeStep)
     B.grid(row=3, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Time step.')
-    B = TTK.Entry(Frame, textvariable=VARS[5], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[5])
     B.grid(row=3, column=1, columnspan=2, sticky=TK.EW)
 
     # - Set data -
@@ -814,10 +814,10 @@ def createApp(win):
     WIDGETS['compute'] = B
     BB = CTK.infoBulle(parent=B, text='Launch computation.')
     B.grid(row=6, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[9], width=5, background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[9], width=5)
     BB = CTK.infoBulle(parent=B, text='Number of iterations for each run.')
     B.grid(row=6, column=1, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[15], width=5, background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[15], width=5)
     BB = CTK.infoBulle(parent=B, text='Number of runs.')
     B.grid(row=6, column=2, columnspan=1, sticky=TK.EW)
 
@@ -825,11 +825,11 @@ def createApp(win):
     #B = TTK.Button(Frame, text="Step", command=updateBodyAndPrepare)
     #BB = CTK.infoBulle(parent=B, text='Apply one motion step to body.')
     #B.grid(row=6, column=0, columnspan=1, sticky=TK.EW)
-    #B = TTK.Entry(Frame, textvariable=VARS[13], width=4, background="White")
+    #B = TTK.Entry(Frame, textvariable=VARS[13], width=4)
     #B.grid(row=6, column=1, columnspan=1, sticky=TK.EW)
     #B.bind('<Return>', updateBodyAndPrepare)
     #BB = CTK.infoBulle(parent=B, text='Current body time.')
-    #B = TTK.Entry(Frame, textvariable=VARS[14], width=4, background="White")
+    #B = TTK.Entry(Frame, textvariable=VARS[14], width=4)
     #B.grid(row=6, column=2, columnspan=1, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Number of steps to reach body time 1.')
 

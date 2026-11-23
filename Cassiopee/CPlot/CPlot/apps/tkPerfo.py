@@ -181,7 +181,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='The number of CPU cores used by Cassiopee.')
     F = TTK.Frame(Frame, borderwidth=0)
     F.grid(row=1, column=1, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(F, textvariable=VARS[2], background='White', width=3)
+    B = TTK.Entry(F, textvariable=VARS[2], width=3)
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of threads\n(init value is OMP_NUM_THREADS).')
     B.bind('<Return>', setThreads)

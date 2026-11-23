@@ -229,13 +229,13 @@ def createApp(win):
     # - nlevels -
     #B = TK.Label(Frame, text="Nlevels:")
     #B.grid(row=1, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=7)
     BB = CTK.infoBulle(parent=B, text='Number of levels.')
     B.grid(row=1, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=7)
     BB = CTK.infoBulle(parent=B, text='Min value.')
     B.grid(row=1, column=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=7)
     BB = CTK.infoBulle(parent=B, text='Max value.')
     B.grid(row=1, column=2, sticky=TK.EW)
 
@@ -247,7 +247,7 @@ def createApp(win):
     # - Value -
     B = TTK.Label(Frame, text="Value:")
     B.grid(row=3, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[2])
     B.grid(row=3, column=1, columnspan=2, sticky=TK.EW)
 
     # - Extract one isoline -

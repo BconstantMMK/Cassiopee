@@ -702,7 +702,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], compound=TK.RIGHT, padx=0, pady=0)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set underlaying model surfaces (you draw onto).')
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[2])
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Underlaying model surfaces.')
 
@@ -713,7 +713,7 @@ def createApp(win):
     B.grid(row=1, column=0, sticky=TK.EW)
 
     # - Npts -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=7)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of points.')
 

@@ -221,12 +221,12 @@ def createApp(win):
 
 
     # - selected block name -
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=15)
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Currently selected zone name.')
 
     # - selected block type -
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[4])
     B.grid(row=0, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Currently selected zone type.')
 
@@ -234,7 +234,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="Npts")
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of points in selection.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White',
+    B = TTK.Entry(Frame, textvariable=VARS[0],
                   width=10)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of points in selection.')
@@ -243,7 +243,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="NCells")
     B.grid(row=2, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of cells in selection.')
-    B = TTK.Entry(Frame, textvariable=VARS[6], background='White',
+    B = TTK.Entry(Frame, textvariable=VARS[6],
                   width=10)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of cells in selection.')
@@ -252,7 +252,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="NFaces")
     B.grid(row=3, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of faces in selection.')
-    B = TTK.Entry(Frame, textvariable=VARS[7], background='White',
+    B = TTK.Entry(Frame, textvariable=VARS[7],
                   width=10)
     B.grid(row=3, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of faces in selection.')
@@ -284,7 +284,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="Min:")
     B.grid(row=5, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Min of variable.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White',
+    B = TTK.Entry(Frame, textvariable=VARS[1],
                   width=10)
     B.grid(row=5, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Min of variable.')
@@ -293,7 +293,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="Max:")
     B.grid(row=6, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Max of variable.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White',
+    B = TTK.Entry(Frame, textvariable=VARS[2],
                   width=10)
     B.grid(row=6, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Max of variable.')

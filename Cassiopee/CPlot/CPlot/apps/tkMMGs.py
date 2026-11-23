@@ -191,7 +191,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="angle")
     BB = CTK.infoBulle(parent=B, text='Ridge angle detection (degrees).')
     B.grid(row=0, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=10)
     B.grid(row=0, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Ridge angle  detection (degrees).')
 
@@ -199,7 +199,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="hausd")
     BB = CTK.infoBulle(parent=B, text='Chordal error (hausdorff distance).')
     B.grid(row=0, column=2, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=10)
     B.grid(row=0, column=3, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Chordal error (hausdorff distance).')
 
@@ -207,7 +207,7 @@ def createApp(win):
     #B = TTK.Label(Frame, text="hmin")
     #BB = CTK.infoBulle(parent=B, text='Minimum step in remeshed surface.')
     #B.grid(row=1, column=0, sticky=TK.EW)
-    #B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=10)
+    #B = TTK.Entry(Frame, textvariable=VARS[2], width=10)
     #B.grid(row=1, column=1, columnspan=1, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Minimum step in remeshed surface.')
 
@@ -215,7 +215,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="hmax")
     BB = CTK.infoBulle(parent=B, text='Maximum step in remeshed surface.')
     B.grid(row=1, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=10)
     B.grid(row=1, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Maximum step in remeshed surface.')
 
@@ -231,7 +231,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0)
     BB = CTK.infoBulle(parent=B, text='Set fixed constraints (points dont move).')
     B.grid(row=2, column=4, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=8)
     B.grid(row=2, column=1, columnspan=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Fixed curves for mmg.')
 
@@ -242,7 +242,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0)
     BB = CTK.infoBulle(parent=B, text='Set size constraints (define sizemap).')
     B.grid(row=3, column=4, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[5], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[5], width=8)
     B.grid(row=3, column=1, columnspan=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Define size map.')
 

@@ -333,15 +333,15 @@ def createApp(win):
         V.set(CTK.PREFS['tkExtrusionNpts'])
 
     # - AddNormalLayers -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Height of each layer.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=5)
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of layers.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=0, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of smoothing iterations.')
 
@@ -359,7 +359,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=2, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set driving curve(s) for extrusion.')
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[3])
     B.grid(row=2, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Driving curve(s) for extrusion.')
 
@@ -376,14 +376,14 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=4, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set axis for revolve.')
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[4])
     B.grid(row=4, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Axis for revolve or\nAxis + rmod curve for revolve.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[5], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[5], width=5)
     B.grid(row=5, column=0,  columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Angle for revolve.')
-    B = TTK.Entry(Frame, textvariable=VARS[6], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[6], width=5)
     B.grid(row=5, column=1,  columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of points in revolve.')
 

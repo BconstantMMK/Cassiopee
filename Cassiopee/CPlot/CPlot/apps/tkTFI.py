@@ -436,7 +436,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Underlaying model surfaces.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     BB = CTK.infoBulle(parent=B, text='Underlaying model surfaces.')
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
 
@@ -454,7 +454,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="TRI", command=TRITFI)
     B.grid(row=1, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Perform a TRI-TFI from 3 contours.')
-    #B = TK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    #B = TK.Entry(Frame, textvariable=VARS[1], width=5)
     #B.grid(row=1, column=2, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Weight of curve.')
 

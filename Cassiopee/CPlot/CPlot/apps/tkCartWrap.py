@@ -248,7 +248,7 @@ def createApp(win):
     # - Point density -
     B = TTK.Label(Frame, text="Point density")
     B.grid(row=0, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=8)
     B.grid(row=0, column=1, sticky=TK.EW)
     B.bind('<Return>', remap)
     BB = CTK.infoBulle(parent=B, text='Point density (npts/length unit).')
@@ -256,14 +256,14 @@ def createApp(win):
     # - Smoother power -
     B = TTK.Label(Frame, text="Smooth iter")
     B.grid(row=1, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=8)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of smoother iterations.')
 
     # - Constraint strength -
     B = TTK.Label(Frame, text="Constraint strength")
     B.grid(row=2, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=8)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Constraint strength.')
 
@@ -272,7 +272,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], compound=TK.RIGHT, padx=0, pady=0)
     B.grid(row=3, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set the constraint curve for smoother.')
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=8)
     B.grid(row=3, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Constraint curve for smoother.')
 

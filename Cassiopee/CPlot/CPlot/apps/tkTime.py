@@ -167,15 +167,15 @@ def createApp(win):
     V = TK.StringVar(win); V.set('Time.'); VARS.append(V)
 
     # - Times -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Starting time.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=5)
     B.grid(row=0, column=1, sticky=TK.EW)
     B.bind('<Return>', setTime)
     BB = CTK.infoBulle(parent=B, text='Current time.')
     WIDGETS['time'] = B
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Final time.')
 

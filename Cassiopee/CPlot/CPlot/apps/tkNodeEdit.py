@@ -380,12 +380,12 @@ def createApp(win):
     F.columnconfigure(0, weight=1)
     F.columnconfigure(1, weight=4)
     F.grid(row=0, column=0, columnspan=4, sticky=TK.EW)
-    B = TTK.Entry(F, textvariable=VARS[4], background='White', width=5)
+    B = TTK.Entry(F, textvariable=VARS[4], width=5)
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Selected node name.\nYou can change this by pressing <Enter>.')
     B.bind('<Return>', setNodeName)
 
-    B = TTK.Entry(F, textvariable=VARS[3], background='White', width=5)
+    B = TTK.Entry(F, textvariable=VARS[3], width=5)
     B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Selected node type.\nYou can change this by pressing <Enter>.')
     B.bind('<Return>', setNodeType)
@@ -395,7 +395,7 @@ def createApp(win):
     FrameA.columnconfigure(1, weight=1)
     FrameA.columnconfigure(2, weight=0)
     FrameA.grid(row=1, column=0, sticky=TK.EW)
-    B = TTK.Entry(FrameA, textvariable=VARS[1], background='White', width=5)
+    B = TTK.Entry(FrameA, textvariable=VARS[1], width=5)
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Displayed index (start: 0).')
     B.bind('<Return>', showNodeValue)
@@ -404,13 +404,13 @@ def createApp(win):
     B = TTK.Button(FrameA, text=">", command=increaseIndex, width=2)
     B.grid(row=0, column=2, sticky=TK.EW)
 
-    B = TTK.Entry(F, textvariable=VARS[2], background='White', width=5, foreground="green")
+    B = TTK.Entry(F, textvariable=VARS[2], width=5, foreground="green")
     B.grid(row=1, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Selected node value at given index.\nYou can change this by pressing <Enter>.')
     B.bind('<Return>', setNodeValue)
 
     # display info text
-    B = TTK.Text(Frame, background='White', width=5, height=5)
+    B = TTK.Text(Frame, width=5, height=5)
     B.grid(row=1, column=0, columnspan=4, sticky=TK.EW)
     B.tag_config("Dim", foreground="blue")
     B.tag_config("Active", foreground="green")
@@ -425,7 +425,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Free", command=freeNode)
     BB = CTK.infoBulle(parent=B, text='Free selected node.')
     B.grid(row=2, column=1, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[7], background='White', width=2)
+    B = TTK.Entry(Frame, textvariable=VARS[7], width=2)
     B.grid(row=2, column=2, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Max depth for load, save and free (-1: full).')
 

@@ -383,14 +383,14 @@ def createApp(win):
     B = TTK.Label(Frame, text="snear")
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='The generated grid spacing for selected curve.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], width=4, background="White")
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=4)
     B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
 
     # - dfar settings  -
     B = TTK.Label(Frame, text="dfar")
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='The distance from the center of object to the far boundary.\nIf set to -1, not taken into account.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], width=4, background="White")
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=4)
     B.grid(row=1, column=1, columnspan=2, sticky=TK.EW)
 
     # - IBC type -
@@ -503,7 +503,7 @@ def createApp(win):
     B = TTK.Label(outpress, text="Static Pressure")
     B.grid(row=10, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Static Pressure at outlet')
-    B = TTK.Entry(outpress, textvariable=VARS[8], width=4, background="White")
+    B = TTK.Entry(outpress, textvariable=VARS[8], width=4)
     B.grid(row=10, column=1, columnspan=2, sticky=TK.EW)
 
     B = TTK.Checkbutton(outpress, text='Constant density at outlet', variable=VARS[9])
@@ -521,28 +521,28 @@ def createApp(win):
     B = TTK.Label(inj, text="Total Pressure")
     B.grid(row=10, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Total Pressure at injection inlet')
-    B = TTK.Entry(inj, textvariable=VARS[10], width=4, background="White")
+    B = TTK.Entry(inj, textvariable=VARS[10], width=4)
     B.grid(row=10, column=1, columnspan=2, sticky=TK.EW)
 
     B = TTK.Label(inj, text="Total Enthalpy")
     B.grid(row=11, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Total Enthalpy at injection inlet')
-    B = TTK.Entry(inj, textvariable=VARS[11], width=4, background="White")
+    B = TTK.Entry(inj, textvariable=VARS[11], width=4)
     B.grid(row=11, column=1, columnspan=2, sticky=TK.EW)
 
     B = TTK.Label(inj, text="Unit Normal: x")
     B.grid(row=12, column=0, sticky=TK.EW)
-    B = TTK.Entry(inj, textvariable=VARS[12], width=4, background="White")
+    B = TTK.Entry(inj, textvariable=VARS[12], width=4)
     B.grid(row=12, column=1, columnspan=2, sticky=TK.EW)
 
     B = TTK.Label(inj, text="Unit Normal: y")
     B.grid(row=13, column=0, sticky=TK.EW)
-    B = TTK.Entry(inj, textvariable=VARS[13], width=4, background="White")
+    B = TTK.Entry(inj, textvariable=VARS[13], width=4)
     B.grid(row=13, column=1, columnspan=2, sticky=TK.EW)
 
     B = TTK.Label(inj, text="Unit Normal: z")
     B.grid(row=14, column=0, sticky=TK.EW)
-    B = TTK.Entry(inj, textvariable=VARS[14], width=4, background="White")
+    B = TTK.Entry(inj, textvariable=VARS[14], width=4)
     B.grid(row=14, column=1, columnspan=2, sticky=TK.EW)
 
     ## Rectilienar
@@ -560,11 +560,11 @@ def createApp(win):
     B = TTK.Label(rec, text="z-dir")
     B.grid(row=10, column=2, sticky=TK.EW)
 
-    B = TTK.Entry(rec, textvariable=VARS[12], width=4, background="White")
+    B = TTK.Entry(rec, textvariable=VARS[12], width=4)
     B.grid(row=11, column=0, sticky=TK.EW)
-    B = TTK.Entry(rec, textvariable=VARS[13], width=4, background="White")
+    B = TTK.Entry(rec, textvariable=VARS[13], width=4)
     B.grid(row=11, column=1, sticky=TK.EW)
-    B = TTK.Entry(rec, textvariable=VARS[14], width=4, background="White")
+    B = TTK.Entry(rec, textvariable=VARS[14], width=4)
     B.grid(row=11, column=2, sticky=TK.EW)
 
     B = TTK.Label(rec, text="Rectilinear granularity")
@@ -588,11 +588,11 @@ def createApp(win):
     B = TTK.Label(wmm, text="KWire")
     B.grid(row=10, column=2, sticky=TK.EW)
 
-    B = TTK.Entry(wmm, textvariable=VARS[12], width=4, background="White")
+    B = TTK.Entry(wmm, textvariable=VARS[12], width=4)
     B.grid(row=11, column=0, sticky=TK.EW)
-    B = TTK.Entry(wmm, textvariable=VARS[13], width=4, background="White")
+    B = TTK.Entry(wmm, textvariable=VARS[13], width=4)
     B.grid(row=11, column=1, sticky=TK.EW)
-    B = TTK.Entry(wmm, textvariable=VARS[14], width=4, background="White")
+    B = TTK.Entry(wmm, textvariable=VARS[14], width=4)
     B.grid(row=11, column=2, sticky=TK.EW)
 
     setMode()
@@ -601,7 +601,7 @@ def createApp(win):
     #B = TTK.Label(Frame, text="No IBC (Zones)")
     #B.grid(row=8, column=0, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Zones that are missing IBC info.')
-    #B = TTK.Entry(Frame, textvariable=VARS[6], width=4, background="White")
+    #B = TTK.Entry(Frame, textvariable=VARS[6], width=4)
     #B.grid(row=8, column=1, columnspan=2, sticky=TK.EW)
 
 

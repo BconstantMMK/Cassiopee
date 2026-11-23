@@ -120,21 +120,21 @@ def createApp(win):
     V = TK.StringVar(win); V.set('%g'%hmin); VARS.append(V)
 
     # Hmin
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=10)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Hmin step of surface mesh.')
     B.bind('<Return>', meshCADEdges)
     WIDGETS['HEntry'] = B
 
     # hmax
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=10)
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Hmax step of surface mesh.')
     B.bind('<Return>', meshCADEdges)
     WIDGETS['H2Entry'] = B
 
     # hausd
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=10)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Deviation of surface mesh.')
     B.bind('<Return>', meshCADEdges)

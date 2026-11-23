@@ -105,7 +105,7 @@ def createApp(win):
     V = TK.StringVar(win); V.set('0;0;0'); VARS.append(V)
 
     # - Buttons -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=15)
     B.bind('<Return>', createPoint)
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Point coordinates (x;y;z).')

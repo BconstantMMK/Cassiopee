@@ -111,19 +111,19 @@ def createApp(win):
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Reference surface.')
 
-    B = TK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TK.Entry(Frame, textvariable=VARS[0])
     B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
 
     # - Extension data
-    B = TK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[1], width=5)
     B.grid(row=2, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Height of each layer.')
 
-    B = TK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of layers.')
 
-    B = TK.Entry(Frame, textvariable=VARS[3], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[3], width=5)
     B.grid(row=2, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of smoothing iterations.')
 

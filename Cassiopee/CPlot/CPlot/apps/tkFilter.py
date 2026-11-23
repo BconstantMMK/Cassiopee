@@ -422,7 +422,7 @@ def createApp(win):
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Apply filter.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=20)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=20)
     BB = CTK.infoBulle(parent=B, text='Matching string.')
     B.grid(row=1, column=1, sticky=TK.EW)
     B.bind('<Return>', setFilter)

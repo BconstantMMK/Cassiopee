@@ -428,7 +428,7 @@ def createApp(win):
         V.set(CTK.PREFS['tkPovRayOutput'])
 
     # - File -
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[2])
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Directory name for output (.pov and .png).')
 

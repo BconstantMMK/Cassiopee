@@ -57,7 +57,7 @@ def createApp(win):
     V = TK.StringVar(win); V.set('SessionLog.py'); VARS.append(V)
 
     # - FileName -
-    B = TK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TK.Entry(Frame, textvariable=VARS[0])
     BB = CTK.infoBulle(parent=B, text='Log file name.')
     B.grid(row=0, column=0, columnspan=3, sticky=TK.EW)
 

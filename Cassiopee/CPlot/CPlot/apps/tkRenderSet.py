@@ -459,7 +459,7 @@ def createApp(win):
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set the width of mesh lines.')
 
-    B = TTK.Entry(F2, textvariable=VARS[8], background='White', width=10)
+    B = TTK.Entry(F2, textvariable=VARS[8], width=10)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Width of mesh lines.')
     B.bind('<Return>', setMeshWidth)

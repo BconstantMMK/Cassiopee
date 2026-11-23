@@ -615,7 +615,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Type of scene.')
 
     # - Rep -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[1])
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Directory name for output.')
 

@@ -207,7 +207,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0)
     B.grid(row=1, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set the BC (zones) to recover.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=8)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='BCs to recover.')
 

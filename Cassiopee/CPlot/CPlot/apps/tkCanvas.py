@@ -284,7 +284,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Refresh canvas.\nUpdate it to make it pass through selection point.')
 
     # - Position -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=7)
     B.bind('<Return>', setCanvasPos)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Canvas position.')
@@ -296,7 +296,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="-", command=moveDown)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Move canvas left.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=7)
     B.grid(row=1, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Canvas move step.')
 
@@ -307,7 +307,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Reduce", command=reduce)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Reduce canvas.')
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=7)
     B.grid(row=2, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Canvas enlarge step.')
 

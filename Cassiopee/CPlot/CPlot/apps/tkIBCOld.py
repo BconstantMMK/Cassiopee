@@ -300,14 +300,14 @@ def createApp(win):
     B = TTK.Label(Frame, text="snear")
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='The generated grid spacing for selected curve.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], width=4, background="White")
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=4)
     B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
 
     # - dfar settings  -
     B = TTK.Label(Frame, text="dfar")
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='The distance from the center of object to the far boundary.\nIf set to -1, not taken into account.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], width=4, background="White")
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=4)
     B.grid(row=1, column=1, columnspan=2, sticky=TK.EW)
 
     # - IBC type -
@@ -390,7 +390,7 @@ def createApp(win):
     #B = TTK.Label(Frame, text="No IBC (Zones)")
     #B.grid(row=8, column=0, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Zones that are missing IBC info.')
-    #B = TTK.Entry(Frame, textvariable=VARS[6], width=4, background="White")
+    #B = TTK.Entry(Frame, textvariable=VARS[6], width=4)
     #B.grid(row=8, column=1, columnspan=2, sticky=TK.EW)
 
 

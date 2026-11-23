@@ -187,7 +187,7 @@ ClbQghfEYAY1uEEOdtCDHwRhCEUIloAAADs=
     scrollbar.grid(sticky=TK.NSEW, row=0, column=1)
 
     textWidget = TK.Text(winl, yscrollcommand=scrollbar.set,
-                         width=43, height=20, background='White')
+                         width=43, height=20)
     textWidget.tag_config('title', justify=TK.CENTER, foreground='blue')
     textWidget.grid(sticky=TK.NSEW, row=0, column=0)
     scrollbar.config(command=textWidget.yview)
@@ -289,7 +289,7 @@ def activation():
     xpos = winl.master.winfo_rootx()+45
     ypos = winl.master.winfo_rooty()+45
     winl.geometry("%+d%+d" % (xpos, ypos))
-    textWidget = TK.Text(winl, width=50, height=6, background='White')
+    textWidget = TK.Text(winl, width=50, height=6)
     d = checkKey()
     if d == 0: version = 'open source'
     else:
@@ -303,7 +303,7 @@ def activation():
     textWidget.grid(sticky=TK.NSEW, row=0, column=0, columnspan=2)
     V = TK.StringVar(winl); V.set('')
     AVARS.append(V)
-    entry = TK.Entry(winl, textvariable=V, background='White')
+    entry = TK.Entry(winl, textvariable=V)
     entry.grid(row=1, column=0, columnspan=2, sticky=TK.EW)
     B = TTK.Button(winl, text="Submit", command=submitKey)
     BB = CTK.infoBulle(parent=B, text='Submit key.')
@@ -411,7 +411,7 @@ def displayErrors(errors, header=''):
         scrollbar = TTK.Scrollbar(ERRORWINDOW, orient=TK.VERTICAL, width=10)
         scrollbar.grid(sticky=TK.NSEW, row=0, column=1)
         myText = TK.Text(ERRORWINDOW, yscrollcommand=scrollbar.set,
-                         width=40, height=20, background='white')
+                         width=40, height=20)
         myText.tag_config("Title", foreground="blue")
         myText.mark_set('START', TK.INSERT)
         myText.mark_gravity('START', TK.LEFT)
@@ -582,27 +582,27 @@ def openMailWindow():
         #MAILWINDOW.bind("<Destroy>", destroyMailWindow)
         B = TK.Label(MAILWINDOW, text="From:")
         B.grid(row=0, column=0, sticky=TK.EW)
-        B = TK.Text(MAILWINDOW, width=40, height=1, background='White')
+        B = TK.Text(MAILWINDOW, width=40, height=1)
         BB = CTK.infoBulle(parent=B, text='Your email-adress: toto@tata.com')
         B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
         if 'mailMe' in CTK.PREFS: B.insert(TK.END, CTK.PREFS['mailMe'])
         mailData['meWidget'] = B
         B = TK.Label(MAILWINDOW, text="To:")
         B.grid(row=1, column=0, sticky=TK.EW)
-        B = TK.Text(MAILWINDOW, width=40, height=2, background='White')
+        B = TK.Text(MAILWINDOW, width=40, height=2)
         BB = CTK.infoBulle(parent=B, text='Cassiopee support: cassiope@onera.fr')
         B.grid(row=1, column=1, columnspan=2, sticky=TK.EW)
         if 'mailFriends' in CTK.PREFS: B.insert(TK.END, CTK.PREFS['mailFriends'])
         mailData['friendWidget'] = B
         B = TK.Label(MAILWINDOW, text="Title:")
         B.grid(row=2, column=0, sticky=TK.EW)
-        B = TK.Text(MAILWINDOW, width=40, height=1, background='White')
+        B = TK.Text(MAILWINDOW, width=40, height=1)
         B.grid(row=2, column=1, columnspan=2, sticky=TK.EW)
         if 'mailTitle' in CTK.PREFS: B.insert(TK.END, CTK.PREFS['mailTitle'])
         mailData['titleWidget'] = B
         B = TK.Label(MAILWINDOW, text="Message:")
         B.grid(row=3, column=0, sticky=TK.EW)
-        B = TK.Text(MAILWINDOW, width=40, height=5, background='White')
+        B = TK.Text(MAILWINDOW, width=40, height=5)
         B.grid(row=3, column=1, columnspan=2, sticky=TK.EW)
         mailData['messageWidget'] = B
         B = TTK.Button(MAILWINDOW, text="Cancel", command=cancelMail)
@@ -781,14 +781,14 @@ def openDocWindow():
         B = TTK.Button(DOCWINDOW, text="File:", command=openDocFile)
         BB = CTK.infoBulle(parent=B, text='Open an existing document file.')
         B.grid(row=0, column=0, sticky=TK.EW)
-        B = TK.Text(DOCWINDOW, width=40, height=1, background='White')
+        B = TK.Text(DOCWINDOW, width=40, height=1)
         B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
         BB = CTK.infoBulle(parent=B, text='Put here your document name (mydoc.odt).')
         if 'docName' in CTK.PREFS: B.insert(TK.END, CTK.PREFS['docName'])
         docData['docWidget'] = B
         B = TK.Label(DOCWINDOW, text="Text:")
         B.grid(row=1, column=0, sticky=TK.EW)
-        B = TK.Text(DOCWINDOW, width=40, height=5, background='White')
+        B = TK.Text(DOCWINDOW, width=40, height=5)
         B.grid(row=1, column=1, columnspan=2, sticky=TK.EW)
         docData['textWidget'] = B
         if 'docText' in CTK.PREFS:
@@ -1275,7 +1275,7 @@ def openRenderPanel():
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(0,*args),
                                      #width=30, height=20,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(0, event))
                 myList.bind('<Button-3>', deactivateZone)
 
@@ -1284,56 +1284,56 @@ def openRenderPanel():
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(1,*args),
                                      #width=30, height=20,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(1, event))
             elif i == 2:
                 # Color listbox
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(2,*args),
                                      #width=30, height=20,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', openScalar)
             elif i == 3:
                 # Blend listbox
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(3,*args),
                                      width=4,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(3, event))
             elif i == 4:
                 # Shader param1 listbox
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(4,*args),
                                      width=4,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(4, event))
             elif i == 5:
                 # shader param2 listbox
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(5,*args),
                                      width=4,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(5, event))
             elif i == 6:
                 # Mesh overlay listbox
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(6,*args),
                                      width=4,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(6, event))
             elif i == 7:
                 # Mesh color listbox
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(7,*args),
                                      width=4,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(7, event))
             elif i == 8:
                 # Mesh width listbox
                 myList = TTK.Listbox(RENDERPANEL, selectmode=TK.EXTENDED,
                                      yscrollcommand=lambda *args: yscrolli(8,*args),
                                      width=4,
-                                     background='white', exportselection=1)
+                                     exportselection=1)
                 myList.bind('<Double-Button>', lambda event: fitZone(8, event))
 
             myList.grid(sticky=TK.NSEW, row=2, column=i)
@@ -1389,7 +1389,7 @@ def openRenderPanel():
         label9.grid(row=0, column=8, sticky=TK.EW)
 
         # -- Filters --
-        B = TK.Entry(RENDERPANEL, textvariable=VARS[9], background='White', width=40)
+        B = TK.Entry(RENDERPANEL, textvariable=VARS[9], width=40)
         B.bind('<KeyRelease>', filterZones)
         B.grid(row=3, column=0, columnspan=9, sticky=TK.EW)
         BB = CTK.infoBulle(parent=B, text='Filter zones by this regexp.')
@@ -1472,7 +1472,7 @@ def openRenderPanel():
             WIDGETS['meshColors'] = B
 
         # mesh width setter
-        B = TTK.Entry(RENDERPANEL, textvariable=VARS[11], background='White', width=10)
+        B = TTK.Entry(RENDERPANEL, textvariable=VARS[11], width=10)
         B.grid(row=1, column=8, sticky=TK.EW)
         BB = CTK.infoBulle(parent=B, text='Width of mesh lines.')
         B.bind('<Return>', setMeshWidth)
@@ -1704,7 +1704,7 @@ def openLoadPanel(event=None):
         OVARS.append([])
 
         # Header
-        B = TTK.Entry(F, textvariable=OVARS[0], background='White')
+        B = TTK.Entry(F, textvariable=OVARS[0])
         BB = CTK.infoBulle(parent=B, text='File for reading.')
         B.grid(row=0, column=0, columnspan=5, sticky=TK.EW)
         B = TTK.Button(F, text='...', command=openLoadFileDialog)
@@ -1716,7 +1716,7 @@ def openLoadPanel(event=None):
         scrollbar.grid(sticky=TK.NSEW, row=1, column=2)
         myList = TK.Listbox(F, selectmode=TK.EXTENDED,
                             yscrollcommand=scrollbar.set,
-                            width=40, height=20, background='white')
+                            width=40, height=20)
         myList.grid(sticky=TK.NSEW, row=1, column=0, columnspan=2)
         scrollbar.config(command=myList.yview)
         WIDGETS['LBZONES'] = myList
@@ -1731,7 +1731,7 @@ def openLoadPanel(event=None):
         B.grid(row=2, column=1, sticky=TK.EW)
         BB = CTK.infoBulle(parent=B, text='Unload zones.')
 
-        B = TK.Entry(F, textvariable=OVARS[2], background='White', width=40)
+        B = TK.Entry(F, textvariable=OVARS[2], width=40)
         B.bind('<KeyRelease>', filterZoneList)
         B.grid(row=3, column=0, columnspan=2, sticky=TK.EW)
         BB = CTK.infoBulle(parent=B, text='Filter zones by this regexp.')
@@ -1741,7 +1741,7 @@ def openLoadPanel(event=None):
         scrollbar.grid(sticky=TK.NSEW, row=1, column=5)
         myList = TK.Listbox(F, selectmode=TK.EXTENDED,
                             yscrollcommand=scrollbar.set,
-                            width=40, height=20, background='white')
+                            width=40, height=20)
         myList.grid(sticky=TK.NSEW, row=1, column=3, columnspan=2)
         scrollbar.config(command=myList.yview)
         WIDGETS['LBVARS'] = myList
@@ -1756,7 +1756,7 @@ def openLoadPanel(event=None):
         B.grid(row=2, column=4, sticky=TK.EW)
         BB = CTK.infoBulle(parent=B, text='Unload vars.')
 
-        B = TK.Entry(F, textvariable=OVARS[1], background='White', width=40)
+        B = TK.Entry(F, textvariable=OVARS[1], width=40)
         B.bind('<KeyRelease>', filterVarList)
         B.grid(row=3, column=3, columnspan=2, sticky=TK.EW)
         BB = CTK.infoBulle(parent=B, text='Filter vars by this regexp.')

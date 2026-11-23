@@ -1165,11 +1165,11 @@ def createApp(win):
 
     B = TTK.Label(Scalar, text='Isos:')
     B.grid(row=2, column=0, sticky=TK.EW)
-    B = TTK.Entry(Scalar, textvariable=VARS[2], width=4, background='White')
+    B = TTK.Entry(Scalar, textvariable=VARS[2], width=4)
     B.bind('<Return>', setNiso)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of solid isos.')
-    #B = TK.Entry(Scalar, textvariable=VARS[3], width=4, background='White')
+    #B = TK.Entry(Scalar, textvariable=VARS[3], width=4)
     #B.bind('<Return>', setIsoEdges)
     #B.grid(row=2, column=2, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Width of edges (-0.5:deactivate, 1.:ok).')
@@ -1181,7 +1181,7 @@ def createApp(win):
 
     B = TTK.Button(Scalar, text="Min", command=compIsoMinFull)
     B.grid(row=3, column=0, sticky=TK.EW)
-    B = TTK.Entry(Scalar, textvariable=VARS[9], width=4, background='White')
+    B = TTK.Entry(Scalar, textvariable=VARS[9], width=4)
     B.bind('<Return>', setIsoMin)
     B.grid(row=3, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Min of isos for this field.')
@@ -1193,7 +1193,7 @@ def createApp(win):
 
     B = TTK.Button(Scalar, text="Max", command=compIsoMaxFull)
     B.grid(row=4, column=0, sticky=TK.EW)
-    B = TTK.Entry(Scalar, textvariable=VARS[10], width=4, background='White')
+    B = TTK.Entry(Scalar, textvariable=VARS[10], width=4)
     B.bind('<Return>', setIsoMax)
     B.grid(row=4, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Max of isos for this field.')
@@ -1206,7 +1206,7 @@ def createApp(win):
     # Cutoffs for isovalues
     B = TTK.Label(Scalar, text="cutoffs:")
     B.grid(row=5, column=0, sticky=TK.EW)
-    B = TTK.Entry(Scalar, textvariable=VARS[30], width=4, background='White')
+    B = TTK.Entry(Scalar, textvariable=VARS[30], width=4)
     B.bind('<Return>', setCutoffMin)
     B.grid(row=5, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Cutoff min of isos for this field.')
@@ -1218,7 +1218,7 @@ def createApp(win):
 
     #B = TTK.Label(Scalar, text="max cut:")
     #B.grid(row=6, column=0, sticky=TK.EW)
-    B = TTK.Entry(Scalar, textvariable=VARS[31], width=4, background='White')
+    B = TTK.Entry(Scalar, textvariable=VARS[31], width=4)
     B.bind('<Return>', setCutoffMax)
     B.grid(row=5, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Cutoff max of isos for this field.')
@@ -1280,7 +1280,7 @@ def createApp(win):
     # - Vector scale -
     B = TTK.Label(Vector, text='Scale:')
     B.grid(row=1, column=0, sticky=TK.EW)
-    B = TTK.Entry(Vector, textvariable=VARS[24], width=4, background='White')
+    B = TTK.Entry(Vector, textvariable=VARS[24], width=4)
     B.bind('<Return>', setScaleVector)
     B.grid(row=1, column=1, sticky=TK.EW)
     B = TTK.Scale(Vector, from_=1E-10, to=200, orient=TK.HORIZONTAL,
@@ -1291,7 +1291,7 @@ def createApp(win):
     # - Vector density -
     B = TTK.Label(Vector, text='Density:')
     WIDGETS['vectorDensityLabel'] = B
-    B = TTK.Entry(Vector, textvariable=VARS[25], width=4, background='White')
+    B = TTK.Entry(Vector, textvariable=VARS[25], width=4)
     B.bind('<Return>', setDensityVector)
     WIDGETS['vectorDensityEnter'] = B
     B = TTK.Scale(Vector, from_=0., to=1.E5, orient=TK.HORIZONTAL,

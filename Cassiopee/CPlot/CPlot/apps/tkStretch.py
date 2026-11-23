@@ -375,7 +375,7 @@ def createApp(win):
     B.grid(row=1, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Enforce given height in mesh following dir.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=3)
     B.grid(row=1, column=1, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Enforced height in mesh.')
 
@@ -384,7 +384,7 @@ def createApp(win):
     B.grid(row=2, column=0, columnspan=1, sticky=TK.EW)
     WIDGETS['refine'] = B
     BB = CTK.infoBulle(parent=B, text='Refine a given mesh keeping original distribution.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=3)
     B.grid(row=2, column=1, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Refinement factor.')
 
@@ -392,7 +392,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Uniformize", command=uniformize)
     B.grid(row=3, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Uniformize the mesh distribution.')
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=3)
     B.grid(row=3, column=1, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Refinement factor.')
 
@@ -400,10 +400,10 @@ def createApp(win):
     B = TTK.Button(Frame, text="mapCurvature", command=mapCurvature)
     B.grid(row=4, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Remesh following curvature.')
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=3)
     B.grid(row=4, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Refinement factor.')
-    B = TTK.Entry(Frame, textvariable=VARS[5], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[5], width=3)
     B.grid(row=4, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Proportionality to curvature.')
 

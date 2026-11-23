@@ -484,7 +484,7 @@ def createApp(win):
     WIDGETS['conformUnstr'] = B
     B.grid(row=2, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Conformize a TRI surface.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=5)
     B.grid(row=2, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Tolerance used in conformUnstr operations.\n0. means automatic setting.')
     B = TTK.Checkbutton(Frame, text='', variable=VARS[2])
@@ -492,13 +492,13 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Split while conformizing.')
 
     # - forceMatch -
-    #B = TTK.Entry(Frame, textvariable=VARS[6], background='White', width=15)
+    #B = TTK.Entry(Frame, textvariable=VARS[6], width=15)
     #B.grid(row=3, column=0, columnspan=1, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Source1.')
     #B = TTK.Button(Frame, image=iconics.PHOTO[8],
     #               command=lambda x=VARS[6] : setSel(x), padx=0)
     #B.grid(row=3, column=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[7], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[7], width=15)
     B.grid(row=3, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Courbe1.')
     WIDGETS['courbe1'] = B
@@ -506,13 +506,13 @@ def createApp(win):
                    command=lambda x=VARS[7], y=WIDGETS['courbe1'] : setSel(x, y), padx=0)
     B.grid(row=3, column=1, sticky=TK.EW)
 
-    #B = TTK.Entry(Frame, textvariable=VARS[8], background='White', width=15)
+    #B = TTK.Entry(Frame, textvariable=VARS[8], width=15)
     #B.grid(row=4, column=0, columnspan=1, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Source1.')
     #B = TTK.Button(Frame, image=iconics.PHOTO[8],
     #               command=lambda x=VARS[8] : setSel(x), padx=0)
     #B.grid(row=4, column=2, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[9], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[9], width=15)
     B.grid(row=3, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Courbe2.')
     WIDGETS['courbe2'] = B
@@ -524,7 +524,7 @@ def createApp(win):
     WIDGETS['forceMatch'] = B
     B.grid(row=4, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Force two patch to match.')
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=5)
     B.grid(row=4, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Tolerance used in forceMatch operations.')
     B = TTK.Checkbutton(Frame, text='', variable=VARS[10], command=toggleFix)

@@ -245,7 +245,7 @@ def createApp(win):
         V.set(CTK.PREFS['tkBasicSurfsType'])
 
     # - Npts -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     B.grid(row=0, column=0, sticky=TK.EW)
     WIDGETS['Npts'] = B
     BB = CTK.infoBulle(parent=B, text='Number of generated points.')

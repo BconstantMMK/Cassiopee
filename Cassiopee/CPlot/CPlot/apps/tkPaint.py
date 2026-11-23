@@ -130,7 +130,7 @@ def createApp(win):
     V = TK.StringVar(win); V.set('Sphere'); VARS.append(V)
 
     # - Value -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Value.')
     WIDGETS['value'] = B
@@ -140,7 +140,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Get value from mouse pointer.')
 
     # - Width -
-    #B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    #B = TTK.Entry(Frame, textvariable=VARS[1], width=5)
     #B.grid(row=0, column=1, columnspan=1, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Width.')
     #WIDGETS['width'] = B

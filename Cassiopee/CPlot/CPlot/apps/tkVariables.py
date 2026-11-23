@@ -585,7 +585,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     F.columnconfigure(1, weight=0)
-    B = TTK.Entry(F, textvariable=VARS[4], background='White')
+    B = TTK.Entry(F, textvariable=VARS[4])
     B.bind('<Return>', importFile)
     B.grid(row=norow, column=0, sticky=TK.EW)
     B = TTK.Button(F, text="...", padx=0, command=chooseImportFile)
@@ -598,7 +598,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Add/modify variable", command=addVar)
     B.grid(row=norow, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Add a new variable into pyTree. A formula of type: Density=3*{CoordinateX} can be specified.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[1])
     B.bind('<Return>', addVar)
     B.grid(row=norow, column=1, sticky=TK.EW)
 
@@ -646,7 +646,7 @@ def createApp(win):
     #    F.grid(row=norow, column=0, sticky=TK.EW)
     #    BB = CTK.infoBulle(parent=B, text='Renamed variable.')
     #    WIDGETS['var5'] = B
-    #B = TK.Entry(Frame, textvariable=VARS[10], background='White')
+    #B = TK.Entry(Frame, textvariable=VARS[10])
     #B.bind('<Return>', renameVar)
     #B.grid(row=norow, column=1, sticky=TK.EW)
     #norow+=1
@@ -746,7 +746,7 @@ def createApp(win):
     B.grid(row=0, column=1, sticky=TK.EW)
     F.grid(row=norow, column=0, sticky=TK.EW)
 
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[3])
     BB = CTK.infoBulle(parent=B, text='Variables for curl.')
     B.grid(row=norow, column=1, sticky=TK.EW)
 

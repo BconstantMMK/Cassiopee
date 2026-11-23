@@ -327,7 +327,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="Export")
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Resolution for image export.')
-    B = TTK.Entry(Frame, textvariable=VARS[8], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[8], width=5)
     B.bind('<Return>', setExportRes)
     BB = CTK.infoBulle(parent=B, text='Resolution for image export.')
     B.grid(row=r, column=1, sticky=TK.EW)
@@ -345,7 +345,7 @@ def createApp(win):
     #B = TK.Label(Frame, text="Auto open")
     #B.grid(row=r, column=0, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Open automatically these apps for next restart (tkTree;tkBC;...)')
-    #B = TK.Entry(Frame, textvariable=VARS[4], background='White')
+    #B = TK.Entry(Frame, textvariable=VARS[4])
     #BB = CTK.infoBulle(parent=B, text='Apps opened for next restart (tkTree;tkBC;...)')
     #B.grid(row=r, column=1, sticky=TK.EW)
     #r += 1

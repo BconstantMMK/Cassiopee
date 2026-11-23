@@ -266,7 +266,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     if ttk is None:
-        B = TK.Entry(F, textvariable=VARS[3], background='White')
+        B = TK.Entry(F, textvariable=VARS[3])
         B.grid(sticky=TK.EW)
         F.bind('<Return>', setPartName)
         F.grid(row=0, column=1, sticky=TK.EW)
@@ -287,7 +287,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     if ttk is None:
-        B = TK.Entry(F, textvariable=VARS[2], background='White')
+        B = TK.Entry(F, textvariable=VARS[2])
         B.grid(sticky=TK.EW)
         F.bind('<Return>', setEntityName)
         F.grid(row=1, column=1, sticky=TK.EW)
@@ -308,7 +308,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     if ttk is None:
-        B = TK.Entry(F, textvariable=VARS[0], background='White')
+        B = TK.Entry(F, textvariable=VARS[0])
         B.grid(sticky=TK.EW)
         F.bind('<Return>', setParameterName)
         F.grid(row=2, column=1, sticky=TK.EW)
@@ -323,7 +323,7 @@ def createApp(win):
         WIDGETS['ParameterName'] = B
 
     # - current parameter value -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=10)
     B.grid(row=3, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Parameter value.')
     B.bind('<Return>', setParameterValue)

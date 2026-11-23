@@ -118,7 +118,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     BB = CTK.infoBulle(parent=B, text='Set source meshes for interpolation.')
     B.grid(row=0, column=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     BB = CTK.infoBulle(parent=B, text='Source meshes for interpolation.')
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
 

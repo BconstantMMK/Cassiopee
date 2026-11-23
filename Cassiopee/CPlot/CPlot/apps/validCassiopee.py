@@ -1966,7 +1966,7 @@ def main():
         Frame.grid(row=0, column=0, sticky=TK.EW)
 
         Listbox = TK.Listbox(Frame, selectmode=TK.EXTENDED, width=125,
-                             height=39, background='White')
+                             height=39)
         Listbox.grid(row=0, column=0, columnspan=11, sticky=TK.NSEW)
 
         Scrollbar = TK.Scrollbar(Frame, orient=TK.VERTICAL)
@@ -1983,7 +1983,7 @@ def main():
         ProgressLabel.grid(row=1, column=1, sticky=TK.EW)
 
         Filter = TK.StringVar(Master)
-        TextFilter = TK.Entry(Frame, textvariable=Filter, background='White',
+        TextFilter = TK.Entry(Frame, textvariable=Filter,
                               width=50)
         TextFilter.bind('<KeyRelease>', filterTestList)
         TextFilter.grid(row=1, column=2, columnspan=3, sticky=TK.EW)
@@ -2013,7 +2013,7 @@ def main():
         Button.grid(row=1, column=8, sticky=TK.EW)
 
         Threads = TK.StringVar(Master)
-        TextThreads = TK.Entry(Frame, textvariable=Threads, background='White',
+        TextThreads = TK.Entry(Frame, textvariable=Threads,
                                width=3)
         TextThreads.grid(row=1, column=9, columnspan=2, sticky=TK.EW)
         TextThreads.bind('<Return>', setThreads)

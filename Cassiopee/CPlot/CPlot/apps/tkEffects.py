@@ -208,7 +208,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Cam angle", command=setViewAngle)
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set the camera view angle.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
     B.bind('<Return>', setViewAngle)
     BB = CTK.infoBulle(parent=B, text='Cam view angle (deg).')

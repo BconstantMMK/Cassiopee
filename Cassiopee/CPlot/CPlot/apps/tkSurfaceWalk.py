@@ -257,7 +257,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set projection surfaces.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[1])
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Projection surfaces.')
 
@@ -266,20 +266,20 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=1, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set constraint contours.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     B.grid(row=1, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Constraint contours.')
 
     # - Walk
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=2, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Height of each layer.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=5)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of layers.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=5)
     B.grid(row=2, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of smoothing iterations.')
 

@@ -386,7 +386,7 @@ def createApp(win):
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Type of background.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=5)
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Borders N or (Ni;Nj;Nk) or (Ni-;Nj-;Nk-;Ni+;Nj+;Nk+).')
     B.bind('<Return>', setBackground)

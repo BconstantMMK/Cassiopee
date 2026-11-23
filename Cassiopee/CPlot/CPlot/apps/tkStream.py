@@ -288,7 +288,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="nptsmax")
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Max number of points of streams.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     BB = CTK.infoBulle(parent=B, text='Max number of points of streams.')
     B.grid(row=1, column=1, columnspan=2, sticky=TK.EW)
 

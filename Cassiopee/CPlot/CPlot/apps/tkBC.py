@@ -853,7 +853,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="NewBCFamily", command=createBCFamily)
     B.grid(row=7, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Create a new BC family tag.')
-    B = TTK.Entry(Frame, textvariable=VARS[11], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[11], width=15)
     BB = CTK.infoBulle(parent=B, text='BC family name to be created.')
     B.grid(row=7, column=1, sticky=TK.EW)
     B.bind('<Return>', createBCFamily)
@@ -878,14 +878,14 @@ def createApp(win):
     WIDGETS['connectMatch'] = B
     B.grid(row=9, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Find the matching BCs\nAdded to pyTree.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[2])
     B.grid(row=9, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Tolerance for matching.')
 
     # - Periodicity management -
     B = TTK.OptionMenu(Frame, VARS[9], 'Not periodic', 'Translation', 'Rotation (Degree)')
     B.grid(row=10, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[10], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[10])
     B.grid(row=10, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Periodic translation: tx;ty;tz\nPeriodic rotation: cx;cy;cz;ax;ay;az\nangles in degrees.')
 
@@ -894,7 +894,7 @@ def createApp(win):
     WIDGETS['connectNearMatch'] = B
     B.grid(row=11, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Find the matching BCs\nAdded to pyTree.')
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[3])
     B.grid(row=11, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Nearmatch ratio (2 or 2;1;2).')
 

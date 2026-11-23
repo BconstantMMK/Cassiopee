@@ -244,7 +244,7 @@ def createApp(win):
     B.grid(row=0, column=2, sticky=TK.EW)
 
     # - Text -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     B.bind('<Return>', createText)
     B.grid(row=1, column=0, columnspan=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Your text.')

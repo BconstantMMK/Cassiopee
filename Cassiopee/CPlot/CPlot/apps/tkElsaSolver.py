@@ -70,7 +70,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Export to", command=export)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Export tree to a CGNS file suitable for elsA.CGNS.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     B.grid(row=0, column=1, sticky=TK.EW)
     B.bind('<Return>', export)
 
@@ -83,7 +83,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Create elsA Hybrid Node", command=elsAHybridNode)
     B.grid(row=2, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Create elsAHybrid node for unstructured mesh')
-    B = TK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TK.Entry(Frame, textvariable=VARS[1])
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Method: 0 (elsA < 3.8.01), 1 (elsA >= 3.8.1)')
 

@@ -166,7 +166,7 @@ def createApp(win):
     V = TK.StringVar(win); V.set('0'); VARS.append(V)
 
     # - Value -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[1])
     B.bind('<Return>', find)
     B.grid(row=0, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Index to find/extract in selected mesh.\nCan be a global index (0 starts)\nor (i,j,k) (1 starts) for structured grids.\nFor extraction, you can define a list of indices.')

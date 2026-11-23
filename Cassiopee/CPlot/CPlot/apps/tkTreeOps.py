@@ -232,7 +232,7 @@ def createApp(win):
     #B.grid(row=2, column=0, sticky=TK.EW)
     #B = TK.OptionMenu(Frame, VARS[6], 'Name', 'Type', 'Value')
     #B.grid(row=2, column=1, sticky=TK.EW)
-    #B = TK.Entry(Frame, textvariable=VARS[5], background='White', width=5)
+    #B = TK.Entry(Frame, textvariable=VARS[5], width=5)
     #BB = CTK.infoBulle(parent=B, text='Enter node name or types. Wildcards are accepted.')
     #B.grid(row=2, column=2, sticky=TK.EW)
 

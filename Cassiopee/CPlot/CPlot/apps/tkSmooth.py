@@ -242,17 +242,17 @@ def createApp(win):
     B = TTK.OptionMenu(Frame, VARS[8], 'Volume', 'Scale', 'Taubin')
     BB = CTK.infoBulle(parent=B, text='Smoothing algorithm.')
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=4)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=4)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Smoother power.')
     B = TTK.Label(Frame, text="Iter")
     B.grid(row=0, column=3, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=4)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=4)
     B.grid(row=0, column=4, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of smoother iterations.')
 
     # - Constraint strength -
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=4)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=4)
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Strength of constraints.')
 
@@ -272,7 +272,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Project on surafce.')
 
     # - Sharp edges detection
-    B = TTK.Entry(Frame, textvariable=VARS[6], background='White', width=4)
+    B = TTK.Entry(Frame, textvariable=VARS[6], width=4)
     B.grid(row=1, column=4, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Sharp edges detection angle.')
 
@@ -281,7 +281,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0)
     BB = CTK.infoBulle(parent=B, text='Set constraint curves for smoother (points dont move).')
     B.grid(row=2, column=4, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=8)
     B.grid(row=2, column=0, columnspan=4, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Constraint curves for smoother (points dont move).')
 

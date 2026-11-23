@@ -508,7 +508,7 @@ def createApp(win):
     V = TK.StringVar(win); V.set('10.'); VARS.append(V)
 
     # CAD file name
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=15)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='CAD file name.')
 
@@ -548,7 +548,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Sew CAD to fix multiple edges.')
     WIDGETS['sewingButton'] = B
 
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=10)
     B.grid(row=4, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Sewing tolerance.')
     B.bind('<Return>', sewCAD)
@@ -559,7 +559,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Make a fillet from edges selection.')
     WIDGETS['filletButton'] = B
 
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=10)
     B.grid(row=5, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Fillet radius.')
     B.bind('<Return>', filletCAD)
@@ -591,7 +591,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Add domain.')
     B.grid(row=8, column=0, columnspan=1, sticky=TK.EW)
 
-    B = TTK.Entry(Frame, textvariable=VARS[8], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[8], width=10)
     B.grid(row=8, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Domain data.')
     B.bind('<Return>', addDomain)

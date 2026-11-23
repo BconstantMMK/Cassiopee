@@ -355,7 +355,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="sharpEdges", command=sharpEdges)
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Extract sharp edges of a surface.\nTree is modified.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=10)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=10)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Threshold angle.')
 
@@ -368,7 +368,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="splitTBranches", command=splitTBranches)
     B.grid(row=2, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Split BAR edges at T-branch points.\nTree is modified.')
-    #B = TK.Entry(Frame, textvariable=VARS[1], background='White', width=10)
+    #B = TK.Entry(Frame, textvariable=VARS[1], width=10)
     #B.grid(row=2, column=1, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Tolerance.')
 

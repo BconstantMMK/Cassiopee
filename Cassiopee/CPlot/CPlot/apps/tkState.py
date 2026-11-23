@@ -430,7 +430,7 @@ def createApp(win):
     B.grid(row=2, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) mach number.')
     WIDGETS['Mach'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[2], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[2], width=6)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) mach number.')
     WIDGETS['Mach'] += [B]
@@ -440,7 +440,7 @@ def createApp(win):
     B.grid(row=2, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='If this mach number is defined, it is used for turbulence definition.\nThis is the case of rotors.')
     WIDGETS['MachTip'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[17], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[17], width=6)
     B.grid(row=2, column=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='If this mach number is defined, it is used for turbulence definition.\nThis is the case of rotors.')
     WIDGETS['MachTip'] += [B]
@@ -449,7 +449,7 @@ def createApp(win):
     B = TTK.Label(F, text="UInf (m/s)")
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) speed (m/s).')
     WIDGETS['UInf'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[12], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[12], width=6)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) speed (m/s).')
     WIDGETS['UInf'] += [B]
 
@@ -458,7 +458,7 @@ def createApp(win):
     BB = CTK.infoBulle(parent=B, text='Angle of incident flow around z axis (deg).')
     B.grid(row=3, column=0, sticky=TK.EW)
     WIDGETS['IncZ'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[4], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[4], width=6)
     B.grid(row=3, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Angle of incident flow around z axis (deg).')
     WIDGETS['IncZ'] += [B]
@@ -468,7 +468,7 @@ def createApp(win):
     B.grid(row=3, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Angle of incident flow around y axis (deg).')
     WIDGETS['IncY'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[5], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[5], width=6)
     B.grid(row=3, column=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Angle of incident flow around y axis (deg).')
     WIDGETS['IncY'] += [B]
@@ -478,7 +478,7 @@ def createApp(win):
     B.grid(row=4, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) Reynolds number.')
     WIDGETS['Reynolds'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[3], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[3], width=6)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) Reynolds number.')
     B.grid(row=4, column=1, sticky=TK.EW)
     WIDGETS['Reynolds'] += [B]
@@ -487,7 +487,7 @@ def createApp(win):
     B = TTK.Label(F, text="TInf (K)")
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) temperature (K).')
     WIDGETS['TInf'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[13], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[13], width=6)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) temperature (K).')
     WIDGETS['TInf'] += [B]
 
@@ -495,7 +495,7 @@ def createApp(win):
     B = TTK.Label(F, text="PInf (Pa)")
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) pressure (Pa).')
     WIDGETS['PInf'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[14], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[14], width=6)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) pressure (Pa).')
     WIDGETS['PInf'] += [B]
 
@@ -503,7 +503,7 @@ def createApp(win):
     B = TTK.Label(F, text="LInf (m)")
     BB = CTK.infoBulle(parent=B, text='Reference length (m).')
     WIDGETS['LInf'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[15], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[15], width=6)
     BB = CTK.infoBulle(parent=B, text='Reference length (m).')
     WIDGETS['LInf'] += [B]
 
@@ -511,7 +511,7 @@ def createApp(win):
     B = TTK.Label(F, text="RoInf (kg/m3)")
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) density (kg/m3).')
     WIDGETS['RoInf'] = [B]
-    B = TTK.Entry(F, textvariable=VARS[16], background='White', width=6)
+    B = TTK.Entry(F, textvariable=VARS[16], width=6)
     BB = CTK.infoBulle(parent=B, text='Reference (infinite) density (kg/m3).')
     WIDGETS['RoInf'] += [B]
 
@@ -527,13 +527,13 @@ def createApp(win):
     B = TTK.Label(F, text="MutSMu")
     B.grid(row=7, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Ratio between turbulent viscosity and molecular viscosity.')
-    B = TTK.Entry(F, textvariable=VARS[9], background='White', width=5)
+    B = TTK.Entry(F, textvariable=VARS[9], width=5)
     B.grid(row=7, column=1, sticky=TK.EW)
 
     B = TTK.Label(F, text="TurbLevel")
     B.grid(row=7, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Level of turbulence.')
-    B = TTK.Entry(F, textvariable=VARS[10], background='White', width=5)
+    B = TTK.Entry(F, textvariable=VARS[10], width=5)
     B.grid(row=7, column=3, sticky=TK.EW)
 
     # - Adim -

@@ -173,7 +173,7 @@ def createApp(win):
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Get variable value from mouse.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White',
+    B = TTK.Entry(Frame, textvariable=VARS[1],
                   width=10)
     B.bind('<Return>', setVariableValue)
     B.grid(row=1, column=0, sticky=TK.EW)

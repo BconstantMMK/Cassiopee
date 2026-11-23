@@ -328,10 +328,10 @@ def createApp(win):
     V = TK.StringVar(win); V.set('Slice'); VARS.append(V)
 
     # - Settings -
-    #B = TK.Entry(Frame, textvariable=VARS[2], background='White', width=3)
+    #B = TK.Entry(Frame, textvariable=VARS[2], width=3)
     #B.grid(row=0, column=0, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Tolerance for surface slice.')
-    #B = TK.Entry(Frame, textvariable=VARS[3], background='White', width=3)
+    #B = TK.Entry(Frame, textvariable=VARS[3], width=3)
     #B.grid(row=0, column=1, sticky=TK.EW)
     #BB = CTK.infoBulle(parent=B, text='Order for interpolation.')
     #B = TK.Button(Frame, text="Fit", command=fit)
@@ -347,7 +347,7 @@ def createApp(win):
     WIDGETS['moins'] = B
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Move slice -.')
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=3)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Move step.')
     B = TTK.Button(Frame, image=iconics.PHOTO[8],
@@ -364,7 +364,7 @@ def createApp(win):
     B = TTK.OptionMenu(Frame, VARS[0], 'Mesh', 'X', 'Y', 'Z', command=changePlane)
     B.grid(row=1, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Slice direction.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=3)
     B.grid(row=1, column=2, sticky=TK.EW)
     B.bind('<Return>', unselectAndView)
     BB = CTK.infoBulle(parent=B, text='Plane position.\nTaken from selection or set it here with no selection.')

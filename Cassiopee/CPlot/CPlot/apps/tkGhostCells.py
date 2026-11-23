@@ -112,7 +112,7 @@ def createApp(win):
     V = TK.StringVar(win); V.set('None'); VARS.append(V)
 
     # - Number of ghost cell layers -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of ghost cell layers.')
 

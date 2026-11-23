@@ -92,22 +92,22 @@ def createApp(win):
     V = TK.StringVar(win); V.set('10.'); VARS.append(V)
 
     # - hf -
-    B = TK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[1], width=5)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Height of first cell.')
 
     # - h -
-    B = TK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[0], width=5)
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Height of generated mesh.')
 
     # - density -
-    B = TK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Grid point density.')
 
     # - splitCrit -
-    B = TK.Entry(Frame, textvariable=VARS[3], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[3], width=5)
     B.grid(row=1, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Curvature radius triggering split.')
 

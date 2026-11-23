@@ -361,13 +361,13 @@ def createApp(win):
         V.set(CTK.PREFS['tkDistributorMultigrid'])
 
     # - NProc -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=3)
     BB = CTK.infoBulle(parent=B, text='Number of processors.')
     B.grid(row=0, column=0, sticky=TK.EW)
     #B.bind('<Return>', distribute)
 
     # - ComSpeed -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=3)
     BB = CTK.infoBulle(parent=B, text='Weight of communication\ncompared to solver.')
     B.grid(row=0, column=1, sticky=TK.EW)
 
@@ -408,13 +408,13 @@ def createApp(win):
     B.grid(row=3, column=0, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set proc manually in selection.')
 
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=5)
     BB = CTK.infoBulle(parent=B, text='Processor number.')
     B.grid(row=3, column=1, columnspan=2, sticky=TK.EW)
     B.bind('<Return>', setProc)
 
     # -  Canvas -
-    B = TK.Canvas(Frame, width=250, height=60, background='White')
+    B = TK.Canvas(Frame, width=250, height=60)
     B.grid(row=4, column=0, columnspan=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Distribution stats.')
     WIDGETS['canvas'] = B

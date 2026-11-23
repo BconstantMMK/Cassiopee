@@ -117,14 +117,14 @@ def createApp(win):
     B = TK.Button(Frame, text="Contour", command=setContour)
     B.grid(row=0, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set contour to fix.')
-    B = TK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TK.Entry(Frame, textvariable=VARS[0])
     B.grid(row=0, column=1, sticky=TK.EW)
 
     # - Surface -
     B = TK.Button(Frame, text="Surface", command=setSurface)
     B.grid(row=1, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set surface to fix.')
-    B = TK.Entry(Frame, textvariable=VARS[1], background='White')
+    B = TK.Entry(Frame, textvariable=VARS[1])
     B.grid(row=1, column=1, sticky=TK.EW)
 
     # - Fix -

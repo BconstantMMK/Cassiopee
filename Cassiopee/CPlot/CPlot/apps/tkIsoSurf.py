@@ -175,7 +175,7 @@ def createApp(win):
         WIDGETS['field'] = B
 
     # - Value -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=7)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=7)
     BB = CTK.infoBulle(parent=B, text='Extracted field value.')
     B.bind('<Return>', extractIsoSurf)
     B.grid(row=0, column=1, sticky=TK.EW)

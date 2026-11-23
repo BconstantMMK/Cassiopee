@@ -1257,17 +1257,17 @@ class infoBulle(TK.Toplevel):
         self.btype = btype
         if btype == 1: # menu
             if textVariable is not None:
-                l = TK.Label(self, textvariable=textVariable, bg="white",
+                l = TK.Label(self, textvariable=textVariable,
                              justify='right', takefocus=0)
             else:
-                l = TK.Label(self, text=text, bg="white", justify='right',
+                l = TK.Label(self, text=text, justify='right',
                              takefocus=0)
         else: # std label
             if textVariable is not None:
-                l = TK.Label(self, textvariable=textVariable, bg="yellow",
+                l = TK.Label(self, textvariable=textVariable,
                              justify='left', takefocus=0)
             else:
-                l = TK.Label(self, text=text, bg="yellow", justify='left',
+                l = TK.Label(self, text=text, justify='left',
                              takefocus=0)
         l.update_idletasks()
         l.pack()
@@ -1620,7 +1620,7 @@ def minimal(title, show=True, mode=0):
     toolBar(win, mode=mode)
 
     # Text only
-    #TXT = TK.Text(win, width=30, height=1, background='White', font=TEXTFONT)
+    #TXT = TK.Text(win, width=30, height=1, font=TEXTFONT)
     #TXT.tag_config("Error", foreground="red")
     #TXT.tag_config("Warning", foreground="green")
     #TXT.mark_set('START', TK.INSERT)
@@ -1630,7 +1630,7 @@ def minimal(title, show=True, mode=0):
     # Text + search entry pour Cortano
     F = TTK.Frame(win, width=30, height=1, takefocus=1)
     F.columnconfigure(0, weight=1)
-    TXT = TTK.Text(F, width=30, height=1, background='White', font=TEXTFONT)
+    TXT = TTK.Text(F, width=30, height=1, font=TEXTFONT)
     TXT.tag_config("Error", foreground="red")
     TXT.tag_config("Warning", foreground="green")
     TXT.mark_set('START', TK.INSERT)

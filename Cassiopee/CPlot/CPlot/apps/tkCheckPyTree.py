@@ -152,18 +152,18 @@ def createApp(win):
     V = TK.StringVar(win); V.set('All conformity'); VARS.append(V)
 
     # - MinPtsPerZone on coarse level -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     BB = CTK.infoBulle(parent=B,
                        text='Checked maximum number of points per zone, \nif Maximum number of nodes is selected. \nChecked minimum number of points per direction on coarse grid \nwhen Multigrid compatibility is selected.')
     B.grid(row=0, column=0, columnspan=2, sticky=TK.EW)
 
     # - MinPtsPerWin on coarse level -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=5)
     BB = CTK.infoBulle(parent=B, text='Checked minimum number of points per direction in BCs on coarse grid, \nwhen Multigrid compatibility is selected.')
     B.grid(row=0, column=2, columnspan=2, sticky=TK.EW)
 
     # - Checked multigrid level -
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=5)
     BB = CTK.infoBulle(parent=B, text='Checked multigrid level,\nwhen Multigrid compatibility is selected.')
     B.grid(row=0, column=4, columnspan=2, sticky=TK.EW)
 

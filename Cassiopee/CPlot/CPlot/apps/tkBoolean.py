@@ -249,7 +249,7 @@ def createApp(win):
     # - Tolerance -
     B = TTK.Label(Frame, text='Tolerance')
     B.grid(row=0, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=5)
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Tolerance used in boolean operations.\n0. means automatic setting.')
 

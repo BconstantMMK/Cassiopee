@@ -381,7 +381,7 @@ def createApp(win):
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B,
                        text='The created holes will expand of this value.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=r, column=1, sticky=TK.EW)
     r+=1
 
@@ -389,7 +389,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="Tol")
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Two surface points distant from this value\nwill be considered as identical.')
-    B = TTK.Entry(Frame, textvariable=VARS[3], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[3], width=5)
     B.grid(row=r, column=1, sticky=TK.EW)
     r += 1
 
@@ -397,7 +397,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Bodies", command=setSurface)
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Blanking bodies.')
-    B = TTK.Entry(Frame, textvariable=VARS[5], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[5])
     B.grid(row=r, column=1, columnspan=3, sticky=TK.EW)
     r += 1
 
@@ -405,7 +405,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="Depth")
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of IBC front layers.')
-    #B = TK.Entry(Frame, textvariable=VARS[6], background='White', width=5)
+    #B = TK.Entry(Frame, textvariable=VARS[6], width=5)
     B = TTK.OptionMenu(Frame, VARS[6], '1', '2', '3', '4', '5')
     B.grid(row=r, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of IBC front layers.')
@@ -440,7 +440,7 @@ def createApp(win):
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B,
                        text='Minimum distance to symmetrize inside and resulting fronts.')
-    B = TTK.Entry(Frame, textvariable=VARS[9], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[9], width=5)
     B.grid(row=r, column=1, sticky=TK.EW)
     r += 1
 

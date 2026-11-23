@@ -115,7 +115,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     if ttk is None:
-        B = TK.Entry(F, textvariable=VARS[0], background='White')
+        B = TK.Entry(F, textvariable=VARS[0])
         B.grid(sticky=TK.EW)
         F.bind('<Return>', setNames)
         F.grid(row=0, column=1, sticky=TK.EW)
@@ -137,7 +137,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     if ttk is None:
-        B = TK.Entry(F, textvariable=VARS[1], background='White')
+        B = TK.Entry(F, textvariable=VARS[1])
         B.grid(sticky=TK.EW)
         F.bind('<Return>', setNames)
         F.grid(row=1, column=1, sticky=TK.EW)
@@ -159,7 +159,7 @@ def createApp(win):
     F = TTK.Frame(Frame, borderwidth=0)
     F.columnconfigure(0, weight=1)
     if ttk is None:
-        B = TK.Entry(F, textvariable=VARS[2], background='White')
+        B = TK.Entry(F, textvariable=VARS[2])
         B.grid(sticky=TK.EW)
         F.bind('<Return>', setNames)
         F.grid(row=2, column=1, sticky=TK.EW)

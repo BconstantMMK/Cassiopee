@@ -288,7 +288,7 @@ def createApp(win):
     B = TTK.Label(Frame, text="Depth")
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of interpolated layers.')
-    B = TTK.Entry(Frame, textvariable=VARS[7], background='White', width=2)
+    B = TTK.Entry(Frame, textvariable=VARS[7], width=2)
     B.grid(row=r, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of interpolated layers.')
 
@@ -322,14 +322,14 @@ def createApp(win):
     B.grid(row=r, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B,
                        text='The created holes will expand of this value.')
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=5)
     B.grid(row=r, column=1, sticky=TK.EW)
 
     # - Xray tol -
     B = TTK.Label(Frame, text="Tol")
     B.grid(row=r, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Two surface points separated of this value\nwill be considered as identical.')
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=5)
     B.grid(row=r, column=3, sticky=TK.EW)
     r += 1
 
@@ -338,7 +338,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=r, column=3, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set blanking surfaces.\nThey must define ONE closed body.')
-    B = TTK.Entry(Frame, textvariable=VARS[6], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[6])
     BB = CTK.infoBulle(parent=B, text='Blanking surfaces.')
     B.grid(row=r, column=0, columnspan=3, sticky=TK.EW)
     r += 1

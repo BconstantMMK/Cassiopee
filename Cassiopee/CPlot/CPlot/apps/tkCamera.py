@@ -115,7 +115,7 @@ def createApp(win):
     # - posCam -
     B = TTK.Label(Frame, text="posCam: ")
     B.grid(row=0, column=0, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=15)
     B.grid(row=0, column=1, columnspan=2, sticky=TK.EW)
     B.bind('<Return>', setInfo)
     BB = CTK.infoBulle(parent=B, text='Camera position.')
@@ -123,7 +123,7 @@ def createApp(win):
     # - posEye -
     B = TTK.Label(Frame, text="posEye: ")
     B.grid(row=1, column=0, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=15)
     B.grid(row=1, column=1, columnspan=2, sticky=TK.EW)
     B.bind('<Return>', setInfo)
     BB = CTK.infoBulle(parent=B, text='Eye position.')
@@ -131,7 +131,7 @@ def createApp(win):
     # - dirCam -
     B = TTK.Label(Frame, text="dirCam: ")
     B.grid(row=2, column=0, columnspan=1, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[2], background='White', width=15)
+    B = TTK.Entry(Frame, textvariable=VARS[2], width=15)
     B.grid(row=2, column=1, columnspan=2, sticky=TK.EW)
     B.bind('<Return>', setInfo)
     BB = CTK.infoBulle(parent=B, text='Camera direction.')

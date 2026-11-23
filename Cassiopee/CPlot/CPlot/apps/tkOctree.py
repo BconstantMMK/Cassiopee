@@ -410,12 +410,12 @@ def createApp(win):
 
     # - Dfar -
     rown=0
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=3)
     B.grid(row=rown, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Distance to far boundaries.')
 
     # - Snears -
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=3)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=3)
     B.grid(row=rown, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Local size near bodies (global or list).')
 
@@ -436,7 +436,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=rown, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Define refinement surfaces.')
-    B = TTK.Entry(Frame, textvariable=VARS[6], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[6])
     B.grid(row=rown, column=0, columnspan=2, sticky=TK.EW)
     rown+=1
     B = TTK.Button(Frame, text="Adapt octree inside surfaces", command=adaptInsideOctree)
@@ -448,7 +448,7 @@ def createApp(win):
     B = TTK.Button(Frame, text="Expand layer", command=expandLayer)
     B.grid(row=rown, column=0, columnspan=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Expand one level.')
-    B = TTK.Entry(Frame, textvariable=VARS[4], background='White', width=5)
+    B = TTK.Entry(Frame, textvariable=VARS[4], width=5)
     B.grid(row=rown, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Level to expand.')
 
@@ -456,7 +456,7 @@ def createApp(win):
     rown+=1
     B = TTK.Button(Frame, text="Octree2Struct", command=octree2Struct)
     B.grid(row=rown, column=0, columnspan=1, sticky=TK.EW)
-    B = TK.Entry(Frame, textvariable=VARS[7], background='White', width=5)
+    B = TK.Entry(Frame, textvariable=VARS[7], width=5)
     B.grid(row=rown, column=1, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Number of points in each structured blocs.')
     B = TTK.OptionMenu(Frame, VARS[8], 'Match', 'Overlap1', 'Overlap2', 'AMR0', 'AMR1', 'AMR2')
@@ -469,7 +469,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], padx=0, pady=0, compound=TK.RIGHT)
     B.grid(row=rown, column=2, columnspan=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Define bodies.')
-    B = TTK.Entry(Frame, textvariable=VARS[6], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[6])
     B.grid(row=rown, column=0, columnspan=2, sticky=TK.EW)
 
     # - Adapt to body

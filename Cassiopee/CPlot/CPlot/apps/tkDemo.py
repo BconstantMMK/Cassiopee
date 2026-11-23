@@ -222,7 +222,7 @@ def createApp(win):
                    image=iconics.PHOTO[8], compound=TK.RIGHT, padx=0, pady=0)
     B.grid(row=2, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Set orbiter path.')
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White')
+    B = TTK.Entry(Frame, textvariable=VARS[0])
     B.grid(row=2, column=0, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Orbiter path (curve).')
 

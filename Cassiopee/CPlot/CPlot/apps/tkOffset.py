@@ -106,12 +106,12 @@ def createApp(win):
     # - Point density -
     B = TTK.Label(Frame, text="density/offset")
     B.grid(row=0, column=0, sticky=TK.EW)
-    B = TTK.Entry(Frame, textvariable=VARS[0], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[0], width=8)
     B.grid(row=0, column=1, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Offset point density (npts/length unit).')
 
     # - Offset -
-    B = TTK.Entry(Frame, textvariable=VARS[1], background='White', width=8)
+    B = TTK.Entry(Frame, textvariable=VARS[1], width=8)
     B.grid(row=0, column=2, sticky=TK.EW)
     BB = CTK.infoBulle(parent=B, text='Distance of surface offset.')
 
