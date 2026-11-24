@@ -41,7 +41,7 @@
             "/opt/homebrew/opt/libomp/include",
             "/opt/homebrew/opt/opencascade/include"
         ],
-        "additionalLibs": ["omp", "gfortran", "gomp"],
+        "additionalLibs": ["omp", "gfortran"],
         "additionalLibPaths": [
             "/opt/X11/lib",
             "/opt/homebrew/lib",

@@ -49,6 +49,7 @@ else
     KC=$(uname -n)
     for pattern in \
       "WDAAA161Z:WDAAA161Z" \
+      "MBA:macos" \
       "atlas:atlas" \
       "topaze:topaze" \
       "node6.cluster:macosx" \
@@ -210,8 +211,15 @@ elif [ "$MAC" = "macos" ]; then
     export ELSAPROD=macos
     export ELSAPROD=$ELSAPROD$EXT
     export OMP_NUM_THREADS=4
-    ln -sf /opt/homebrew/bin/python3.11 ~/bin/python3
-    ln -sf /opt/homebrew/bin/python3.11 ~/bin/python
+
+    if [ -x /opt/homebrew/bin/python3.11 ]; then
+        mkdir -p "$HOME/bin"
+        ln -sfn /opt/homebrew/bin/python3.11 "$HOME/bin/python3"
+        ln -sfn /opt/homebrew/bin/python3.11 "$HOME/bin/python"
+    else
+        echo "Warning: /opt/homebrew/bin/python3.11 not found (try: brew install python@3.11)"
+    fi
+
     export PYTHONEXE=python3
     export PRODMODE=3
     export PIP_DISABLE_PIP_VERSION_CHECK=1
