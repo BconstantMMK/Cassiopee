@@ -1026,11 +1026,6 @@ def getCArgs():
     elif Cppcompiler == "clang" or Cppcompiler == "clang++":
         if DEBUG(): options += ['-g', '-O0', '-Wall', '-D_GLIBCXX_DEBUG_PEDANTIC']
         else: options += ['-DNDEBUG', '-O3', '-Wall']
-        if mySystem[0] == 'Darwin':
-            # Apple clang on ARM64 contracts mul+add into FMA by default,
-            # which changes floating-point results vs gcc and breaks the
-            # Delaunay predicates in Nuga (T3mesher "error in refine").
-            options += ['-ffp-contract=off']
         if useOMP == 1:
             # Apple clang on Darwin does not support -fopenmp directly,
             # it must be passed via -Xclang to use libomp from homebrew
