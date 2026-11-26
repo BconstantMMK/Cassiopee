@@ -211,16 +211,11 @@ elif [ "$MAC" = "macos" ]; then
     export ELSAPROD=macos
     export ELSAPROD=$ELSAPROD$EXT
     export OMP_NUM_THREADS=4
-
-    if [ -x /opt/homebrew/bin/python3.11 ]; then
-        mkdir -p "$HOME/bin"
-        ln -sfn /opt/homebrew/bin/python3.11 "$HOME/bin/python3"
-        ln -sfn /opt/homebrew/bin/python3.11 "$HOME/bin/python"
-    else
-        echo "Warning: /opt/homebrew/bin/python3.11 not found (try: brew install python@3.11)"
-    fi
-
-    export PYTHONEXE=python3
+    export PYTHONEXE=/opt/homebrew/bin/python3.11
+    PROD_PATH=/opt/homebrew/opt/python@3.11/bin
+    PROD_LD_LIBRARY_PATH=/opt/homebrew/opt/python@3.11/lib
+    alias python3=$PYTHONEXE
+    alias python=$PYTHONEXE
     export PRODMODE=3
     export PIP_DISABLE_PIP_VERSION_CHECK=1
     export XMODIFIERS="@im=none"
@@ -793,8 +788,8 @@ fi
 
 getSupportedMachines() {
     local script_path="$1"
-    grep -E '^\s*(if|elif)\s*\[\s*"\$MAC"\s*=\s*"' "$script_path" \
-      | sed -E 's/.*"\$MAC"\s*=\s*"([^"]+)".*/\1/'
+    grep -E '^[[:space:]]*(if|elif)[[:space:]]*\[[[:space:]]*"\$MAC"[[:space:]]*=[[:space:]]*"' "$script_path" \
+      | sed -E 's/.*"\$MAC"[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/'
 }
 
 if [ -z $ELSAPROD ]; then
@@ -827,7 +822,7 @@ if [ "$PYTHONEXE" = "python3" ]; then
     alias python=python3
 else
     pyenv=$($PYTHONEXE -c 'import sys; print("pyenv" in sys.executable)' 2>/dev/null)
-    pyversion="python"`python -c "import sys; print('.'.join(str(n) for n in sys.version_info[:2]))"`
+    pyversion="python"`"${PYTHONEXE:-python}" -c "import sys; print('.'.join(str(n) for n in sys.version_info[:2]))"`
     if [ "$MAC" = "ubuntu" ] && [ "$pyenv" == "False" ]; then
         pybin="local/bin"
         pylib="local/lib"
@@ -869,14 +864,10 @@ else
 fi
 
 # Remove empty paths
-clean_path() {
-    printf '%s' "$1" | sed -E 's/::+/:/g; s/^://; s/:$//'
-}
-PATH=$(clean_path "$PATH")
-PATHL=$(clean_path "$PATHL")
-LD_LIBRARY_PATH=$(clean_path "$LD_LIBRARY_PATH")
-LD_LIBRARY_PATHL=$(clean_path "$LD_LIBRARY_PATHL")
-PYTHONPATH=$(clean_path "$PYTHONPATH")
-PYTHONPATHL=$(clean_path "$PYTHONPATHL")
+for var in PATH PATHL LD_LIBRARY_PATH LD_LIBRARY_PATHL PYTHONPATH PYTHONPATHL; do
+    eval "value=\${$var}"
+    value=$(printf '%s' "$value" | sed -E 's/::+/:/g; s/^://; s/:$//')
+    eval "$var=\$value"
+done
 
 echo '>> Hello from '$MAC', '$ELSAPROD' production is set.'
